@@ -222,15 +222,16 @@ CREATE TABLE `judge` (
   `id` int NOT NULL,
   `uuid` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `categories_id` int NOT NULL,
-  `users_id` int NOT NULL
+  `users_id` int NOT NULL,
+  `participates_current_year` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Déchargement des données de la table `judge`
 --
 
-INSERT INTO `judge` (`id`, `uuid`, `categories_id`, `users_id`) VALUES
-(34, '94097b1b-05b7-4c13-879d-69ad597846e9', 6, 782);
+INSERT INTO `judge` (`id`, `uuid`, `categories_id`, `users_id`, `participates_current_year`) VALUES
+(34, '94097b1b-05b7-4c13-879d-69ad597846e9', 6, 782, 1);
 
 -- --------------------------------------------------------
 
@@ -409,6 +410,10 @@ CREATE TABLE `users` (
   `numero_da` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `picture` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `picture_consent` tinyint(1) NOT NULL DEFAULT '0',
+  `photo_consent_publication` tinyint(1) NOT NULL DEFAULT '0',
+  `photo_consent_internal` tinyint(1) NOT NULL DEFAULT '0',
+  `photo_consent_refusal` tinyint(1) NOT NULL DEFAULT '0',
+  `is_anonymous` tinyint(1) NOT NULL DEFAULT '0',
   `reset_token` int DEFAULT NULL,
   `activation_token` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1',
@@ -420,11 +425,11 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `pwd`, `email`, `numero_da`, `picture`, `picture_consent`, `reset_token`, `activation_token`, `activated`, `blacklisted`, `role_id`) VALUES
-(1, 'le testeur', 'professionnel', 'test', '$2y$10$wNOJM7zdwWO2KoDZ3jSCKOXbTJnVUnHKlgrJ8sRdwAky/3FzwOiRW', 'test@letesteur.test', NULL, '', 0, NULL, NULL, 1, 0, 0),
-(782, 'Juge', 'Test', NULL, NULL, 'jugetest@courriel.com', NULL, NULL, 0, NULL, NULL, 1, 0, 1),
-(783, 'Membre', 'Test1', NULL, NULL, NULL, '5830586', NULL, 0, NULL, 'e1f8e1de-4463-4999-aefc-34e4c51fd2d9', 0, 0, 3),
-(784, 'Membre', 'Test2', NULL, NULL, NULL, '3460599', NULL, 0, NULL, 'c8bab8ab-5bac-4858-af8a-702e78710c58', 0, 0, 3);
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `pwd`, `email`, `numero_da`, `picture`, `picture_consent`, `photo_consent_publication`, `photo_consent_internal`, `photo_consent_refusal`, `is_anonymous`, `reset_token`, `activation_token`, `activated`, `blacklisted`, `role_id`) VALUES
+(1, 'le testeur', 'professionnel', 'test', '$2y$10$wNOJM7zdwWO2KoDZ3jSCKOXbTJnVUnHKlgrJ8sRdwAky/3FzwOiRW', 'test@letesteur.test', NULL, '', 0, 0, 0, 0, 0, NULL, NULL, 1, 0, 0),
+(782, 'Juge', 'Test', NULL, NULL, 'jugetest@courriel.com', NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, 1, 0, 1),
+(783, 'Membre', 'Test1', NULL, NULL, NULL, '5830586', NULL, 0, 0, 0, 0, 0, NULL, 'e1f8e1de-4463-4999-aefc-34e4c51fd2d9', 0, 0, 3),
+(784, 'Membre', 'Test2', NULL, NULL, NULL, '3460599', NULL, 0, 0, 0, 0, 0, NULL, 'c8bab8ab-5bac-4858-af8a-702e78710c58', 0, 0, 3);
 
 -- --------------------------------------------------------
 
