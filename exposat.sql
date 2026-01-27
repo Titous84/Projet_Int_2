@@ -308,19 +308,20 @@ CREATE TABLE `site_component` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `survey`
+-- Structure de la table `evaluationgrids`
 --
+-- Note : cette table remplace l'ancienne table `survey` pour centraliser les grilles d'évaluation.
 
-CREATE TABLE `survey` (
+CREATE TABLE `evaluationgrids` (
   `id` int NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Déchargement des données de la table `survey`
+-- Déchargement des données de la table `evaluationgrids`
 --
 
-INSERT INTO `survey` (`id`, `name`) VALUES
+INSERT INTO `evaluationgrids` (`id`, `name`) VALUES
 (1, 'GrillePourTous');
 
 -- --------------------------------------------------------
@@ -563,9 +564,9 @@ ALTER TABLE `site_component`
   ADD KEY `type_component` (`type_id`);
 
 --
--- Index pour la table `survey`
+-- Index pour la table `evaluationgrids`
 --
-ALTER TABLE `survey`
+ALTER TABLE `evaluationgrids`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -695,9 +696,9 @@ ALTER TABLE `site_component`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
--- AUTO_INCREMENT pour la table `survey`
+-- AUTO_INCREMENT pour la table `evaluationgrids`
 --
-ALTER TABLE `survey`
+ALTER TABLE `evaluationgrids`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
@@ -738,7 +739,7 @@ ALTER TABLE `users_teams`
 -- Contraintes pour la table `categories`
 --
 ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_survey` FOREIGN KEY (`survey_id`) REFERENCES `survey` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `categories_survey` FOREIGN KEY (`survey_id`) REFERENCES `evaluationgrids` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `categories_judge`
@@ -767,7 +768,7 @@ ALTER TABLE `evaluation`
   ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`rating_section_id`) REFERENCES `rating_section` (`id`),
   ADD CONSTRAINT `heure_index` FOREIGN KEY (`heure`) REFERENCES `time_slots` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `judge_index` FOREIGN KEY (`judge_id`) REFERENCES `judge` (`id`),
-  ADD CONSTRAINT `survey_index` FOREIGN KEY (`survey_id`) REFERENCES `survey` (`id`),
+  ADD CONSTRAINT `survey_index` FOREIGN KEY (`survey_id`) REFERENCES `evaluationgrids` (`id`),
   ADD CONSTRAINT `survey_teams_index` FOREIGN KEY (`teams_id`) REFERENCES `teams` (`id`);
 
 --
@@ -788,7 +789,7 @@ ALTER TABLE `site_component`
 --
 ALTER TABLE `teams`
   ADD CONSTRAINT `categorie_id` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `teams_survey` FOREIGN KEY (`survey_id`) REFERENCES `survey` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `teams_survey` FOREIGN KEY (`survey_id`) REFERENCES `evaluationgrids` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `teams_contact_person`

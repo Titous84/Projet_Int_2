@@ -22,6 +22,7 @@ class TeamsListRepository extends Repository
     public function get_all_teams_and_members(string $role_name): array
     {
         try {
+            // Les grilles d'évaluation sont stockées dans evaluationgrids (alias survey pour garder les champs).
             $sql = "SELECT users.id,
                 teams.id as team_id,
                 teams.team_number,
@@ -44,7 +45,7 @@ class TeamsListRepository extends Repository
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -87,7 +88,7 @@ class TeamsListRepository extends Repository
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -131,7 +132,7 @@ class TeamsListRepository extends Repository
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
             WHERE teams.id = :id
@@ -164,7 +165,7 @@ class TeamsListRepository extends Repository
     public function get_survey_by_name(string $survey): array
     {
         try {
-            $sql = "SELECT id, name FROM survey WHERE name = '$survey'";
+            $sql = "SELECT id, name FROM evaluationgrids WHERE name = '$survey'";
 
             $req = $this->db->query($sql);
 
