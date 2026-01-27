@@ -178,9 +178,16 @@ export const TEXTS = {
             }
         },
         pictureConsent:{
-            label:"Je consens à être pris en photo et j'autorise le comité à les utiliser pour faire de la publicité future (site web, médias sociaux, journaux, etc.)",
+            label:"Consentement à la prise de photos",
+            publication:"J'autorise l'utilisation des photos pour la promotion (site web, médias sociaux, journaux, etc.).",
+            internal:"J'autorise l'utilisation des photos à des fins internes et pédagogiques.",
+            refusal:"Je refuse que des photos soient prises de moi.",
             yes:"Oui",
             no:"Non"
+        },
+        anonymous:{
+            label:"Inscription anonyme",
+            helper:"Masquer mes informations personnelles (prénom, nom, DA, etc.) dans les listes."
         },
         buttons:{
             addMember:"Ajouter un membre",
