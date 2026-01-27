@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from '@mui/material';
 import { Add, Edit, Logout } from '@mui/icons-material';
 import InformationsEditor from '../../components/informations/informationsEditor/informationsEditor';
-import Layout from '../../components/layout/layout';
+import PageSection from '../../components/common/PageSection';
 import MDContentViewer from '../../components/markdown/mdContentViewer';
 import InformationBlockInfo from '../../types/informations/informationBlockInfo';
 import IPage from '../../types/IPage';
@@ -145,7 +145,7 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
         let content = informations.map(info => {return info.content}).join("\n");
         return (
             <div data-testid="Information" className={styles.informationPage}>
-                <Layout name={TEXTS.informations.title}>
+                <PageSection titre={TEXTS.informations.title}>
                     {/* Boutons administrateurs */}
                     {this.generateButtons()}
                     {/* Affichage des informations */}
@@ -153,7 +153,7 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
                     content={content}/>}
                     {/* Éditeur des informations */}
                     {this.modifying && <InformationsEditor update={this.onUpdate} informations={this.state.informations}/>}
-                </Layout>
+                </PageSection>
             </div>
         );
     }

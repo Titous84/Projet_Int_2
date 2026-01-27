@@ -132,6 +132,23 @@ export default class UserService {
     }
 
     /**
+     * Lance la réinitialisation annuelle des données d'administration.
+     */
+    public static async resetAnnualData(): Promise<void> {
+        let response: APIResult<void>;
+        try {
+            response = await APIRequest("administrators/reset-annual", "POST", true);
+        } catch (error) {
+            console.error("Erreur lors de la réinitialisation annuelle :", error);
+            throw new Error("Une erreur est survenue lors de la réinitialisation annuelle.");
+        }
+
+        if (response.error) {
+            throw new Error(response.error);
+        }
+    }
+
+    /**
      * @author Thomas-gabriel Paquin
      * Permet de recevoir les informations des juges.
      * @param blacklisted Information si les juges font partis de la liste noire.

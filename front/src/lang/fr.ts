@@ -63,7 +63,15 @@ export const TEXTS = {
         btnemail:"Envoyer un email"
     },
     administratorsListPage:{
-        title:"Gestion des administrateurs"
+        title:"Paramètres généraux",
+        resetAction:"Réinitialiser l'année",
+        resetTitle:"Réinitialisation annuelle",
+        resetDescription:"Réinitialise la participation des juges et les assignations de l'édition courante.",
+        resetConfirmation:"Voulez-vous vraiment lancer la réinitialisation annuelle? Cette action peut désactiver des assignations en cours.",
+        resetConfirm:"Confirmer la réinitialisation",
+        resetCancel:"Annuler",
+        resetSuccess:"La réinitialisation annuelle a été effectuée avec succès.",
+        resetError:"Une erreur est survenue lors de la réinitialisation annuelle."
     },
     ajoutAdmin:{
         title:"Ajouter un administrateur à Expo Sat",

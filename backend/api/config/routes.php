@@ -24,6 +24,7 @@ use App\Actions\Users\ChangePasswordAction;
 use App\Actions\Administrators\GetAllAdministratorsAction;
 use App\Actions\Administrators\DeleteAdministratorsByIdsAction;
 use App\Actions\Administrators\PostAdministratorAction;
+use App\Actions\Administrators\ResetAnnualDataAction;
 
 // ?
 use App\Actions\SignUpTeamAction\PostSignUp;
@@ -170,6 +171,9 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 
         // Permet de créer un nouvel administrateur.
         $administratorsGroup->post("", PostAdministratorAction::class);
+
+        // Permet de réinitialiser les données annuelles.
+        $administratorsGroup->post("/reset-annual", ResetAnnualDataAction::class);
 
         // Permet de modifier un administrateur.
         // $administratorsGroup->put("", DeleteAdministratorAction::class);

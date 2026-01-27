@@ -287,6 +287,36 @@ class UserRepository extends Repository
         }
     }
 
+    /**
+     * Réinitialise les données annuelles sensibles à l'édition courante.
+     * @return bool true si la réinitialisation est un succès, false sinon.
+     */
+    public function reset_annual_data(): bool
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // Désactive la participation des juges pour la nouvelle édition.
+            $this->db->exec("UPDATE judge SET participates_current_year = 0");
+
+            // Réinitialise l'état d'assignation des équipes.
+            $this->db->exec("UPDATE teams SET judge_assignation = 0");
+
+            // Désactive les évaluations en cours sans supprimer l'historique.
+            $this->db->exec("UPDATE evaluation SET est_actif = 0");
+
+            $this->db->commit();
+            return true;
+        } catch (PDOException $exception) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            $context["http_error_code"] = $exception->getCode();
+            $this->logHandler->critical($exception->getMessage(), $context);
+            return false;
+        }
+    }
+
 	/**
 	 * Fonction qui permet d'obtenir tous les juges et les séparer en blacklisted ou non.
 	 * @author Thomas-Gabriel Paquin
