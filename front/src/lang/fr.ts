@@ -63,7 +63,15 @@ export const TEXTS = {
         btnemail:"Envoyer un email"
     },
     administratorsListPage:{
-        title:"Gestion des administrateurs"
+        title:"Paramètres généraux",
+        resetAction:"Réinitialiser l'année",
+        resetTitle:"Réinitialisation annuelle",
+        resetDescription:"Réinitialise la participation des juges et les assignations de l'édition courante.",
+        resetConfirmation:"Voulez-vous vraiment lancer la réinitialisation annuelle? Cette action peut désactiver des assignations en cours.",
+        resetConfirm:"Confirmer la réinitialisation",
+        resetCancel:"Annuler",
+        resetSuccess:"La réinitialisation annuelle a été effectuée avec succès.",
+        resetError:"Une erreur est survenue lors de la réinitialisation annuelle."
     },
     ajoutAdmin:{
         title:"Ajouter un administrateur à Expo Sat",
@@ -178,9 +186,16 @@ export const TEXTS = {
             }
         },
         pictureConsent:{
-            label:"Je consens à être pris en photo et j'autorise le comité à les utiliser pour faire de la publicité future (site web, médias sociaux, journaux, etc.)",
+            label:"Consentement à la prise de photos",
+            publication:"J'autorise l'utilisation des photos pour la promotion (site web, médias sociaux, journaux, etc.).",
+            internal:"J'autorise l'utilisation des photos à des fins internes et pédagogiques.",
+            refusal:"Je refuse que des photos soient prises de moi.",
             yes:"Oui",
             no:"Non"
+        },
+        anonymous:{
+            label:"Inscription anonyme",
+            helper:"Masquer mes informations personnelles (prénom, nom, DA, etc.) dans les listes."
         },
         buttons:{
             addMember:"Ajouter un membre",

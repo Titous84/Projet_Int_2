@@ -91,7 +91,38 @@ class SignUpTeamRepository extends Repository
                 $verifcationMember = $this->get_member_by_numero_da($team->members[$a]["numero_da"]);
                 if(sizeOf($verifcationMember) == 0){ //
                     //Insertion d'un membre dans la bd
-                    $sql = "INSERT INTO users (first_name, last_name, numero_da, role_id, picture_consent, activated, activation_token) VALUES (:first_name, :last_name, :numero_da, :role_id, :picture_consent, 0, :activation_token)";
+                    $sql = "INSERT INTO users (
+                        first_name,
+                        last_name,
+                        numero_da,
+                        role_id,
+                        picture_consent,
+                        photo_consent_publication,
+                        photo_consent_internal,
+                        photo_consent_refusal,
+                        is_anonymous,
+                        activated,
+                        activation_token
+                    ) VALUES (
+                        :first_name,
+                        :last_name,
+                        :numero_da,
+                        :role_id,
+                        :picture_consent,
+                        :photo_consent_publication,
+                        :photo_consent_internal,
+                        :photo_consent_refusal,
+                        :is_anonymous,
+                        0,
+                        :activation_token
+                    )";
+
+                    $photoConsentPublication = intval($team->members[$a]['photoConsentPublication'] ?? 0);
+                    $photoConsentInternal = intval($team->members[$a]['photoConsentInternal'] ?? 0);
+                    $photoConsentRefusal = intval($team->members[$a]['photoConsentRefusal'] ?? 0);
+                    $isAnonymous = intval($team->members[$a]['isAnonymous'] ?? 0);
+                    // Compatibilité : le champ historique picture_consent est vrai si un consentement est donné et sans refus total.
+                    $pictureConsent = ($photoConsentPublication || $photoConsentInternal) && !$photoConsentRefusal ? 1 : 0;
     
                     $req = $this->db->prepare($sql);
                     $req->execute(array(
@@ -99,16 +130,43 @@ class SignUpTeamRepository extends Repository
                         "last_name" => $this->uppercase_first_letter($team->members[$a]['lastName']),
                         "numero_da" => $team->members[$a]['numero_da'],
                         "role_id" => 3,
-                        "picture_consent" => $team->members[$a]['pictureConsent'],
+                        "picture_consent" => $pictureConsent,
+                        "photo_consent_publication" => $photoConsentPublication,
+                        "photo_consent_internal" => $photoConsentInternal,
+                        "photo_consent_refusal" => $photoConsentRefusal,
+                        "is_anonymous" => $isAnonymous,
                         "activation_token" => $token[$a]
                     ));
                 }
                 //Permet de mettre à jour le token pour une nouvelle validation
                 else{
-                    $sql = "UPDATE users SET activation_token = :activation_token WHERE id = :id";
+                    $photoConsentPublication = intval($team->members[$a]['photoConsentPublication'] ?? 0);
+                    $photoConsentInternal = intval($team->members[$a]['photoConsentInternal'] ?? 0);
+                    $photoConsentRefusal = intval($team->members[$a]['photoConsentRefusal'] ?? 0);
+                    $isAnonymous = intval($team->members[$a]['isAnonymous'] ?? 0);
+                    // Compatibilité : le champ historique picture_consent est vrai si un consentement est donné et sans refus total.
+                    $pictureConsent = ($photoConsentPublication || $photoConsentInternal) && !$photoConsentRefusal ? 1 : 0;
+
+                    $sql = "UPDATE users
+                        SET activation_token = :activation_token,
+                            first_name = :first_name,
+                            last_name = :last_name,
+                            picture_consent = :picture_consent,
+                            photo_consent_publication = :photo_consent_publication,
+                            photo_consent_internal = :photo_consent_internal,
+                            photo_consent_refusal = :photo_consent_refusal,
+                            is_anonymous = :is_anonymous
+                        WHERE id = :id";
                     $req = $this->db->prepare($sql);
                     $req->execute(array(
                         "activation_token" => $token[$a],
+                        "first_name" => $this->uppercase_first_letter ($team->members[$a]['firstName']),
+                        "last_name" => $this->uppercase_first_letter($team->members[$a]['lastName']),
+                        "picture_consent" => $pictureConsent,
+                        "photo_consent_publication" => $photoConsentPublication,
+                        "photo_consent_internal" => $photoConsentInternal,
+                        "photo_consent_refusal" => $photoConsentRefusal,
+                        "is_anonymous" => $isAnonymous,
                         "id" => $verifcationMember['id']
                     ));
                 }

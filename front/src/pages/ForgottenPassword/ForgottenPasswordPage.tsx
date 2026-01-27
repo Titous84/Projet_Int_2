@@ -1,7 +1,7 @@
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import IPage from "../../types/IPage";
 import UserService from "../../api/users/userService";
 import VerificationCodeService from "../../api/verificationCode/verificationCodeService";
@@ -82,7 +82,7 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
          */
         return (
             <div className={styles.toCenter}>
-                <Layout name={TEXTS.signin.password.title}>
+                <PageSection titre={TEXTS.signin.password.title}>
                     <ValidatorForm
                         onSubmit={()=>this.handleSubmit()}
                         onError={errors => ()=>ShowToast(errors.toString(),5000,"error","top-center",false)}
@@ -103,7 +103,7 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
                             <Button type="submit" className={styles.btnConnexion+ ' ' + styles.btnHover}>{TEXTS.signin.btnemail}</Button>
                         </div>
                     </ValidatorForm>
-                </Layout>              
+                </PageSection>              
             </div>
         )
     }
