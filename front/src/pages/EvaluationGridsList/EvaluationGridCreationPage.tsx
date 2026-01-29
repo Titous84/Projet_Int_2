@@ -348,7 +348,7 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
             })
         }
         else if(this.state.sendSuccess === true) {
-            return <Navigate replace to="/gestion-grille-evaluation" />
+            return <Navigate replace to="/administration?onglet=modeles-grilles-evaluation" />
         } 
     }
 
