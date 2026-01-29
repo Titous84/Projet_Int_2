@@ -56,11 +56,22 @@ class UserRepository extends Repository
     {
 		try
 		{
-			$sql = "SELECT users.id, first_name as firstName, last_name as lastName, email, uuid, categories.name AS category, users.blacklisted, users.activated
+			$sql = "SELECT users.id,
+				first_name as firstName,
+				last_name as lastName,
+				email,
+				uuid,
+				categories.name AS category,
+				users.blacklisted,
+				users.activated,
+				judge.participates_current_year AS participatesCurrentYear,
+				CASE WHEN COUNT(evaluation.id) > 0 THEN 1 ELSE 0 END AS hasAssignment
 			FROM users 
 			INNER JOIN judge ON judge.users_id = users.id
 			INNER JOIN categories ON judge.categories_id = categories.id
-			WHERE role_id = 1";
+			LEFT JOIN evaluation ON evaluation.judge_id = judge.id
+			WHERE role_id = 1
+			GROUP BY users.id, first_name, last_name, email, uuid, categories.name, users.blacklisted, users.activated, judge.participates_current_year";
 
 			$req = $this->db->prepare($sql);
 			$req->execute();
@@ -276,6 +287,36 @@ class UserRepository extends Repository
         }
     }
 
+    /**
+     * Réinitialise les données annuelles sensibles à l'édition courante.
+     * @return bool true si la réinitialisation est un succès, false sinon.
+     */
+    public function reset_annual_data(): bool
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // Désactive la participation des juges pour la nouvelle édition.
+            $this->db->exec("UPDATE judge SET participates_current_year = 0");
+
+            // Réinitialise l'état d'assignation des équipes.
+            $this->db->exec("UPDATE teams SET judge_assignation = 0");
+
+            // Désactive les évaluations en cours sans supprimer l'historique.
+            $this->db->exec("UPDATE evaluation SET est_actif = 0");
+
+            $this->db->commit();
+            return true;
+        } catch (PDOException $exception) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            $context["http_error_code"] = $exception->getCode();
+            $this->logHandler->critical($exception->getMessage(), $context);
+            return false;
+        }
+    }
+
 	/**
 	 * Fonction qui permet d'obtenir tous les juges et les séparer en blacklisted ou non.
 	 * @author Thomas-Gabriel Paquin
@@ -286,11 +327,22 @@ class UserRepository extends Repository
     {
 		try
 		{
-			$sql = "SELECT users.id, first_name as firstName, last_name as lastName, email, uuid, categories.name AS category, blacklisted, activated
+			$sql = "SELECT users.id,
+				first_name as firstName,
+				last_name as lastName,
+				email,
+				uuid,
+				categories.name AS category,
+				blacklisted,
+				activated,
+				judge.participates_current_year AS participatesCurrentYear,
+				CASE WHEN COUNT(evaluation.id) > 0 THEN 1 ELSE 0 END AS hasAssignment
 			FROM users 
 			INNER JOIN judge ON judge.users_id = users.id
 			INNER JOIN categories ON judge.categories_id = categories.id
-			WHERE role_id = 1 AND blacklisted = 1";
+			LEFT JOIN evaluation ON evaluation.judge_id = judge.id
+			WHERE role_id = 1 AND blacklisted = 1
+			GROUP BY users.id, first_name, last_name, email, uuid, categories.name, blacklisted, activated, judge.participates_current_year";
 
 			$req = $this->db->prepare($sql);
 			$req->execute();
@@ -668,6 +720,25 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * Fonction qui permet de modifier la présence du juge à l'édition courante.
+	 * @author Thomas-Gabriel Paquin
+	 * @param int $userId ID de l'utilisateur à modifier.
+	 * @param int $participatesCurrentYear Indique si le juge participe à l'édition courante.
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	 */
+	private function update_judge_participation(int $userId, int $participatesCurrentYear)
+	{
+		$sql = "UPDATE judge SET participates_current_year = :participates_current_year
+		WHERE users_id = :id";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(
+			":id" => $userId,
+			":participates_current_year" => $participatesCurrentYear,
+		));
+		return $query->rowCount();
+	}
+
+	/**
 	 * Fonction qui permet de modifier un juge.
 	 * @author Thomas-Gabriel Paquin
 	 * @param array $judge Juge à modifié.
@@ -690,8 +761,14 @@ class UserRepository extends Repository
 				":blacklisted" => $data['judge']['blacklisted']
 			));
 			$results = $query->rowCount();
+			$categoryUpdate = $this->update_judge_category($data['judge']['id'], $data['judge']['categoryId']);
+			$participatesCurrentYear = $data['judge']['participatesCurrentYear'] ?? 1;
+			$participationUpdate = $this->update_judge_participation(
+				$data['judge']['id'],
+				$participatesCurrentYear
+			);
 
-        	return $results || $this->update_judge_category($data['judge']['id'], $data['judge']['categoryId']);
+        	return $results || $categoryUpdate || $participationUpdate;
 		}
 		catch(PDOException $e)
 		{
