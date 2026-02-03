@@ -1,25 +1,29 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Class EvaluationGridRepository
  * @author Raphaël Boisvert
  * @author Thomas-Gabriel Paquin
  * @package App\Repositories
- */
+*/
 class EvaluationGridRepository extends Repository
 {
     /**
+     * @author Nathan Reyes
      * Requête pour obtenir la liste de toutes les grilles d'évaluation
      * @return array|null
-     */
+    */
     public function getEvaluationGrid()
     {
         try {
-            $sql = "SELECT survey.id, survey.name as name FROM survey
+            // La table des grilles d'évaluation s'appelle evaluationgrids (alias survey pour simplifier les requêtes).
+            $sql = "SELECT survey.id, survey.name as name FROM evaluationgrids AS survey
             ORDER BY survey.name ASC";
             $req = $this->db->prepare($sql);
             $req->execute();
@@ -32,12 +36,13 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * @author Jean-Christophe Demers
      * @author Thomas-Gabriel Paquin
      * Requête pour obtenir une grille d'évaluation et toutes ses sections et ses critères
      * @param $id
      * @return array|null
-     */
+    */
     public function getEvaluationGridById($id)
     {
         try {
@@ -45,7 +50,7 @@ class EvaluationGridRepository extends Repository
             rating_section.name as rating_section_name, rating_section.position as rating_section_position,
             criteria.id as criteria_id, criteria.criteria as criteria_name, criteria.position as criteria_position,
             criteria.max_value as criteria_max_value, criteria.incremental_value as criteria_incremental_value
-            FROM survey
+            FROM evaluationgrids AS survey
             LEFT JOIN rating_section ON rating_section.survey_id = survey.id
             LEFT JOIN criteria ON criteria.rating_section_id = rating_section.id
             WHERE survey.id = :id
@@ -97,10 +102,11 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour supprimer une grille d'évaluation et toutes ses sections et tous ses critères
      * @param $id
      * @return bool
-     */
+    */
     public function deleteEvaluationGridById($id)
     {
         try {
@@ -114,7 +120,7 @@ class EvaluationGridRepository extends Repository
             $req->bindParam(':id', $id);
             $req->execute();
 
-            $sql = "DELETE FROM survey WHERE id = :id";
+            $sql = "DELETE FROM evaluationgrids WHERE id = :id";
             $req = $this->db->prepare($sql);
             $req->bindParam(':id', $id);
             $req->execute();
@@ -126,13 +132,14 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour ajouter une grille d'évaluation et toutes ses sections et tous ses critères
      * @param $id
      * @return int|null
-     */
+    */
     public function insertEvaluationGrid($data){
         try {
-            $sql = "INSERT INTO survey (name) VALUES (:name)";
+            $sql = "INSERT INTO evaluationgrids (name) VALUES (:name)";
             $req = $this->db->prepare($sql);
             $req->bindParam(':name', $data['name']);
             $req->execute();
@@ -167,14 +174,15 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour mette à jour une grille d'évaluation et toutes ses sections ainsi que tous ses critères
      * @param $id
      * @return bool
-     */
+    */
     public function updateEvaluationGrid($data)
     {
         try {
-                $sql = 'UPDATE survey SET name = :name WHERE id = :id';
+                $sql = 'UPDATE evaluationgrids SET name = :name WHERE id = :id';
                 $req = $this->db->prepare($sql);
                 $req->bindParam(':name', $data['name']);
                 $req->bindParam(':id', $data['id']);

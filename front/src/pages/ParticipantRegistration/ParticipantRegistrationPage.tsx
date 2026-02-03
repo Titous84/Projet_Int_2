@@ -1,7 +1,11 @@
 /**
+ * @author Nathan Reyes
+*/
+/**
+ * @author Nathan Reyes
  * @file Page d'inscription des participants.
  * @author Tristan Lafontaine
- */
+*/
 import { Navigate } from 'react-router';
 import { ValidatorForm } from 'react-material-ui-form-validator'
 import { Box, Button, CircularProgress } from '@mui/material';
@@ -22,21 +26,23 @@ import { TEXTS } from '../../lang/fr';
 import styles from "./ParticipantRegistrationPage.module.css"
 
 /**
+ * @author Nathan Reyes
  * @constant {number} MIN_MEMBER - Le nombre minimum de membres par équipe.
  * @constant {number} MIN_CONTACT - Le nombre minimum de personnes ressources par équipe.
  * @constant {number} MAX_CONTACT - Le nombre maximum de personnes ressources par équipe.
  * @author Mathieu Sévégny
- */
+*/
 const MIN_MEMBER = 2
 const MIN_CONTACT = 1
 const MAX_CONTACT = 2
 
 /**
+ * @author Nathan Reyes
  * Structure d'un membre d'une équipe.
  * @property {string} firstName - Le prénom du membre.
  * @property {string} lastName - Le nom de famille du membre.
  * @property {string} numero_da - Le numéro de Dossier Administratif du membre.
- */
+*/
 interface Member {
     firstName: string;
     lastName: string;
@@ -44,13 +50,14 @@ interface Member {
 }
 
 /**
+ * @author Nathan Reyes
  * Structure d'un message de succès. Affiche les informations de l'équipe créée à l'utilisateur.
  * @property {string} title - Le titre du message de succès.
  * @property {string} description - La description du message de succès.
  * @property {string} category - La catégorie de l'équipe créée.
  * @property {string} year - L'année de l'équipe créée.
  * @property {Member[]} members - La liste des membres de l'équipe créée.
- */
+*/
 interface SuccessMessage {
     title: string;
     description: string;
@@ -60,6 +67,7 @@ interface SuccessMessage {
 }
 
 /**
+ * @author Nathan Reyes
  * Variables d'état du composant React: ParticipantRegistrationPage.
  * @property {TeamInfo} teamInfo - Les informations de l'équipe.
  * @property {Category[]} categories - La liste des catégories disponibles.
@@ -68,7 +76,7 @@ interface SuccessMessage {
  * @property {boolean} sendSuccess - Indique si l'inscription a réussi.
  * @property {boolean} activeCircularProcress - Indique si le chargement est en cours.
  * @property {SuccessMessage} successMessage - Le message de succès à afficher.
- */
+*/
 interface ParticipantRegistrationPageState{
     teamInfo:TeamInfo,
     categories:Category[],
@@ -80,20 +88,23 @@ interface ParticipantRegistrationPageState{
 }
 
 /**
+ * @author Nathan Reyes
  * Page du formulaire d'inscription pour les participants.
  * @author Tristan Lafontaine
- */
+*/
 export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRegistrationPageState> {
     constructor(props: {}) {
         super(props)
 
         /**
+         * @author Nathan Reyes
          * Initialisation des variables d'état.
-         */
+        */
         this.state = {
             /**
+             * @author Nathan Reyes
              * @author Mathieu Sévégny
-             */
+            */
             teamInfo : {
                 title:'',
                 description:'',
@@ -103,8 +114,8 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
                     {email:"", fullName:""}
                 ],
                 members:[
-                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0},
-                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0}
+                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false},
+                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false}
                 ]
             },
             categories:[],
@@ -122,16 +133,18 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
         }
 
         /**
+         * @author Nathan Reyes
          * Sert à lier la méthode à l'instance du composant React.
          * @author Tristan Lafontaine
-         */
+        */
         this.handleChangeForm = this.handleChangeForm.bind(this);
     }
 
     /**
+     * @author Nathan Reyes
      * Ajoute un membre à un tableau
      * Mathieu Sévégny
-     */
+    */
     addPerson(type:"members" | "contactPerson"){
         let oldState : any = {...this.state.teamInfo}
 
@@ -140,7 +153,7 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
 
         //Crée le bon object en fonction du type demandé
         if (type === "contactPerson") array.push({numero_da:"",fullName:""})
-        else array.push({numero_da:"",firstName:"",lastName:"",pictureConsent:0})
+        else array.push({numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false})
 
         oldState[type] = array;
 
@@ -153,9 +166,10 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Enlève un membre à un tableau
      * Mathieu Sévégny
-     */
+    */
     removePerson(type:"members" | "contactPerson"){
         let oldState : any = {...this.state.teamInfo}
 
@@ -187,9 +201,10 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Vérification personnaliser
      * Tristan Lafontaine
-     */
+    */
     componentDidMount() {
         //Permet de récupérer les catégories lors du chargmement de la page
         this.getCategory();
@@ -218,12 +233,13 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Réagit aux changements dans les formulaires des membres.
      * @param number Numéro du membre
      * @param key Clé de la propriété
      * @param value Nouvelle valeur de la propriété
      * Mathieu Sévégny
-     */
+    */
     handleChangeTeamMemberForm(number:number,key:string,value:any){
         //Cherche le tableau du type choisi
         let array : any[] = Array.from(this.state.teamInfo.members);
@@ -233,6 +249,21 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
         
         //Change la valeur de la personne
         person[key] = value
+
+        // Gestion du consentement aux photos avec plusieurs clauses.
+        if (key === "photoConsentRefusal" && value === true) {
+            // Un refus total désactive les autres consentements.
+            person.photoConsentPublication = false;
+            person.photoConsentInternal = false;
+        }
+
+        if ((key === "photoConsentPublication" || key === "photoConsentInternal") && value === true) {
+            // Une acceptation partielle annule le refus total.
+            person.photoConsentRefusal = false;
+        }
+
+        // Met à jour l'ancien champ de compatibilité pour l'API.
+        person.pictureConsent = person.photoConsentPublication || person.photoConsentInternal ? 1 : 0;
 
         //Modifie la personne dans le tableau
         array[number-1] = person;
@@ -246,12 +277,13 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Réagit aux changements dans les formulaires des personnes ressources.
      * @param number Numéro du membre
      * @param key Clé de la propriété
      * @param value Nouvelle valeur de la propriété
      * Mathieu Sévégny
-     */
+    */
     handleChangeContactForm(number:number,key:string,value:any){
         //Cherche le tableau du type choisi
         let array : any[] = Array.from(this.state.teamInfo.contactPerson);
@@ -285,10 +317,11 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les formulaires de membres.
      * @returns Un formulaire pour chaque membre.
      * Mathieu Sévégnyemail
-     */
+    */
     generateTeamMemberForms(){
         let counter = 0;
         return this.state.teamInfo.members.map(teamMember => {
@@ -299,10 +332,11 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les formulaires des personnes ressources.
      * @returns Un formulaire pour chaque personne ressource.
      * @author Mathieu Sévégny
-     */
+    */
     generateContactPersonForms(){
         let counter = 0;
         return this.state.teamInfo.contactPerson.map(contactPerson => {
@@ -313,12 +347,13 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les alerts lors d'erreur avec l'API ou fait la redirection vers la page de succès
      * @returns une alert pour chaque erreur
      * @author Tristan Lafontaine
-     * 
+     *
      * @description Cette fonction génère une alerte pour chaque erreur dans le state error. Si l'inscription est réussie, elle redirige l'utilisateur vers la page de succès
-     */
+    */
     generateAlert(){
         let counter = 0;
         if(this.state.error.length > 0){
@@ -333,9 +368,10 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'aller chercher les categories à l'API
      * Tristan Lafontaine
-     */
+    */
     async getCategory() {
         const response = await SignUpService.tryGetCategory()
         if (response.error) {
@@ -351,13 +387,14 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de générer le numéro d'équipe lors de l'inscription
      * (Pas encore complètement fonctionnelle : l'incrémentation ne fonctionne pas
      * mais le numéro d'équipe est généré correctement)
-     * 
+     *
      * @param categoryName Nom de la catégorie
      * @returns Le numéro d'équipe généré
-     */
+    */
     private async generateTeamNumber(categoryName: string): Promise<string> {
     
         // Vérifie si les catégories sont chargées
@@ -379,17 +416,29 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'envoyer le formulaire à l'API
      * @author Tristan Lafontaine
-     * 
+     *
      * @description Cette fonction envoie les données du formulaire à l'API pour l'inscription d'une équipe. Si l'ajout est réussi, elle construit un message de succès et l'affiche. Sinon, en cas d'erreur, elle affiche les messages d'erreur correspondants
-     */
+    */
     async onSubmit() {
         this.setState({activeCircularProcress:true}) // Activé le rendu de la progression de la soumission
 
         // Permet d'afficher un message si le form est tenté d'être soumis avant que les catégories soient chargées
         if (!this.state.categories || this.state.categories.length === 0) {
             ShowToast("Les catégories ne sont pas encore chargées. Veuillez réessayer dans quelques secondes.", 5000, "warning", "top-center", false);
+            this.setState({activeCircularProcress:false});
+            return;
+        }
+
+        // Validation locale : chaque membre doit choisir une clause de consentement.
+        const membresSansConsentement = this.state.teamInfo.members.filter((member) => {
+            return !member.photoConsentPublication && !member.photoConsentInternal && !member.photoConsentRefusal;
+        });
+
+        if (membresSansConsentement.length > 0) {
+            ShowToast("Chaque participant doit choisir une option de consentement pour la prise de photos.", 5000, "warning", "top-center", false);
             this.setState({activeCircularProcress:false});
             return;
         }
@@ -433,9 +482,9 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
                             category: teamInfo.category,
                             year: teamInfo.year,
                             members: teamInfo.members.map(member => ({
-                                firstName: member.firstName,
-                                lastName: member.lastName,
-                                numero_da: member.numero_da
+                                firstName: member.isAnonymous ? "Participant anonyme" : member.firstName,
+                                lastName: member.isAnonymous ? "" : member.lastName,
+                                numero_da: member.isAnonymous ? "Masqué" : member.numero_da
                             }))
                         };
                         
@@ -456,15 +505,17 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
     }
 
     /**
+     * @author Nathan Reyes
      * Permet de scroller au début de la page
-     */
+    */
     error(){
         window.scrollTo(0, 0)
     }
 
     /**
+     * @author Nathan Reyes
      * Permet de faire un rendu de la progression de la soumission.
-     */
+    */
     circluarProgess(){
         return(
             <div className={`${styles.pageFullScreen} ${styles.flexTitle}`}>

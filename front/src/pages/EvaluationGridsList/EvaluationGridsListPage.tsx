@@ -1,7 +1,10 @@
+/**
+ * @author Nathan Reyes
+*/
 import { Link } from "react-router-dom";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ButtonExposat from '../../components/button/button-exposat';
-import Layout from '../../components/layout/layout';
+import PageSection from '../../components/common/PageSection';
 import { IEvaluationGrid } from "../../types/evaluationGrid/IEvaluationGrid";
 import IPage from "../../types/IPage";
 import EvaluationGridService from "../../api/evaluationGrid/evaluationGridService";
@@ -10,18 +13,20 @@ import { TEXTS } from '../../lang/fr';
 import styles from './EvaluationGridsListPage.module.css';
 
 /**
+ * @author Nathan Reyes
  * Variables d'état du composant React: EvaluationGridsListPage.
  * @property {IEvaluationGrid[]} evaluationGrids - La liste des modèles de questionnaire.
- */
+*/
 interface EvaluationGridsListPageState {
     evaluationGrids: IEvaluationGrid[];
 }
 
 /**
+ * @author Nathan Reyes
  * Page de la liste des modèles de questionnaire.
  * @author Raphaël Boisvert
  * @author Thomas-Gabriel Paquin
- */
+*/
 export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsListPageState> {
     constructor(props: {}) {
         super(props)
@@ -41,8 +46,9 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère les modèles de questionnaire
-     */
+    */
     async getEvaluationGrid() {
         const response = await EvaluationGridService.getEvaluationGrid();
         if (response && response.data) {
@@ -53,9 +59,10 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
     }
 
     /**
+     * @author Nathan Reyes
      * Supprime un modèle de questionnaire
      * @param id L'id du modèle de questionnaire
-     */
+    */
     deleteEvaluationGrid(id: number) {
         EvaluationGridService.deleteEvaluationGrid(id).then(() => {
             this.getEvaluationGrid();
@@ -67,7 +74,7 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
 
     render() {
         return (
-            <Layout name={TEXTS.evaluationGrid.title}>
+            <PageSection titre={TEXTS.evaluationGrid.title}>
                 <Link to={`/gestion-grille-evaluation/formulaire/`}>
                     <ButtonExposat className={styles.buttonCreate} children={TEXTS.evaluationGrid.buttonCreate} />
                 </Link>
@@ -98,7 +105,7 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Layout>
+            </PageSection>
         )
     }
 }

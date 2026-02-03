@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { Checkbox, FormControl, InputLabel, MenuItem, Select, Typography, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ICategories } from "../../types/TeamsList/ICategories";
@@ -14,10 +17,11 @@ import TemporarySnackbar from "../../components/TemporarySnackbar/TemporarySnack
 type SnackbarMessageType = AlertColor;
 
 /**
+ * @author Nathan Reyes
  * @file Page d'affichage et de modification pour les juges actifs.
  * @author Thomas-Gabriel Paquin
  * @author Étienne Nadeau
- */
+*/
 export default function JudgesListPage() {
     const [listJudge, setListJudge] = useState<Judge[]>([]);
     const [categories, setCategories] = useState<ICategories[]>([]);
@@ -30,21 +34,23 @@ export default function JudgesListPage() {
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
     /**
+     * @author Nathan Reyes
      * @author Étienne Nadeau
-     * Après l'exécution du constructeur, 
-     * cette fonction va s'exécuter afin d'aller chercher les juges 
+     * Après l'exécution du constructeur,
+     * cette fonction va s'exécuter afin d'aller chercher les juges
      * et les catégories.
-     */
+    */
     useEffect(() => {
         getCategories();
         getJudges();
     }, []);
 
     /**
+     * @author Nathan Reyes
      * @author Thomas-Gabriel Paquin
      * @author Étienne Nadeau
      * Permet d'aller obtenir dans l'api les juges qui ont le status actif.
-     */
+    */
     const getJudges = async () => {
         setIsLoading(true);
         try {
@@ -63,11 +69,12 @@ export default function JudgesListPage() {
     };
 
     /**
+     * @author Nathan Reyes
      * Mets à jour un juge dans la bd avec les informations reçues.
      * @author Thomas-Gabriel Paquin
      * @author Étienne Nadeau
      * @param judge Le juge qui sera mis à jour.
-     */
+    */
     const patchJudge = async (judge: JudgeUpdate) => {
         try {
             const response = await UserService.patchJudgeInfos(judge);
@@ -83,10 +90,11 @@ export default function JudgesListPage() {
     };
 
     /**
+     * @author Nathan Reyes
      * Fait une recherche de toutes les catégories présentes dans la base de données
      * @author Thomas-Gabriel Paquin
      * @author Étienne Nadeau
-     */
+    */
     const getCategories = async () => {
         try {
             const response = await TeamsListService.tryGetCategories();
@@ -103,12 +111,13 @@ export default function JudgesListPage() {
     };
 
     /**
+     * @author Nathan Reyes
      * Met à jour les données des states vers les nouvelles données
      * @author Thomas-Gabriel Paquin
      * @author Étienne Nadeau
      * @param userId L'id du user associé au juge à modifier
      * @param displayData Les données qui sont modifier dans le juge
-     */
+    */
     const editJudge = async (userId: number, displayData: Judge) => {
 
         const judge: JudgeUpdate = {
@@ -119,14 +128,16 @@ export default function JudgesListPage() {
             email: displayData.email,
             activated: displayData.activated,
             blacklisted: displayData.blacklisted,
+            participatesCurrentYear: displayData.participatesCurrentYear,
         };
         await patchJudge(judge);
     };
 
     /**
+     * @author Nathan Reyes
      * @author Étienne Nadeau
      * Méthode permettant de supprimer les juges sélectionnés dans le tableau.
-     */
+    */
     const deleteSelectedJudges = () => {
         if (selectedJudgesIds.length > 0) {
             /* 
@@ -161,10 +172,11 @@ export default function JudgesListPage() {
     };
 
     /**
+     * @author Nathan Reyes
      * @author Étienne Nadeau
      * Définition de l'affichage des colonnes utilisées dans le tableau de gestion des juges.
      * Inspirer de: https://mui.com/x/react-data-grid/column-definition/
-     */
+    */
     const columns: GridColDef[] = [
         {
             field: "firstName",
@@ -336,6 +348,46 @@ export default function JudgesListPage() {
             valueFormatter: (params) => (params ? "Oui" : "Non"),
         },
         {
+            field: "participatesCurrentYear",
+            headerName: "Édition courante",
+            editable: true,
+            width: 150,
+            renderEditCell: (params) => (
+                <Checkbox
+                    checked={params.value}
+                    onChange={(event) => {
+                        // Mettre à jour la participation à l'édition courante.
+                        params.api.setEditCellValue({
+                            id: params.id,
+                            field: "participatesCurrentYear",
+                            value: event.target.checked,
+                        });
+                    }}
+                    /*
+                    * Il faut cliquer en dehors du champ pour que la modification soit prise en compte
+                    * Inspirer de: https://www.w3schools.com/jsref/event_onblur.asp
+                    */
+                    onBlur={() => {
+                        editJudge(params.row.id, {
+                            ...params.row,
+                            participatesCurrentYear: params.row.participatesCurrentYear ? 1 : 0,
+                        });
+                        setSnackbarMessage(`La participation à l'édition courante a été modifiée.`);
+                        setSnackbarMessageType("success");
+                        setIsSnackbarOpen(true);
+                    }}
+                />
+            ),
+            valueFormatter: (params) => (params ? "Oui" : "Non"),
+        },
+        {
+            field: "hasAssignment",
+            headerName: "Assigné",
+            width: 110,
+            sortable: false,
+            valueFormatter: (params) => (params ? "Oui" : "Non"),
+        },
+        {
             field: "blacklisted",
             headerName: "Liste noire",
             width: 120,
@@ -372,10 +424,11 @@ export default function JudgesListPage() {
     ];
 
     /**
+     * @author Nathan Reyes
      * @author Thomas-Gabriel Paquin
      * @author Étienne Nadeau
      * @returns Retourne un tableau contenant les juges actifs et l'option de les modifier.
-     */
+    */
     return (
         <div
             data-testid="judge-list"

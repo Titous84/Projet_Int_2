@@ -1,3 +1,4 @@
+# @author Nathan Reyes
 #ExpoSAT script de compilation et paquete l'API et le projet React.
 
 function Build-ExpoSAT{
@@ -10,6 +11,17 @@ function Build-ExpoSAT{
     }
 
     Set-Location ./front
+
+    # Vérifier la présence des fichiers d'environnement requis
+    if (!(Test-Path -Path ./.env -PathType Leaf)) {
+        Write-Host "Erreur : le fichier .env est manquant dans ./front. Veuillez le créer avant de compiler."
+        Return
+    }
+
+    if (!(Test-Path -Path ./.env.prod -PathType Leaf)) {
+        Write-Host "Erreur : le fichier .env.prod est manquant dans ./front. Veuillez le créer avant de compiler."
+        Return
+    }
 
     #Compilation du projet React
     npm run build
