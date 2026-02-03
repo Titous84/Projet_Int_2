@@ -463,7 +463,10 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
     render() {
         // Gestion des cas sans données pour éviter des erreurs inutiles.
         // @author Nathan Reyes
+<<<<<<< codex/fix-bugs-and-add-features-z7mtco
         // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
+=======
+>>>>>>> main
         const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
         const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
         const messageAucuneDonnee = aucunJuge || aucuneEquipe;
