@@ -131,6 +131,10 @@ class ValidatorTeam extends Validator
                 }
 
                 for($a = 0; $a < $sizeofArray; $a++){
+                    $photoConsentPublication = $team['members'][$a]['photoConsentPublication'] ?? false;
+                    $photoConsentInternal = $team['members'][$a]['photoConsentInternal'] ?? false;
+                    $photoConsentRefusal = $team['members'][$a]['photoConsentRefusal'] ?? false;
+
                     //Vérification du prénom du membre n'est pas vide
                     if($this->is_empty($team['members'][$a]['firstName'])){
                         $messages[] = "Le prénom est obligatoire : " . $team['members'][$a]['firstName'];
@@ -144,6 +148,10 @@ class ValidatorTeam extends Validator
                     // Vérification du numéro de DA du membre n'est pas vide.
                     if ($this->is_empty($team['members'][$a]['numero_da'])) {
                         $messages[] = "Le numéro DA du membre est obligatoire : " . $team['members'][$a]['numero_da'];
+                    }
+
+                    if (!$photoConsentPublication && !$photoConsentInternal && !$photoConsentRefusal) {
+                        $messages[] = "Le consentement aux photos doit être précisé pour chaque membre.";
                     }
                 }
             }

@@ -19,7 +19,8 @@ class EvaluationGridRepository extends Repository
     public function getEvaluationGrid()
     {
         try {
-            $sql = "SELECT survey.id, survey.name as name FROM survey
+            // La table des grilles d'évaluation s'appelle evaluationgrids (alias survey pour simplifier les requêtes).
+            $sql = "SELECT survey.id, survey.name as name FROM evaluationgrids AS survey
             ORDER BY survey.name ASC";
             $req = $this->db->prepare($sql);
             $req->execute();
@@ -45,7 +46,7 @@ class EvaluationGridRepository extends Repository
             rating_section.name as rating_section_name, rating_section.position as rating_section_position,
             criteria.id as criteria_id, criteria.criteria as criteria_name, criteria.position as criteria_position,
             criteria.max_value as criteria_max_value, criteria.incremental_value as criteria_incremental_value
-            FROM survey
+            FROM evaluationgrids AS survey
             LEFT JOIN rating_section ON rating_section.survey_id = survey.id
             LEFT JOIN criteria ON criteria.rating_section_id = rating_section.id
             WHERE survey.id = :id
@@ -114,7 +115,7 @@ class EvaluationGridRepository extends Repository
             $req->bindParam(':id', $id);
             $req->execute();
 
-            $sql = "DELETE FROM survey WHERE id = :id";
+            $sql = "DELETE FROM evaluationgrids WHERE id = :id";
             $req = $this->db->prepare($sql);
             $req->bindParam(':id', $id);
             $req->execute();
@@ -132,7 +133,7 @@ class EvaluationGridRepository extends Repository
      */
     public function insertEvaluationGrid($data){
         try {
-            $sql = "INSERT INTO survey (name) VALUES (:name)";
+            $sql = "INSERT INTO evaluationgrids (name) VALUES (:name)";
             $req = $this->db->prepare($sql);
             $req->bindParam(':name', $data['name']);
             $req->execute();
@@ -174,7 +175,7 @@ class EvaluationGridRepository extends Repository
     public function updateEvaluationGrid($data)
     {
         try {
-                $sql = 'UPDATE survey SET name = :name WHERE id = :id';
+                $sql = 'UPDATE evaluationgrids SET name = :name WHERE id = :id';
                 $req = $this->db->prepare($sql);
                 $req->bindParam(':name', $data['name']);
                 $req->bindParam(':id', $data['id']);
