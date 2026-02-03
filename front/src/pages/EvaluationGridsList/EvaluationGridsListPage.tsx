@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ButtonExposat from '../../components/button/button-exposat';
-import Layout from '../../components/layout/layout';
+import PageSection from '../../components/common/PageSection';
 import { IEvaluationGrid } from "../../types/evaluationGrid/IEvaluationGrid";
 import IPage from "../../types/IPage";
 import EvaluationGridService from "../../api/evaluationGrid/evaluationGridService";
@@ -67,7 +67,7 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
 
     render() {
         return (
-            <Layout name={TEXTS.evaluationGrid.title}>
+            <PageSection titre={TEXTS.evaluationGrid.title}>
                 <Link to={`/gestion-grille-evaluation/formulaire/`}>
                     <ButtonExposat className={styles.buttonCreate} children={TEXTS.evaluationGrid.buttonCreate} />
                 </Link>
@@ -98,7 +98,7 @@ export default class EvaluationGridsListPage extends IPage<{}, EvaluationGridsLi
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Layout>
+            </PageSection>
         )
     }
 }

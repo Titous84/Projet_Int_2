@@ -116,9 +116,27 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
      * S'occupe de vérifier que le numéro d'équipe existe et
      * ensuite envoye les valeurs à la fonction updateOrAddSurvey()
      * @param e La numéro d'équipe selectionner par l'utilisateur
+     * @author Nathan Reyes
      */
     handleChange(e: SelectChangeEvent<string>) {
         this.setState({ standId: e.target.value });
+        const placement = this.props.placement + 1;
+
+        const assignationExistante = this.props.standsEval.find((assignation) => (
+            assignation.judge_id === this.props.leJuge.id &&
+            assignation.stand_id === e.target.value &&
+            assignation.hour !== placement
+        ));
+
+        if (assignationExistante) {
+            ShowToast(
+                `Ce juge est déjà assigné à l'équipe ${e.target.value} à une autre heure.`,
+                5000,
+                "warning",
+                "top-center",
+                false
+            );
+        }
 
         this.props.stands.map((stand) => {
             if (stand.team_number != e.target.value)

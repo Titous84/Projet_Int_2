@@ -22,6 +22,8 @@ class TeamsListRepository extends Repository
     public function get_all_teams_and_members(string $role_name): array
     {
         try {
+            // Les grilles d'évaluation sont stockées dans evaluationgrids (alias survey pour garder les champs).
+            // Les informations des participants anonymes sont masquées dans la requête.
             $sql = "SELECT users.id,
                 teams.id as team_id,
                 teams.team_number,
@@ -31,20 +33,24 @@ class TeamsListRepository extends Repository
                 teams.years as year,
                 survey.name as survey,
                 teams.activated as teams_activated, 
-                users.first_name, 
-                users.last_name,
-                users.numero_da,
-                users.email, 
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END as first_name,
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END as last_name,
+                CASE WHEN users.is_anonymous = 1 THEN 'Masqué' ELSE users.numero_da END as numero_da,
+                CASE WHEN users.is_anonymous = 1 THEN NULL ELSE users.email END as email,
                 users.activated as users_activated,
                 users.blacklisted, 
                 users.picture_consent,
+                users.photo_consent_publication,
+                users.photo_consent_internal,
+                users.photo_consent_refusal,
+                users.is_anonymous,
                 GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name, 
                 GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -82,12 +88,18 @@ class TeamsListRepository extends Repository
     {
         try {
             $sql = "SELECT teams.id as team_id, teams.team_number, teams.name as title, teams.description, categories.name as category, teams.years as year, survey.name as survey, teams.activated as teams_activated, 
-            GROUP_CONCAT(DISTINCT CONCAT(users.first_name,' ',users.last_name) SEPARATOR ', ') as members, GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name, GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
+            GROUP_CONCAT(DISTINCT CONCAT(
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END,
+                ' ',
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END
+            ) SEPARATOR ', ') as members,
+            GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name,
+            GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -126,12 +138,25 @@ class TeamsListRepository extends Repository
     {
         try {
             $sql = "SELECT users.id, teams.id as team_id, teams.team_number, teams.name as title, teams.description, categories.name as category, teams.years as year, survey.name as survey, survey.id as survey_id, teams.activated as teams_activated, 
-            users.first_name, users.last_name, users.numero_da, users.email, users.picture_consent, users.activated as users_activated, users.blacklisted, contact_person.name as contact_name, contact_person.email as contact_email, contact_person.id as contact_id
+            CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END as first_name,
+            CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END as last_name,
+            CASE WHEN users.is_anonymous = 1 THEN 'Masqué' ELSE users.numero_da END as numero_da,
+            CASE WHEN users.is_anonymous = 1 THEN NULL ELSE users.email END as email,
+            users.picture_consent,
+            users.photo_consent_publication,
+            users.photo_consent_internal,
+            users.photo_consent_refusal,
+            users.is_anonymous,
+            users.activated as users_activated,
+            users.blacklisted,
+            contact_person.name as contact_name,
+            contact_person.email as contact_email,
+            contact_person.id as contact_id
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
             WHERE teams.id = :id
@@ -164,7 +189,7 @@ class TeamsListRepository extends Repository
     public function get_survey_by_name(string $survey): array
     {
         try {
-            $sql = "SELECT id, name FROM survey WHERE name = '$survey'";
+            $sql = "SELECT id, name FROM evaluationgrids WHERE name = '$survey'";
 
             $req = $this->db->query($sql);
 
@@ -249,8 +274,30 @@ class TeamsListRepository extends Repository
 
             // Insertion dans la table `users`
             $sqlUser = "
-                INSERT INTO users (first_name, last_name, numero_da, picture_consent, activated, role_id)
-                VALUES (:first_name, :last_name, :numero_da, :picture_consent, :activated, :role_id)
+                INSERT INTO users (
+                    first_name,
+                    last_name,
+                    numero_da,
+                    picture_consent,
+                    photo_consent_publication,
+                    photo_consent_internal,
+                    photo_consent_refusal,
+                    is_anonymous,
+                    activated,
+                    role_id
+                )
+                VALUES (
+                    :first_name,
+                    :last_name,
+                    :numero_da,
+                    :picture_consent,
+                    :photo_consent_publication,
+                    :photo_consent_internal,
+                    :photo_consent_refusal,
+                    :is_anonymous,
+                    :activated,
+                    :role_id
+                )
             ";
 
             $reqUser = $this->db->prepare($sqlUser);
@@ -259,6 +306,10 @@ class TeamsListRepository extends Repository
                 "last_name" => $teamMember->lastName,
                 "numero_da" => $teamMember->numeroDa,
                 "picture_consent" => $teamMember->pictureConsent,
+                "photo_consent_publication" => $teamMember->photoConsentPublication,
+                "photo_consent_internal" => $teamMember->photoConsentInternal,
+                "photo_consent_refusal" => $teamMember->photoConsentRefusal,
+                "is_anonymous" => $teamMember->isAnonymous,
                 "activated" => $teamMember->userActivated,
                 "role_id" => 3,
             ]);
@@ -374,6 +425,10 @@ class TeamsListRepository extends Repository
                 numero_da = :numero_da,
                 blacklisted = :blacklisted,
                 picture_consent = :picture_consent,
+                photo_consent_publication = :photo_consent_publication,
+                photo_consent_internal = :photo_consent_internal,
+                photo_consent_refusal = :photo_consent_refusal,
+                is_anonymous = :is_anonymous,
                 activated = :activated
             WHERE id = :id";
     
@@ -386,6 +441,10 @@ class TeamsListRepository extends Repository
                 "numero_da" => $teamMember->numeroDa,
                 "blacklisted" => $teamMember->blacklisted,
                 "picture_consent" => $teamMember->pictureConsent,
+                "photo_consent_publication" => $teamMember->photoConsentPublication,
+                "photo_consent_internal" => $teamMember->photoConsentInternal,
+                "photo_consent_refusal" => $teamMember->photoConsentRefusal,
+                "is_anonymous" => $teamMember->isAnonymous,
                 "activated" => $teamMember->userActivated
             ]);
     
@@ -505,6 +564,10 @@ class TeamsListRepository extends Repository
                         "contact_person_name" => $member["contact_name"],
                         "contact_person_id" => $member["contact_id"],
                         "picture_consent" => $member["picture_consent"],
+                        "photo_consent_publication" => $member["photo_consent_publication"],
+                        "photo_consent_internal" => $member["photo_consent_internal"],
+                        "photo_consent_refusal" => $member["photo_consent_refusal"],
+                        "is_anonymous" => $member["is_anonymous"],
                     ]
                 )
             );

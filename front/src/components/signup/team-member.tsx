@@ -5,7 +5,7 @@ import React from 'react';
 import { ValidatorForm } from 'react-material-ui-form-validator'
 import TeamMember from '../../types/sign-up/team-member';
 import { MAX_LENGTH_FIRST_NAME, MAX_LENGTH_LAST_NAME } from '../../utils/constants';
-import { FormControl,FormControlLabel,FormLabel, Grid, Paper, Radio, RadioGroup } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, Paper } from '@mui/material';
 import styles from "./../../pages/ParticipantRegistration/ParticipantRegistrationPage.module.css";
 import { TextValidator } from 'react-material-ui-form-validator'
 import { INPUT_VARIANT } from '../../utils/muiConstants';
@@ -105,18 +105,64 @@ export default class TeamMemberForm extends React.Component<TeamMemberFormProps>
                         </Grid>
                         <Grid item xs={12} md={12}>
                         <FormControl>
-                            <FormLabel id="demo-controlled-radio-buttons-group">{TEXTS.signup.pictureConsent.label}</FormLabel>
-                            <RadioGroup
-                                name="controlled-radio-buttons-group"
-                                value={this.props.teamMember.pictureConsent}
-                                onChange={(event:any) => {
-
-                                    this.props.handleChangeTeamMember(this.props.number,"pictureConsent", event.target.value)
-                                }}
-                            >
-                                <FormControlLabel value={1} control={<Radio />} label={TEXTS.signup.pictureConsent.yes} />
-                                <FormControlLabel value={0} control={<Radio />} label={TEXTS.signup.pictureConsent.no} />
-                            </RadioGroup>
+                            <FormLabel>{TEXTS.signup.anonymous.label}</FormLabel>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={this.props.teamMember.isAnonymous}
+                                        onChange={(event: any) => {
+                                            // Active ou désactive le masquage des informations personnelles.
+                                            this.props.handleChangeTeamMember(this.props.number, "isAnonymous", event.target.checked);
+                                        }}
+                                    />
+                                }
+                                label={TEXTS.signup.anonymous.helper}
+                            />
+                        </FormControl>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                        <FormControl>
+                            <FormLabel>{TEXTS.signup.pictureConsent.label}</FormLabel>
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.props.teamMember.photoConsentPublication}
+                                            disabled={this.props.teamMember.photoConsentRefusal}
+                                            onChange={(event:any) => {
+                                                // Consentement pour un usage public.
+                                                this.props.handleChangeTeamMember(this.props.number,"photoConsentPublication", event.target.checked)
+                                            }}
+                                        />
+                                    }
+                                    label={TEXTS.signup.pictureConsent.publication}
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.props.teamMember.photoConsentInternal}
+                                            disabled={this.props.teamMember.photoConsentRefusal}
+                                            onChange={(event:any) => {
+                                                // Consentement pour un usage interne.
+                                                this.props.handleChangeTeamMember(this.props.number,"photoConsentInternal", event.target.checked)
+                                            }}
+                                        />
+                                    }
+                                    label={TEXTS.signup.pictureConsent.internal}
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.props.teamMember.photoConsentRefusal}
+                                            onChange={(event:any) => {
+                                                // Refus total de la prise de photos.
+                                                this.props.handleChangeTeamMember(this.props.number,"photoConsentRefusal", event.target.checked)
+                                            }}
+                                        />
+                                    }
+                                    label={TEXTS.signup.pictureConsent.refusal}
+                                />
+                            </FormGroup>
                             </FormControl>
                         </Grid>
                     </Grid>
