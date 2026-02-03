@@ -48,6 +48,8 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
                 lastName: "",
                 category: "",
                 pictureConsent: false,
+                participatesCurrentYear: true,
+                hasAssignment: false,
                 pwd: "",
                 pwdconfirm: "",
                 blacklisted: false,

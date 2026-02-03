@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { Alert } from "@mui/material";
 import SurveyList from "../../components/judge-survey/survey-list";
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import { IJudgeEvaluation } from "../../types/JudgeEvaluationsListPage/IJudgeEvaluation";
 import { IJudgeQuestion } from "../../types/survey/IJudgeQuestion";
 import SurveyService from "../../api/survey/surveyService";
@@ -201,14 +201,14 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     render() {
         return (
             <div data-testid="judge-survey">
-                <Layout name={this.state.pageName}>
+                <PageSection titre={this.state.pageName}>
                     { this.isSurveySearching() && <Alert severity="warning">{ TEXTS.survey.isSearchingSurvey }</Alert>  }
                     { !this.isSurveySearching() && !this.isSurveyFound() && <Alert severity="error">{ TEXTS.survey.surveyNotFound }</Alert>  }
                     { !this.isSurveySearching() && this.isSurveyFound() && !this.isAllSurveyCompleted() && 
                       <SurveyList setAllCompletedSurvey={this.setAllCompletedSurvey} handleChangeCommentaire={this.handleChangeCommentaire} handleChangeQuestion={this.handleChangeQuestion} changeName={this.changeName} surveyList={this.state.evaluationsList}></SurveyList> 
                     }
                     { this.isAllSurveyCompleted() && <Alert severity="success">{ TEXTS.survey.surveyCompletedConfirmation }</Alert> }
-                </Layout>
+                </PageSection>
             </div>
         )
     }
