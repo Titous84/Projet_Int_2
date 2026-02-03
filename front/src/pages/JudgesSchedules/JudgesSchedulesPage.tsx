@@ -50,7 +50,7 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
 export default class JudgesSchedulesPage extends React.Component<
   {},
   JudgesSchedulesPageState
-> {
+ {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -130,46 +130,75 @@ export default class JudgesSchedulesPage extends React.Component<
       return;
     }
 
-    if (response.data?.length) {
-      this.setState({
-        hours: response.data.map((slot: TimeSlots) => {
-          return {
-            id: slot.id,
-            time: new Date('2021-01-01T' + slot.time),
-          };
-        }),
-      });
-    } else {
-      this.setState({ hours: [] });
-    }
-  }
+    /** 
+     * @function loadStands
+     * @author Xavier Houle
+     * S'occupe d'aller chercher le numéro d'équipe dans la BD
+     * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
+     */
+    async loadStands() {
+        const response = await JugeStandService.GetStand();
 
-  /**
-   * @function loadCategory
-   * @author Xavier Houle
-   * S'occupe d'aller chercher les catégories dans la BD
-   * Si la réponse de l'API est inexistante affiche une erreur
-   * @author Nathan Reyes
-   */
-  async loadCategory() {
-    let response = await SignUpJudgeService.tryGetCategory();
-    if (response.error) {
-      ShowToast(
-        'Une erreur est survenue lors du chargement des catégories.',
-        5000,
-        'error',
-        'top-center',
-        false,
-      );
-      return;
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des équipes.", 5000, "error", "top-center", false)
+            return;
+        }
+
+        this.setState({ stands: response.data ?? [] })
     }
 
-    if (response.data?.length) {
-      this.setState({
-        categories: response.data,
-      });
-    } else {
-      this.setState({ categories: [] });
+    /** 
+     * @function loadTimeSlots
+     * @author Xavier Houle
+     * S'occupe d'aller chercher les heures de passages dans la BD
+     * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
+    */
+    async loadTimeSlots() {
+        let response = await JugeStandService.GetAllTimeSlots();
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des plages horaires.", 5000, "error", "top-center", false)
+            return;
+        }
+
+        if (response.data?.length) {
+            this.setState({
+                hours: response.data.map((slot: TimeSlots) => {
+                    return {
+                        id: slot.id,
+                        time: new Date('2021-01-01T' + slot.time)
+                    }
+                })
+            })
+        }
+        else {
+            this.setState({ hours: [] })
+        }
+    }
+
+    /** 
+     * @function loadCategory
+     * @author Xavier Houle
+     * S'occupe d'aller chercher les catégories dans la BD
+     * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
+    */
+    async loadCategory() {
+        let response = await SignUpJudgeService.tryGetCategory();
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des catégories.", 5000, "error", "top-center", false);
+            return;
+        }
+
+        if (response.data?.length) {
+            this.setState({
+                categories: response.data
+            });
+        }
+        else {
+            this.setState({ categories: [] });
+        }
     }
   }
 
@@ -188,26 +217,28 @@ export default class JudgesSchedulesPage extends React.Component<
         boolStand: true,
       });
     }
-  }
 
-  /**
-   * @function loadJudge
-   * @author Xavier Houle
-   * S'occupe d'aller chercher les juges existants dans la BD
-   * Si la réponse de l'API est inexistante affiche une erreur
-   * @author Nathan Reyes
-   */
-  async loadJudge() {
-    const resultat = await JugeStandService.GetJudge();
-    if (resultat.error) {
-      ShowToast(
-        'Une erreur est survenue lors du chargement des juges.',
-        5000,
-        'error',
-        'top-center',
-        false,
-      );
-      return;
+    /** 
+     * @function loadJudge
+     * @author Xavier Houle
+     * S'occupe d'aller chercher les juges existants dans la BD
+     * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
+     */
+    async loadJudge() {
+        const resultat = await JugeStandService.GetJudge();
+        if (resultat.error) {
+            ShowToast("Une erreur est survenue lors du chargement des juges.", 5000, "error", "top-center", false)
+            return;
+        }
+
+        if (resultat.data?.length) {
+            //A fonctionné
+            this.setState({ juges: resultat.data })
+        }
+        else {
+            this.setState({ juges: [] })
+        }
     }
 
     if (resultat.data?.length) {
@@ -485,21 +516,64 @@ export default class JudgesSchedulesPage extends React.Component<
         groupedJudges[juge.categories_id] = [];
       }
 
-<<<<<<< HEAD
       groupedJudges[juge.categories_id].push(juge);
     });
-=======
-    render() {
-        // Gestion des cas sans données pour éviter des erreurs inutiles.
-        // @author Nathan Reyes
-<<<<<<< codex/fix-bugs-and-add-features-z7mtco
         // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
-=======
->>>>>>> main
         const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
         const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
         const messageAucuneDonnee = aucunJuge || aucuneEquipe;
->>>>>>> 91df42dd199737529863fbaf3ef3856794034da9
+
+        return (
+            <>
+                <h1 style={{ width: "100%", textAlign: "center" }}>Tableau d'assignation des évaluations</h1>
+                <h4 style={{ width: "100%", textAlign: "center" }}>Attention les choix en jaunes sont des équipes qui ne correspondent pas à la catégorie du juge</h4>
+                <div style={{ width: "100%", textAlign: "center" }}>
+                    <ColorButton variant='contained' style={{ textAlign: "center" }} onClick={this.handleClickOpen}>Changer les heures de passages</ColorButton>
+                </div>
+
+                <EvalHour
+                    hours={this.state.hours}
+                    onChangeHour={this.onChangeHour}
+                    boolDialog={this.state.boolDialog}
+                    handleClose={this.handleClose}
+                    handleHoursChange={this.handleHoursChange}
+                    onAddTimeSlot={(heureDepart : Date, interval: number) => this.handleAddTimeSlot(heureDepart, interval)}
+                    onDeleteTimeSlot={this.handleDeleteTimeSlot}
+                />
+
+                {messageAucuneDonnee ? (
+                    <div style={{ width: "100%", textAlign: "center", marginTop: "2rem" }}>
+                        {aucunJuge && <p>Aucun juge disponible pour le moment.</p>}
+                        {aucuneEquipe && <p>Aucune équipe inscrite pour le moment.</p>}
+                    </div>
+                ) : (
+                    <TableContainer style={{ width: "100%" }}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Juges</TableCell>
+                                    {
+                                        this.state.hours.map((element, index) => {
+                                            return (
+                                                <TableCell key={index} className={"TimePicker"} align='center'>{("0" + element.time.getHours()).slice(-2)}:{("0" + element.time.getMinutes()).slice(-2)}</TableCell>
+                                            )
+                                        })
+                                    }
+                                </TableRow>
+                            </TableHead>
+                            <TableBody sx={{ textAlign: "center" }}>
+                                {!this.state.boolLoading && this.generateRow()}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
+            </>
+        )
+    }
+        // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
+        const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
+        const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
+        const messageAucuneDonnee = aucunJuge || aucuneEquipe;
 
     const groupedJudgesArray = Object.keys(groupedJudges).map((categoryId) => ({
       categoryId: parseInt(categoryId),
