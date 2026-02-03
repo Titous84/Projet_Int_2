@@ -70,6 +70,8 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
                 lastName:"",
                 category:"",
                 pictureConsent:false,
+                participatesCurrentYear:true,
+                hasAssignment:false,
                 pwd:"",
                 pwdconfirm:"",
                 blacklisted:false,

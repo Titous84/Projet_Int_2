@@ -78,17 +78,17 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher le numéro d'équipe dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
      */
     async loadStands() {
         const response = await JugeStandService.GetStand();
 
-        if (response.data?.length) {
-            this.setState({ stands: response.data })
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des équipes.", 5000, "error", "top-center", false)
+            return;
         }
-        else {
-            //Erreur
-            ShowToast("une erreur est survenue veuillez contacter l'administration", 5000, "error", "top-center", false)
-        }
+
+        this.setState({ stands: response.data ?? [] })
     }
 
     /** 
@@ -96,9 +96,15 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les heures de passages dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
     */
     async loadTimeSlots() {
         let response = await JugeStandService.GetAllTimeSlots();
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des plages horaires.", 5000, "error", "top-center", false)
+            return;
+        }
+
         if (response.data?.length) {
             this.setState({
                 hours: response.data.map((slot: TimeSlots) => {
@@ -110,7 +116,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
             })
         }
         else {
-            ShowToast("une erreur est survenue veuillez contacter l'administration", 5000, "error", "top-center", false)
+            this.setState({ hours: [] })
         }
     }
 
@@ -119,16 +125,22 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les catégories dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
     */
     async loadCategory() {
         let response = await SignUpJudgeService.tryGetCategory();
+        if (response.error) {
+            ShowToast("Une erreur est survenue lors du chargement des catégories.", 5000, "error", "top-center", false);
+            return;
+        }
+
         if (response.data?.length) {
             this.setState({
                 categories: response.data
             });
         }
         else {
-            ShowToast("une erreur est survenue veuillez contacter l'administration", 5000, "error", "top-center", false);
+            this.setState({ categories: [] });
         }
     }
 
@@ -154,16 +166,21 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les juges existants dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
      */
     async loadJudge() {
         const resultat = await JugeStandService.GetJudge();
+        if (resultat.error) {
+            ShowToast("Une erreur est survenue lors du chargement des juges.", 5000, "error", "top-center", false)
+            return;
+        }
+
         if (resultat.data?.length) {
             //A fonctionné
             this.setState({ juges: resultat.data })
         }
         else {
-            //Erreur
-            ShowToast("une erreur est survenue veuillez contacter l'administration", 5000, "error", "top-center", false)
+            this.setState({ juges: [] })
         }
     }
 
@@ -444,6 +461,13 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
     }
 
     render() {
+        // Gestion des cas sans données pour éviter des erreurs inutiles.
+        // @author Nathan Reyes
+        // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
+        const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
+        const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
+        const messageAucuneDonnee = aucunJuge || aucuneEquipe;
+
         return (
             <>
                 <h1 style={{ width: "100%", textAlign: "center" }}>Tableau d'assignation des évaluations</h1>
@@ -462,25 +486,32 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
                     onDeleteTimeSlot={this.handleDeleteTimeSlot}
                 />
 
-                <TableContainer style={{ width: "100%" }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Juges</TableCell>
-                                {
-                                    this.state.hours.map((element, index) => {
-                                        return (
-                                            <TableCell key={index} className={"TimePicker"} align='center'>{("0" + element.time.getHours()).slice(-2)}:{("0" + element.time.getMinutes()).slice(-2)}</TableCell>
-                                        )
-                                    })
-                                }
-                            </TableRow>
-                        </TableHead>
-                        <TableBody sx={{ textAlign: "center" }}>
-                            {!this.state.boolLoading && this.generateRow()}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                {messageAucuneDonnee ? (
+                    <div style={{ width: "100%", textAlign: "center", marginTop: "2rem" }}>
+                        {aucunJuge && <p>Aucun juge disponible pour le moment.</p>}
+                        {aucuneEquipe && <p>Aucune équipe inscrite pour le moment.</p>}
+                    </div>
+                ) : (
+                    <TableContainer style={{ width: "100%" }}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Juges</TableCell>
+                                    {
+                                        this.state.hours.map((element, index) => {
+                                            return (
+                                                <TableCell key={index} className={"TimePicker"} align='center'>{("0" + element.time.getHours()).slice(-2)}:{("0" + element.time.getMinutes()).slice(-2)}</TableCell>
+                                            )
+                                        })
+                                    }
+                                </TableRow>
+                            </TableHead>
+                            <TableBody sx={{ textAlign: "center" }}>
+                                {!this.state.boolLoading && this.generateRow()}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
             </>
         )
     }
