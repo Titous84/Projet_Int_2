@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Membre d'équipe.
  * Mathieu Sévégny
  */

@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Juge avec les informations qui peuvent être modifiées
  * @author Thoams-Gabriel Paquin
  */

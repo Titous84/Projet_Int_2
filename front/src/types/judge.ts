@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Juge
  * @author Jean-Philippe Bourassa
  * @author Thomas-Gabriel Paquin

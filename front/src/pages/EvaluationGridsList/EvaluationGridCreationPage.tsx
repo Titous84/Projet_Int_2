@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from 'react';
 import { Navigate, useParams } from "react-router";
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'

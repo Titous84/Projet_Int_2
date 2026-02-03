@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';

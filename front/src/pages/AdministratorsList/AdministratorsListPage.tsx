@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from "@mui/material";
 import React from "react";
 import { TEXTS } from '../../lang/fr';

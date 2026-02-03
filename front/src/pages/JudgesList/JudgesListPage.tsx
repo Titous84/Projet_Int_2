@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { Checkbox, FormControl, InputLabel, MenuItem, Select, Typography, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ICategories } from "../../types/TeamsList/ICategories";

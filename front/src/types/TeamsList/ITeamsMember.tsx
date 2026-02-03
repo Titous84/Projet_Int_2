@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Interface représentant un membre d'une équipe
  * 
  * @interface ITeamsMember

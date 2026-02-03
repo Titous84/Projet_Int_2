@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
 import { MessagePosition, MessageTypes, SNACKBAR_EVENT_NAME } from "../../utils/utils";

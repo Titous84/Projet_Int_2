@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { ContentPaste as ContentPasteIcon, Groups as GroupsIcon, ManageAccounts as ManageAccountsIcon, Percent as PercentIcon, Person as PersonIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
 import { blue, green, grey, orange, red } from "@mui/material/colors";
 import { OverridableComponent } from "@mui/material/OverridableComponent";

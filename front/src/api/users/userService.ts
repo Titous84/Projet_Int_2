@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { RoleName } from "../../router/routes";
 import ActivatedUser from "../../types/activatedUser";
 import APIResult from "../../types/apiResult";
