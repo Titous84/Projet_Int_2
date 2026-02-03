@@ -523,6 +523,14 @@ export default class JudgesSchedulesPage extends React.Component<
         const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
         const messageAucuneDonnee = aucunJuge || aucuneEquipe;
 
+    render() {
+        // Gestion des cas sans données pour éviter des erreurs inutiles.
+        // @author Nathan Reyes
+        // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
+        const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
+        const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
+        const messageAucuneDonnee = aucunJuge || aucuneEquipe;
+
         return (
             <>
                 <h1 style={{ width: "100%", textAlign: "center" }}>Tableau d'assignation des évaluations</h1>
@@ -570,150 +578,4 @@ export default class JudgesSchedulesPage extends React.Component<
             </>
         )
     }
-        // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
-        const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
-        const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
-        const messageAucuneDonnee = aucunJuge || aucuneEquipe;
-
-    const groupedJudgesArray = Object.keys(groupedJudges).map((categoryId) => ({
-      categoryId: parseInt(categoryId),
-      judges: groupedJudges[parseInt(categoryId)],
-    }));
-
-    return groupedJudgesArray;
-  }
-
-  /**
-   * @author Xavier Houle
-   * Génère le tableau d'assignation des équipes
-   * Les rangées sont les juges qui sont groupés par catégories
-   * Les colonnes sont les heures de passages
-   * Pour StandRow voir la classe dans /front/components/juge-stand/stand-row.tsx
-   * @returns Le tableau d'assignation des équipes
-   */
-  generateRow(): any {
-    return this.groupJudgesByCategory().map((group) => {
-      return (
-        <React.Fragment key={group.categoryId}>
-          <tr>
-            <td>
-              <h5 style={{ textAlign: 'left', marginLeft: '1em' }}>
-                {
-                  this.state.categories.find(
-                    (categorie: Category) => categorie.id === group.categoryId,
-                  )?.name
-                }
-              </h5>
-              <Divider />
-            </td>
-          </tr>
-          {group.judges.map((juge, index) => (
-            <StandRow
-              key={index}
-              handleChangeAssignation={this.handleChangeAssignation}
-              handleDeleteAssignation={this.handleDeleteAssignation}
-              verifyIfTeamIsAssignedMoreThan3Times={
-                this.verifyIfTeamIsAssignedMoreThan3Times
-              }
-              stands={this.state.stands}
-              leJuge={juge}
-              standsEval={this.state.standsEval}
-              nbreColonnes={this.state.hours.length}
-            ></StandRow>
-          ))}
-        </React.Fragment>
-      );
-    });
-  }
-
-  /**
-   * @author Xavier Houle
-   * Change l'heure de passage pour modifier le state
-   * @param newValue La nouvelle heure
-   * @param hourNumber L'index du nombre dans le tableau
-   */
-  onChangeHour = (newValue: Date, hourNumber: number) => {
-    let updatedHour = [...this.state.hours];
-    updatedHour[hourNumber].time = new Date(newValue);
-
-    this.setState({
-      hours: updatedHour,
-    });
-  };
-
-  render() {
-    // Gestion des cas sans données pour éviter des erreurs inutiles.
-    // @author Nathan Reyes
-    const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
-    const aucuneEquipe =
-      !this.state.boolLoading && this.state.stands.length === 0;
-    const messageAucuneDonnee = aucunJuge || aucuneEquipe;
-
-    return (
-      <>
-        <h1 style={{ width: '100%', textAlign: 'center' }}>
-          Tableau d'assignation des évaluations
-        </h1>
-        <h4 style={{ width: '100%', textAlign: 'center' }}>
-          Attention les choix en jaunes sont des équipes qui ne correspondent
-          pas à la catégorie du juge
-        </h4>
-        <div style={{ width: '100%', textAlign: 'center' }}>
-          <ColorButton
-            variant="contained"
-            style={{ textAlign: 'center' }}
-            onClick={this.handleClickOpen}
-          >
-            Changer les heures de passages
-          </ColorButton>
-        </div>
-
-        <EvalHour
-          hours={this.state.hours}
-          onChangeHour={this.onChangeHour}
-          boolDialog={this.state.boolDialog}
-          handleClose={this.handleClose}
-          handleHoursChange={this.handleHoursChange}
-          onAddTimeSlot={(heureDepart: Date, interval: number) =>
-            this.handleAddTimeSlot(heureDepart, interval)
-          }
-          onDeleteTimeSlot={this.handleDeleteTimeSlot}
-        />
-
-        {messageAucuneDonnee ? (
-          <div
-            style={{ width: '100%', textAlign: 'center', marginTop: '2rem' }}
-          >
-            {aucunJuge && <p>Aucun juge disponible pour le moment.</p>}
-            {aucuneEquipe && <p>Aucune équipe inscrite pour le moment.</p>}
-          </div>
-        ) : (
-          <TableContainer style={{ width: '100%' }}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Juges</TableCell>
-                  {this.state.hours.map((element, index) => {
-                    return (
-                      <TableCell
-                        key={index}
-                        className={'TimePicker'}
-                        align="center"
-                      >
-                        {('0' + element.time.getHours()).slice(-2)}:
-                        {('0' + element.time.getMinutes()).slice(-2)}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody sx={{ textAlign: 'center' }}>
-                {!this.state.boolLoading && this.generateRow()}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </>
-    );
-  }
 }
