@@ -59,3 +59,65 @@ Ce document résume les changements réalisés dans ce projet, ainsi que les cas
 
 - `front/src/components/judge-stand/line-select.tsx`
 - `front/src/pages/JudgesSchedules/JudgesSchedulesPage.tsx`
+
+## Liste exhaustive des fichiers modifiés (Nathan Reyes)
+
+Les fichiers ci-dessous ont été modifiés dans le cadre des tâches listées (migration `survey` → `evaluationgrids`, reset annuel, consentements/anonymat, refonte UI/UX, etc.).
+
+- `DOCUMENTATION/CHANGELOG_NATHAN_REYES.md`
+- `Donnees_SQL_test/Insert_de_test_pour_affichage.sql`
+- `Donnees_SQL_test/requettes_de_test.sql`
+- `backend/api/config/routes.php`
+- `backend/api/src/Actions/Administrators/ResetAnnualDataAction.php`
+- `backend/api/src/Handlers/LogHandler.php`
+- `backend/api/src/Models/TeamMember.php`
+- `backend/api/src/Repositories/EvaluationGridRepository.php`
+- `backend/api/src/Repositories/FormRepository.php`
+- `backend/api/src/Repositories/SendRepository.php`
+- `backend/api/src/Repositories/SignUpTeamRepository.php`
+- `backend/api/src/Repositories/SurveyRepository.php`
+- `backend/api/src/Repositories/TeamsListRepository.php`
+- `backend/api/src/Repositories/UserRepository.php`
+- `backend/api/src/Services/SurveyService.php`
+- `backend/api/src/Services/UserService.php`
+- `backend/api/src/Validators/ValidatorTeam.php`
+- `build.ps1`
+- `exposat.sql`
+- `front/package.json`
+- `front/src/App.tsx`
+- `front/src/api/users/userService.ts`
+- `front/src/components/AdministrationMainPage/AdministrationNavigationSidebar.tsx`
+- `front/src/components/NavigationBar/NavigationBar.module.css`
+- `front/src/components/TeamsListPage/TeamsTables/TeamsTable.tsx`
+- `front/src/components/common/AppSnackbar.tsx`
+- `front/src/components/common/PageSection.module.css`
+- `front/src/components/common/PageSection.tsx`
+- `front/src/components/evaluationGrid/evaluationGridFormSection.tsx`
+- `front/src/components/judge-stand/line-select.tsx`
+- `front/src/components/layout/layout.module.css` (supprimé)
+- `front/src/components/layout/layout.tsx` (supprimé)
+- `front/src/components/signup/team-member.tsx`
+- `front/src/lang/fr.ts`
+- `front/src/pages/AdministrationMain/AdministrationMainPage.tsx`
+- `front/src/pages/AdministratorsList/AdministratorsListPage.tsx`
+- `front/src/pages/DevelopersList/DevelopersListPage.tsx`
+- `front/src/pages/EmailValidationJudge/EmailValidationJudgePage.tsx`
+- `front/src/pages/EvaluationGridsList/EvaluationGridCreationPage.tsx`
+- `front/src/pages/EvaluationGridsList/EvaluationGridsListPage.tsx`
+- `front/src/pages/ForgottenPassword/ForgottenPasswordPage.tsx`
+- `front/src/pages/ForgottenPasswordModification/ForgottenPasswordModificationPage.tsx`
+- `front/src/pages/Informations/InformationsPage.tsx`
+- `front/src/pages/JudgeCreation/JudgeCreationPage.tsx`
+- `front/src/pages/JudgeEvaluationsList/JudgeEvaluationsListPage.tsx`
+- `front/src/pages/JudgesList/JudgeTableToolbar.tsx`
+- `front/src/pages/JudgesList/JudgesListPage.tsx`
+- `front/src/pages/JudgesList/SendEvaluation.test.tsx`
+- `front/src/pages/JudgesSchedules/JudgesSchedulesPage.tsx`
+- `front/src/pages/Login/LoginPage.tsx`
+- `front/src/pages/ParticipantRegistration/ParticipantRegistrationPage.tsx`
+- `front/src/types/AdministrationMainPage/AdministrationMainPageTabs.ts`
+- `front/src/types/TeamsList/ITeamsMember.tsx`
+- `front/src/types/judge.ts`
+- `front/src/types/judgeUpdate.ts`
+- `front/src/types/sign-up/team-member.ts`
+- `front/src/utils/utils.ts`
