@@ -116,6 +116,7 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
      * S'occupe de vérifier que le numéro d'équipe existe et
      * ensuite envoye les valeurs à la fonction updateOrAddSurvey()
      * @param e La numéro d'équipe selectionner par l'utilisateur
+     * @author Nathan Reyes
      */
     handleChange(e: SelectChangeEvent<string>) {
         this.setState({ standId: e.target.value });

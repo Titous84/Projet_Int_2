@@ -78,6 +78,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher le numéro d'équipe dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
      */
     async loadStands() {
         const response = await JugeStandService.GetStand();
@@ -95,6 +96,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les heures de passages dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
     */
     async loadTimeSlots() {
         let response = await JugeStandService.GetAllTimeSlots();
@@ -123,6 +125,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les catégories dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
     */
     async loadCategory() {
         let response = await SignUpJudgeService.tryGetCategory();
@@ -163,6 +166,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
      * @author Xavier Houle
      * S'occupe d'aller chercher les juges existants dans la BD
      * Si la réponse de l'API est inexistante affiche une erreur
+     * @author Nathan Reyes
      */
     async loadJudge() {
         const resultat = await JugeStandService.GetJudge();
@@ -457,6 +461,8 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
     }
 
     render() {
+        // Gestion des cas sans données pour éviter des erreurs inutiles.
+        // @author Nathan Reyes
         const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
         const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
         const messageAucuneDonnee = aucunJuge || aucuneEquipe;
