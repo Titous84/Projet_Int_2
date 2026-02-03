@@ -485,8 +485,21 @@ export default class JudgesSchedulesPage extends React.Component<
         groupedJudges[juge.categories_id] = [];
       }
 
+<<<<<<< HEAD
       groupedJudges[juge.categories_id].push(juge);
     });
+=======
+    render() {
+        // Gestion des cas sans données pour éviter des erreurs inutiles.
+        // @author Nathan Reyes
+<<<<<<< codex/fix-bugs-and-add-features-z7mtco
+        // Cas d'utilisation Nathan Reyes : afficher un message clair lorsqu'il manque des juges ou des équipes.
+=======
+>>>>>>> main
+        const aucunJuge = !this.state.boolLoading && this.state.juges.length === 0;
+        const aucuneEquipe = !this.state.boolLoading && this.state.stands.length === 0;
+        const messageAucuneDonnee = aucunJuge || aucuneEquipe;
+>>>>>>> 91df42dd199737529863fbaf3ef3856794034da9
 
     const groupedJudgesArray = Object.keys(groupedJudges).map((categoryId) => ({
       categoryId: parseInt(categoryId),

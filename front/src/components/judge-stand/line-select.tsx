@@ -115,6 +115,7 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
      * @author Xavier Houle
      * S'occupe de vérifier que le numéro d'équipe existe et
      * ensuite envoye les valeurs à la fonction updateOrAddSurvey()
+     * Cas d'utilisation Nathan Reyes : avertir si l'équipe est déjà assignée au juge à une autre heure.
      * @param e La numéro d'équipe selectionner par l'utilisateur
      * @author Nathan Reyes
      */
