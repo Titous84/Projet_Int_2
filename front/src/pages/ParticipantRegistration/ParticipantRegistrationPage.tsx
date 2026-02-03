@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * @file Page d'inscription des participants.
  * @author Tristan Lafontaine
  */
@@ -103,8 +106,8 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
                     {email:"", fullName:""}
                 ],
                 members:[
-                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0},
-                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0}
+                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false},
+                    {numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false}
                 ]
             },
             categories:[],
@@ -140,7 +143,7 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
 
         //Crée le bon object en fonction du type demandé
         if (type === "contactPerson") array.push({numero_da:"",fullName:""})
-        else array.push({numero_da:"",firstName:"",lastName:"",pictureConsent:0})
+        else array.push({numero_da:"",firstName:"",lastName:"",pictureConsent:0, photoConsentPublication:false, photoConsentInternal:false, photoConsentRefusal:false, isAnonymous:false})
 
         oldState[type] = array;
 
@@ -233,6 +236,21 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
         
         //Change la valeur de la personne
         person[key] = value
+
+        // Gestion du consentement aux photos avec plusieurs clauses.
+        if (key === "photoConsentRefusal" && value === true) {
+            // Un refus total désactive les autres consentements.
+            person.photoConsentPublication = false;
+            person.photoConsentInternal = false;
+        }
+
+        if ((key === "photoConsentPublication" || key === "photoConsentInternal") && value === true) {
+            // Une acceptation partielle annule le refus total.
+            person.photoConsentRefusal = false;
+        }
+
+        // Met à jour l'ancien champ de compatibilité pour l'API.
+        person.pictureConsent = person.photoConsentPublication || person.photoConsentInternal ? 1 : 0;
 
         //Modifie la personne dans le tableau
         array[number-1] = person;
@@ -394,6 +412,17 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
             return;
         }
 
+        // Validation locale : chaque membre doit choisir une clause de consentement.
+        const membresSansConsentement = this.state.teamInfo.members.filter((member) => {
+            return !member.photoConsentPublication && !member.photoConsentInternal && !member.photoConsentRefusal;
+        });
+
+        if (membresSansConsentement.length > 0) {
+            ShowToast("Chaque participant doit choisir une option de consentement pour la prise de photos.", 5000, "warning", "top-center", false);
+            this.setState({activeCircularProcress:false});
+            return;
+        }
+
         const team_number = await this.generateTeamNumber(this.state.teamInfo.category);
 
         const teamInfoWithNumber = {
@@ -433,9 +462,9 @@ export default class ParticipantRegistrationPage extends IPage<{}, ParticipantRe
                             category: teamInfo.category,
                             year: teamInfo.year,
                             members: teamInfo.members.map(member => ({
-                                firstName: member.firstName,
-                                lastName: member.lastName,
-                                numero_da: member.numero_da
+                                firstName: member.isAnonymous ? "Participant anonyme" : member.firstName,
+                                lastName: member.isAnonymous ? "" : member.lastName,
+                                numero_da: member.isAnonymous ? "Masqué" : member.numero_da
                             }))
                         };
                         

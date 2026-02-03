@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { ContentPaste as ContentPasteIcon, Groups as GroupsIcon, ManageAccounts as ManageAccountsIcon, Percent as PercentIcon, Person as PersonIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
 import { blue, green, grey, orange, red } from "@mui/material/colors";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -74,9 +77,9 @@ export const ADMINISTRATION_MAIN_PAGE_TABS: AdministrationMainPageTab[] = [
         iconColor: grey[500]
     },
     {
-        id: "administrateurs",
-        primaryText: "Administrateurs",
-        secondaryText: "Ajouter et supprimer des administrateurs et modifier leur mot de passe",
+        id: "parametres-generaux",
+        primaryText: "Paramètres généraux",
+        secondaryText: "Administration générale et actions de maintenance annuelle",
         componentToDisplayInContentZone: AdministratorsListPage,
         icon: ManageAccountsIcon,
         iconColor: grey[500]

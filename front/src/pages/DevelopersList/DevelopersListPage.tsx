@@ -1,5 +1,8 @@
+/**
+ * @author Nathan Reyes
+ */
 import IPage from "../../types/IPage";
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import styles from './DevelopersListPage.module.css'
 import { TEXTS } from '../../lang/fr';
 
@@ -31,9 +34,9 @@ export default class DevelopersListPage extends IPage {
         const developpeurs : string[][] = [annee2025, annee2024, annee2023, annee2022]
         
         return developpeurs.map(annee => {
-            /* retourne la table dans <Layout> */
+            /* retourne la table dans <PageSection> */
             const table = this.generateTableList(annee);
-            return <Layout name={annee[0]} key={annee.toString()}>{table}</Layout>
+            return <PageSection titre={annee[0]} key={annee.toString()}>{table}</PageSection>
         });
     }
     /**

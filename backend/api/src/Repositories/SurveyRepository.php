@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -199,8 +200,43 @@ class SurveyRepository extends Repository
         FROM judge
         INNER JOIN users
         ON judge.users_id=users.id
-        WHERE users.blacklisted IS NOT true AND users.activated IS true AND role_id=1;";
+        WHERE users.blacklisted IS NOT true
+            AND users.activated IS true
+            AND judge.participates_current_year = 1
+            AND role_id=1
+            AND EXISTS (
+                SELECT 1 FROM evaluation
+                WHERE evaluation.judge_id = judge.id
+            );";
         $req = $this->db->query($sql);
+        return $req->fetchAll();
+    }
+
+    /**
+     * Récupère les juges admissibles à l'envoi d'évaluations parmi une liste d'identifiants utilisateurs.
+     * @param array $judgeUserIds Liste d'IDs d'utilisateurs.
+     * @return array Retourne la liste des juges admissibles.
+     */
+    public function find_eligible_judges_by_user_ids(array $judgeUserIds): array
+    {
+        if (empty($judgeUserIds)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($judgeUserIds), '?'));
+        $sql = "SELECT users.id, users.first_name, users.last_name, users.email, judge.id AS judge_id
+            FROM judge
+            INNER JOIN users ON judge.users_id = users.id
+            WHERE users.id IN ($placeholders)
+                AND users.blacklisted IS NOT true
+                AND users.activated IS true
+                AND judge.participates_current_year = 1
+                AND EXISTS (
+                    SELECT 1 FROM evaluation
+                    WHERE evaluation.judge_id = judge.id
+                );";
+        $req = $this->db->prepare($sql);
+        $req->execute($judgeUserIds);
         return $req->fetchAll();
     }
 

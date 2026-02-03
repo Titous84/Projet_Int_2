@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Juge
  * @author Jean-Philippe Bourassa
  * @author Thomas-Gabriel Paquin
@@ -37,11 +40,19 @@
       */
      pwdconfirm:string;
      /**
-      * Blacklist
-      */
+     * Blacklist
+     */
      blacklisted:boolean;
      /**
-      * Activé
-      */
+     * Activé
+     */
      activated:boolean;
-}
+     /**
+      * Indique si le juge participe à l'édition courante.
+      */
+     participatesCurrentYear:boolean;
+     /**
+      * Indique si le juge a au moins une équipe assignée.
+      */
+     hasAssignment:boolean;
+} 

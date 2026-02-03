@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Services;
 
@@ -265,6 +266,24 @@ class UserService
             $this->logHandler->critical($exception->getMessage(), $context);
             // Retourner une erreur 500 et un message d'erreur.
             return new Result(EnumHttpCode::SERVER_ERROR, array("Une erreur inattendue est survenue lors de la création de l'administrateur."));
+        }
+    }
+
+    /**
+     * Réinitialise les données annuelles liées à l'administration.
+     */
+    public function reset_annual_data(): Result
+    {
+        try {
+            if (!$this->userRepository->reset_annual_data()) {
+                return new Result(EnumHttpCode::SERVER_ERROR, array("Une erreur est survenue lors de la réinitialisation annuelle."));
+            }
+
+            return new Result(EnumHttpCode::SUCCESS, array("La réinitialisation annuelle a été effectuée avec succès."), true);
+        } catch (Exception $exception) {
+            $context["http_error_code"] = $exception->getCode();
+            $this->logHandler->critical($exception->getMessage(), $context);
+            return new Result(EnumHttpCode::SERVER_ERROR, array("Une erreur inattendue est survenue lors de la réinitialisation annuelle."));
         }
     }
 

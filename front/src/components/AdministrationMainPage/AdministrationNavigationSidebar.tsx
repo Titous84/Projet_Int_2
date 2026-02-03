@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from "react";
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -6,9 +9,11 @@ import { ADMINISTRATION_MAIN_PAGE_TABS } from "../../types/AdministrationMainPag
 /**
  * Props reçues par le composant React: AdministrationNavigationSidebar.
  * @property {function} onTabSelected - Méthode passée par le parent. Appelée quand un onglet est sélectionné. Change l'onglet sélectionné dans le parent.
+ * @property {string} ongletActifId - Identifiant de l'onglet actuellement sélectionné.
  */
 interface AdministrationNavigationSidebarProps {
     onAdministrationSidebarTabSelected: (tabId: string) => void; // Méthode passée par le parent.
+    ongletActifId: string;
 }
 
 /**
@@ -34,8 +39,11 @@ export default class AdministrationNavigationSidebar extends React.Component<Adm
                         return (
                             <ListItem key={tab.id} disablePadding> {/* Chaque <ListItem> a besoin d'un id unique. On prend celui dans le tab actuel. */}
                                 <ListItemButton
-                                    component="a" // `component="a"` : le <ListItemButton> sera considéré comme un bouton. Donc, le curseur de la souris changera pour «pointer» quand on le hover.
+                                    component="button" // `component="button"` : garde le comportement bouton sans recharger la page.
+                                    type="button"
+                                    selected={tab.id === this.props.ongletActifId}
                                     onClick={() => this.props.onAdministrationSidebarTabSelected(tab.id)} // Quand cet onglet est cliqué, ça appelle la méthode `onTabSelected()` située dans le composant parent en lui passant l'id de cet onglet.
+                                    aria-current={tab.id === this.props.ongletActifId ? "page" : undefined}
                                 >
                                     <ListItemIcon><tab.icon fontSize="large" sx={{ color: tab.iconColor }} /></ListItemIcon> {/* `<tab.icon>` veut dire affiche le composant React qui se trouve dans la propriété `icon` de l'objet `tab`. */}
                                     <ListItemText primary={tab.primaryText} secondary={tab.secondaryText} />

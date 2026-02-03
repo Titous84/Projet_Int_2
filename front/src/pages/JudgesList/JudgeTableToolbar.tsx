@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { useNavigate } from 'react-router';
 import { Button, IconButton, Stack, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, Send as SendIcon } from '@mui/icons-material';
@@ -25,10 +28,16 @@ interface JudgeTableToolbarProps {
  */
 function SendEvaluationGridsButton({ selectedJudges }: { selectedJudges: Judge[] }) {
     const navigate = useNavigate();
+    const eligibleJudges = (selectedJudges || []).filter((judge) => {
+        return judge.activated && !judge.blacklisted && judge.participatesCurrentYear && judge.hasAssignment;
+    });
 
     const handleClick = () => {
-        if (selectedJudges && selectedJudges.length > 0) {
-            navigate("/envoiEvaluationsJugeIndividuelle", { state: { selectedJudges } });
+        if (eligibleJudges.length > 0) {
+            if (eligibleJudges.length !== selectedJudges.length) {
+                console.warn("Certains juges sélectionnés ne sont pas admissibles pour l'envoi des évaluations.");
+            }
+            navigate("/envoiEvaluationsJugeIndividuelle", { state: { selectedJudges: eligibleJudges } });
         } else {
             // Gérer le cas où aucun juge n'est sélectionné (afficher un message, désactiver le bouton, etc.)
             console.warn("Aucun juge sélectionné pour l'envoi d'évaluation.");
@@ -41,7 +50,7 @@ function SendEvaluationGridsButton({ selectedJudges }: { selectedJudges: Judge[]
             className="sendMailButton"
             startIcon={<SendIcon />}
             onClick={handleClick}
-            disabled={!selectedJudges || selectedJudges.length === 0} // Désactiver si aucun juge n'est sélectionné
+            disabled={eligibleJudges.length === 0} // Désactiver si aucun juge admissible n'est sélectionné
         >
             Envoyer les évaluations
         </Button>

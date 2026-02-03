@@ -1,7 +1,10 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import IPage from "../../types/IPage";
 import ConnectionService from "../../api/connection/connectionService"
 import { saveToken } from "../../utils/tokenUtil";
@@ -114,7 +117,7 @@ export default class LoginPage extends IPage<{}, LoginPageState> {
 
         return (
             <div data-testid="pageConnexion" className={styles.toCenter}>
-                <Layout name={TEXTS.signin.title}>
+                <PageSection titre={TEXTS.signin.title}>
                     <ValidatorForm onSubmit={()=>this.handleSubmit()}>
                                     <div className={styles.padding20 + ' ' + styles.centerText}>
                                         <div>
@@ -156,7 +159,7 @@ export default class LoginPage extends IPage<{}, LoginPageState> {
                                         </div>
                                     </div>
                      </ValidatorForm>
-                </Layout>
+                </PageSection>
             </div>
         )
     }

@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { RoleName } from "../../router/routes";
 import ActivatedUser from "../../types/activatedUser";
 import APIResult from "../../types/apiResult";
@@ -127,6 +130,23 @@ export default class UserService {
         // S'il y a un message d'erreur dans la réponse,
         if (response.error) {
             // Récupérer le message d'erreur destiné à l'utilisateur que l'API a retourné.
+            throw new Error(response.error);
+        }
+    }
+
+    /**
+     * Lance la réinitialisation annuelle des données d'administration.
+     */
+    public static async resetAnnualData(): Promise<void> {
+        let response: APIResult<void>;
+        try {
+            response = await APIRequest("administrators/reset-annual", "POST", true);
+        } catch (error) {
+            console.error("Erreur lors de la réinitialisation annuelle :", error);
+            throw new Error("Une erreur est survenue lors de la réinitialisation annuelle.");
+        }
+
+        if (response.error) {
             throw new Error(response.error);
         }
     }

@@ -1,9 +1,11 @@
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+/**
+ * @author Nathan Reyes
+ */
 import {v4 as uuidv4} from 'uuid';
 
 export type MessageTypes = "success" | "error" | "warning" | "info" | "default";
 export type MessagePosition = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
+export const SNACKBAR_EVENT_NAME = "app-snackbar";
 
 /**
  * Crée une clé unique.
@@ -51,17 +53,22 @@ export function suffix(suffix: number): string{
  * @returns le pop-up
  */
 export function ShowToast(message:string,delay:number,type:MessageTypes, position:MessagePosition = "top-center", hideProgressBar:boolean){
-    return toast(message,{
-        type:type,
-        theme:"colored",
-        position: position,
-        autoClose: delay,
-        hideProgressBar: hideProgressBar,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-    })
+    // Le paramètre hideProgressBar est conservé pour compatibilité, même si le Snackbar ne l'utilise pas.
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    window.dispatchEvent(
+        new CustomEvent(SNACKBAR_EVENT_NAME, {
+            detail: {
+                message,
+                delay,
+                type,
+                position,
+                hideProgressBar,
+            },
+        })
+    );
 }
 /**
  * Aide l'ordonnance d'éléments par un nombre.

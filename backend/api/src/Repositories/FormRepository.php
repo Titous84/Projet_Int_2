@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -225,7 +226,8 @@ class FormRepository extends Repository
      */
     public function get_all_survey(): array{
         try{
-        $sql = "SELECT id, name FROM survey ORDER BY id";
+        // Utilisation de la table evaluationgrids (anciennement survey) pour les formulaires.
+        $sql = "SELECT id, name FROM evaluationgrids ORDER BY id";
         $req = $this->db->query($sql);
         return $req->fetchAll();}
         catch(Exception $exception){
@@ -242,7 +244,8 @@ class FormRepository extends Repository
     public function create_survey(string $name):Result
     {
         try{
-            $sql = "INSERT INTO survey (name) VALUES (:name);";
+            // Insertion dans la table evaluationgrids pour enregistrer la grille d'évaluation.
+            $sql = "INSERT INTO evaluationgrids (name) VALUES (:name);";
             $req = $this->db->prepare($sql);
 
             $req->execute(array(
@@ -273,7 +276,8 @@ class FormRepository extends Repository
                 "id" => $id
             ));
 
-            $sql = "DELETE from survey WHERE id = :id;";
+            // Suppression de la grille d'évaluation dans evaluationgrids.
+            $sql = "DELETE from evaluationgrids WHERE id = :id;";
             $req = $this->db->prepare($sql);
 
             $req->execute(array(
@@ -296,7 +300,8 @@ class FormRepository extends Repository
     public function update_survey(int $id, string $name, int $survey_id):Result
     {
         try{
-            $sql = "UPDATE survey SET survey.name = :name WHERE id = :id;";
+            // Mise à jour de la grille d'évaluation dans evaluationgrids.
+            $sql = "UPDATE evaluationgrids AS survey SET survey.name = :name WHERE id = :id;";
             $req = $this->db->prepare($sql);
 
             $req->execute(array(

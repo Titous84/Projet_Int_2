@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -27,6 +30,17 @@ export default function TeamsTable() {
     const [snackbarMessageType, setSnackbarMessageType] = useState<SnackbarMessageType>("error") // Type de message à afficher dans le snackbar. Peut être "success", "error", "warning" ou "info".
     // Fenêtre contextuelle de confirmation pour la suppression des équipes sélectionnées.
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
+
+    /**
+     * Affiche un message lorsque la liste d'équipes est vide.
+     */
+    const NoTeamsOverlay = () => {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                <span>Aucune équipe pour l'instant</span>
+            </div>
+        );
+    };
 
     // Quelles colonnes on veut afficher et sous quel nom.
     const columns: GridColDef<ITeam>[] = [
@@ -294,7 +308,8 @@ export default function TeamsTable() {
                             <TeamsTableToolbar
                                 {...props}
                                 deleteSelectedTeams={handleDeleteButtonClick} // Passe la méthode pour supprimer les équipes par ids au composant.
-                            />
+                            />,
+                        noRowsOverlay: NoTeamsOverlay
                     }}
                     onRowSelectionModelChange={(newSelection) => {
                         setSelectedTeamsIds(newSelection.map(id => Number(id)));

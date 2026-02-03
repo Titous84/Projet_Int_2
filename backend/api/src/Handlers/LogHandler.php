@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Handlers;
 
@@ -101,12 +102,13 @@ class LogHandler implements LoggerInterface
 
 		$datetime_log = date('Y-m-d H:i:s');
 		$date_nom_log = date("Y-m-d");
-		$chemin_fichier_log = "../log/error-" . $date_nom_log . ".log";
-		$http_error_code = $context["http_error_code"];
+		$chemin_dossier_log = dirname(__DIR__, 3) . "/log";
+		$chemin_fichier_log = $chemin_dossier_log . "/error-" . $date_nom_log . ".log";
+		$http_error_code = $context["http_error_code"] ?? "N/A";
 
-		if(!file_exists("../log"))
+		if(!is_dir($chemin_dossier_log))
 		{
-			mkdir("../log");
+			mkdir($chemin_dossier_log, 0755, true);
 		}
 
 		$log_string = "-- $level | " . $http_error_code . " | $datetime_log | " . $this->obtenir_adresse_ip() . " --\n";

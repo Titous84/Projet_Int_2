@@ -1,7 +1,10 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from 'react';
 import { IEvaluationGridSection } from '../../types/evaluationGrid/IEvaluationGridSection';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import Layout from '../layout/layout';
+import PageSection from '../common/PageSection';
 import {Grid } from '@mui/material';
 import ButtonExposat from '../button/button-exposat';
 import { INPUT_VARIANT } from '../../utils/muiConstants';
@@ -62,7 +65,7 @@ export default class EvaluationGridFormSection extends React.Component<Evaluatio
 
     render() {
         return (
-            <Layout name={`Section ${this.props.sectionPosition}`}>
+            <PageSection titre={`Section ${this.props.sectionPosition}`}>
                 <Grid container spacing={2}>
                     <Grid item xs={9} md={9}>
                         <TextValidator
@@ -93,7 +96,7 @@ export default class EvaluationGridFormSection extends React.Component<Evaluatio
                         <ButtonExposat onClick={() => this.props.addCriteria(this.props.sectionPosition)} children={"+ Ajouter un critère"} />
                     </Grid>
                 </Grid>
-            </Layout>
+            </PageSection>
         );
     }
 }

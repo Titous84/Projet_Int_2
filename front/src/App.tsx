@@ -1,12 +1,14 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import Router from './router/router';
 import { pages, RoleName } from './router/routes';
 import Footer from './components/footer/footer';
 import Loader from './components/loader/loader';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import {ActualRole as RoleClass} from './utils/roleUtil';
-import 'react-toastify/dist/ReactToastify.css';
+import AppSnackbar from './components/common/AppSnackbar';
 
 /**
  * Composant affichant le cadre de l'application
@@ -64,7 +66,7 @@ export default class App extends React.Component {
                     </div>
                     <Footer/>
                 </div>
-                <ToastContainer />
+                <AppSnackbar />
             </>
         );
     }

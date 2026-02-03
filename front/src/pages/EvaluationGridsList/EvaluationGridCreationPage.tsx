@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import React from 'react';
 import { Navigate, useParams } from "react-router";
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
@@ -6,7 +9,7 @@ import AlertComposant from "../../components/alert/alert";
 import ButtonExposat from '../../components/button/button-exposat';
 import Category from "../../types/sign-up/category";
 import EvaluationGridFormSection from "../../components/evaluationGrid/evaluationGridFormSection";
-import Layout from '../../components/layout/layout';
+import PageSection from '../../components/common/PageSection';
 import { IEvaluationGrid } from "../../types/evaluationGrid/IEvaluationGrid";
 import EvaluationGridService from "../../api/evaluationGrid/evaluationGridService";
 import { INPUT_VARIANT } from "../../utils/muiConstants";
@@ -348,7 +351,7 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
             })
         }
         else if(this.state.sendSuccess === true) {
-            return <Navigate replace to="/gestion-grille-evaluation" />
+            return <Navigate replace to="/administration?onglet=modeles-grilles-evaluation" />
         } 
     }
 
@@ -368,7 +371,7 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
         return (
             <>
                 {!this.state.loading ? (
-                    <Layout isNotContainer name={TEXTS.evaluationGridForm.title}>
+                    <PageSection estPleineLargeur titre={TEXTS.evaluationGridForm.title}>
                         <ValidatorForm noValidate onSubmit={()=>this.onSubmit()}>
                             {this.generateAlert()}
 
@@ -409,7 +412,7 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
                                 onClick={()=>this.onSubmit()} children={this.state.updateMode ? "Modifier" : "Créer"}
                             />
                         </ValidatorForm>
-                    </Layout>
+                    </PageSection>
                 ) : (
                     this.renderLoading()
                 )}

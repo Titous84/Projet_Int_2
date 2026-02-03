@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+ */
 import { Checkbox, FormControl, InputLabel, MenuItem, Select, Typography, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ICategories } from "../../types/TeamsList/ICategories";
@@ -119,6 +122,7 @@ export default function JudgesListPage() {
             email: displayData.email,
             activated: displayData.activated,
             blacklisted: displayData.blacklisted,
+            participatesCurrentYear: displayData.participatesCurrentYear,
         };
         await patchJudge(judge);
     };
@@ -333,6 +337,46 @@ export default function JudgesListPage() {
                     }}
                 />
             ),
+            valueFormatter: (params) => (params ? "Oui" : "Non"),
+        },
+        {
+            field: "participatesCurrentYear",
+            headerName: "Édition courante",
+            editable: true,
+            width: 150,
+            renderEditCell: (params) => (
+                <Checkbox
+                    checked={params.value}
+                    onChange={(event) => {
+                        // Mettre à jour la participation à l'édition courante.
+                        params.api.setEditCellValue({
+                            id: params.id,
+                            field: "participatesCurrentYear",
+                            value: event.target.checked,
+                        });
+                    }}
+                    /*
+                    * Il faut cliquer en dehors du champ pour que la modification soit prise en compte
+                    * Inspirer de: https://www.w3schools.com/jsref/event_onblur.asp
+                    */
+                    onBlur={() => {
+                        editJudge(params.row.id, {
+                            ...params.row,
+                            participatesCurrentYear: params.row.participatesCurrentYear ? 1 : 0,
+                        });
+                        setSnackbarMessage(`La participation à l'édition courante a été modifiée.`);
+                        setSnackbarMessageType("success");
+                        setIsSnackbarOpen(true);
+                    }}
+                />
+            ),
+            valueFormatter: (params) => (params ? "Oui" : "Non"),
+        },
+        {
+            field: "hasAssignment",
+            headerName: "Assigné",
+            width: 110,
+            sortable: false,
             valueFormatter: (params) => (params ? "Oui" : "Non"),
         },
         {

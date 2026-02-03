@@ -1,4 +1,7 @@
 /**
+ * @author Nathan Reyes
+ */
+/**
  * Jean-Philippe Bourassa, basé sur le travail de Tristan Lafontaine
  */
 import { Navigate } from 'react-router';
@@ -48,6 +51,8 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
                 lastName: "",
                 category: "",
                 pictureConsent: false,
+                participatesCurrentYear: true,
+                hasAssignment: false,
                 pwd: "",
                 pwdconfirm: "",
                 blacklisted: false,
