@@ -2,7 +2,7 @@ import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
 import IPage from "../../types/IPage";
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import UserService from "../../api/users/userService";
 import verificationCodeService from "../../api/verificationCode/verificationCodeService";
 import { ShowToast } from '../../utils/utils';
@@ -125,7 +125,7 @@ export default class ForgottenPasswordModificationPage extends IPage<{}, Forgott
          */
         return (
             <div data-testid="ChangePWF" className={styles.toCenter}>
-                <Layout name={TEXTS.modifyPassword.title}>
+                <PageSection titre={TEXTS.modifyPassword.title}>
                     <ValidatorForm onSubmit={()=>this.handleSubmit()}>
                                     <div className={styles.padding20 + ' ' + styles.centerText}>
                                         <div className={styles.paddingForm}>
@@ -174,7 +174,7 @@ export default class ForgottenPasswordModificationPage extends IPage<{}, Forgott
                                         </div>
                                     </div>
                      </ValidatorForm>
-                </Layout>
+                </PageSection>
             </div>
         )
     }

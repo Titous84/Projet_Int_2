@@ -31,4 +31,8 @@
       * Activé
       */
      activated:boolean;
-}
+     /**
+      * Présence à l'édition en cours
+      */
+     participatesCurrentYear:boolean;
+} 

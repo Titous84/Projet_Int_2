@@ -36,6 +36,26 @@ class TeamMember
     public $pictureConsent;
 
     /**
+     * @var int Consentement à l'utilisation publique des photos
+     */
+    public $photoConsentPublication;
+
+    /**
+     * @var int Consentement à l'utilisation interne des photos
+     */
+    public $photoConsentInternal;
+
+    /**
+     * @var int Refus total pour la prise de photos
+     */
+    public $photoConsentRefusal;
+
+    /**
+     * @var int Indique si le membre souhaite masquer ses informations personnelles
+     */
+    public $isAnonymous;
+
+    /**
      * @var int Activé
      */
     public $userActivated;
@@ -71,6 +91,10 @@ class TeamMember
         $this->firstName = $teamJSON["first_name"];
         $this->lastName = $teamJSON["last_name"];
         $this->pictureConsent = $teamJSON["picture_consent"];
+        $this->photoConsentPublication = $teamJSON["photo_consent_publication"] ?? 0;
+        $this->photoConsentInternal = $teamJSON["photo_consent_internal"] ?? 0;
+        $this->photoConsentRefusal = $teamJSON["photo_consent_refusal"] ?? 0;
+        $this->isAnonymous = $teamJSON["is_anonymous"] ?? 0;
         $this->userActivated = isset($teamJSON["users_activated"]) ? $teamJSON["users_activated"] : 1;
         $this->teamId = isset($teamJSON["team_id"]) ? $teamJSON["team_id"] : null;
         $this->email = isset($teamJSON["email"]) ? $teamJSON["email"] : null;

@@ -269,6 +269,24 @@ class UserService
     }
 
     /**
+     * Réinitialise les données annuelles liées à l'administration.
+     */
+    public function reset_annual_data(): Result
+    {
+        try {
+            if (!$this->userRepository->reset_annual_data()) {
+                return new Result(EnumHttpCode::SERVER_ERROR, array("Une erreur est survenue lors de la réinitialisation annuelle."));
+            }
+
+            return new Result(EnumHttpCode::SUCCESS, array("La réinitialisation annuelle a été effectuée avec succès."), true);
+        } catch (Exception $exception) {
+            $context["http_error_code"] = $exception->getCode();
+            $this->logHandler->critical($exception->getMessage(), $context);
+            return new Result(EnumHttpCode::SERVER_ERROR, array("Une erreur inattendue est survenue lors de la réinitialisation annuelle."));
+        }
+    }
+
+    /**
      * Supprime une liste d'administrateurs par leurs ids.
      * 
      * Cette méthode retourne un code HTTP 200 si AU MOINS UN des ids d'administrateurs existe dans la BD.

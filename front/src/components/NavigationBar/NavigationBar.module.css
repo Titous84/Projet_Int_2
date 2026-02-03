@@ -4,6 +4,8 @@
     padding: 0;
     overflow: hidden;
     background-color: rgb(28,36,60);
+    display: flex;
+    align-items: center;
 }
 /*Positionnement des elements*/
 /*Elements sur un ecran d'ordinateur*/
@@ -64,10 +66,13 @@
     }
 }
 li.positionGauche {
-    float: left;
+    margin-right: 10px;
 }
 li.positionDroit {
-    float: right;
+    margin-left: auto;
+}
+li.positionDroit + li.positionDroit {
+    margin-left: 0;
 }
 .lienMenu {
     display: block;
@@ -92,5 +97,7 @@ p.titreMenu {
     text-align: center;
 }
 div.block {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
