@@ -1,5 +1,16 @@
 import * as React from 'react';
-import { Button, ButtonProps, Divider, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  Divider,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { purple } from '@mui/material/colors';
 import EvalHour from '../../components/judge-stand/eval-hour';
 import StandRow from '../../components/judge-stand/stand-row';
@@ -13,23 +24,23 @@ import SignUpJudgeService from '../../api/signUpJudge/signUpJudgeService';
 import { ShowToast } from '../../utils/utils';
 
 interface JudgesSchedulesPageState {
-    stands: StandInfo[];
-    standsEval: IAssignation[];
-    juges: JugeInfo[];
-    categories: Category[];
-    hours: TimeSlots[],
-    boolDialog: boolean;
-    boolStand: boolean;
-    boolLoading: boolean;
+  stands: StandInfo[];
+  standsEval: IAssignation[];
+  juges: JugeInfo[];
+  categories: Category[];
+  hours: TimeSlots[];
+  boolDialog: boolean;
+  boolStand: boolean;
+  boolLoading: boolean;
 }
 
 //suivre thème de couleur du site
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    color: theme.palette.getContrastText(purple[500]),
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: 'black',
+  '&:hover': {
     backgroundColor: 'black',
-    '&:hover': {
-        backgroundColor: 'black',
-    },
+  },
 }));
 
 /**
@@ -38,18 +49,55 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
  * @author Xavier Houle
 */
 export default class JudgesSchedulesPage extends React.Component<{}, JudgesSchedulesPageState> {
-    constructor(props: {}) {
-        super(props)
-        this.state = {
-            boolDialog: false,
-            boolStand: false,
-            stands: [],
-            standsEval: [],
-            juges: [],
-            hours: [],
-            categories: [],
-            boolLoading: true,
-        }
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      boolDialog: false,
+      boolStand: false,
+      stands: [],
+      standsEval: [],
+      juges: [],
+      hours: [],
+      categories: [],
+      boolLoading: true,
+    };
+  }
+
+  /**
+   * @author Nathan Reyes
+   * Permet de charger toutes les valeurs requise pour la page
+   * Le boolLoading est pour afficher les résultats avant que l'API est fini
+   * @author Xavier Houle
+  */
+  async componentDidMount() {
+    await Promise.all([
+      this.loadJudge(),
+      this.loadEvaluation(),
+      this.loadTimeSlots(),
+      this.loadStands(),
+      this.loadCategory(),
+    ]);
+
+    setTimeout(() => {
+      this.setState({
+        boolLoading: false,
+      });
+    }, 500);
+  }
+
+  /**
+   * @author Nathan Reyes
+   * @function loadStands
+   * @author Xavier Houle
+   * S'occupe d'aller chercher le numéro d'équipe dans la BD
+   * Si la réponse de l'API est inexistante affiche une erreur
+  */
+  async loadStands() {
+    const response = await JugeStandService.GetStand();
+
+    if (response.error) {
+      ShowToast("Une erreur est survenue lors du chargement des équipes.", 5000, "error", "top-center", false);
+      return;
     }
 
     /**
@@ -388,12 +436,44 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
               hours: prevState.hours.slice(0, -1)
             }));
           }
-        } catch (error) {
-          ShowToast("Une erreur est survenue lors de l'ajout de la plage horaire.", 5000, "error", "top-center", false);
-        }
+        });
+    }
+  };
+
+  /**
+   * @author Nathan Reyes
+   * @author Xavier Houle
+   * @param id L'id de l'assignation a supprimer
+   * Supprime l'assignation dans la base de données et update le state de la page
+  */
+  handleDeleteAssignation = (id: number) => {
+    const updatedStandsEval = this.state.standsEval.filter(assignation => assignation.id !== id);
+
+    this.setState({ standsEval: updatedStandsEval });
+  };
+
+  /**
+   * @author Nathan Reyes
+   * @author Xavier Houle
+   * @param startHour L'heure de départ de la plage horraire
+   * @param interval L'intervalle entre les heures de passages
+   * S'occupe de changer le state de la page lorsqu'un heure de départ
+   * et une intervale est changer. Ensuite elle s'occupe de calculer automatiquement
+   * chaque heure de passages.
+  */
+  handleHoursChange = (startHour: Date, interval: number) => {
+    const newHours = this.state.hours.map((element, index) => {
+      const newTime = new Date(startHour);
+
+      if (index !== 0) {
+        newTime.setMinutes(newTime.getMinutes() + (interval * index));
       }
 
+      return { ...element, time: newTime };
+    });
 
+    this.setState({ hours: newHours });
+  };
 
     /**
      * @author Nathan Reyes
@@ -405,21 +485,33 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
     groupJudgesByCategory(): { categoryId: number; judges: JugeInfo[] }[] {
         const groupedJudges: { [key: number]: JugeInfo[] } = {};
 
-        this.state.juges.forEach((juge) => {
-            if (!groupedJudges[juge.categories_id]) {
-                groupedJudges[juge.categories_id] = [];
-            }
+    let nouveauSlot: TimeSlots;
 
-            groupedJudges[juge.categories_id].push(juge);
-        });
-
-        const groupedJudgesArray = Object.keys(groupedJudges).map((categoryId) => ({
-            categoryId: parseInt(categoryId),
-            judges: groupedJudges[parseInt(categoryId)],
-        }));
-
-        return groupedJudgesArray;
+    if (this.state.hours.length <= 0) {
+      nouveauSlot = {
+        id: 0,
+        time: heureDepart,
+      };
     }
+    else {
+      const dernierTimeSlot = this.state.hours[this.state.hours.length - 1];
+      const dernierHeure = new Date(dernierTimeSlot.time);
+
+      // Calcul de la prochaine heure
+      const prochainHeure = new Date(dernierHeure.getTime() + interval * 60 * 1000);
+      nouveauSlot = {
+        id: 0,
+        time: prochainHeure,
+      };
+    }
+
+    try {
+      // Appeler le service pour ajouter la nouvelle plage horaire
+      if (await JugeStandService.AddTimeSlot(nouveauSlot)) {
+        this.setState((prevState) => ({
+          hours: [...prevState.hours, nouveauSlot],
+
+        }));
 
     /**
      * @author Nathan Reyes
@@ -474,6 +566,22 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
             hours: updatedHour
         })
     }
+  };
+
+  /**
+   * @author Nathan Reyes
+   * @author Xavier Houle
+   * @returns Les juges groupés par catégorie
+   * S'occupe de grouper les juges selon leurs catégories et retourne
+   * un tableau avec les juges groupées
+  */
+  groupJudgesByCategory(): { categoryId: number; judges: JugeInfo[] }[] {
+    const groupedJudges: { [key: number]: JugeInfo[] } = {};
+
+    this.state.juges.forEach((juge) => {
+      if (!groupedJudges[juge.categories_id]) {
+        groupedJudges[juge.categories_id] = [];
+      }
 
     render() {
         // Gestion des cas sans données pour éviter des erreurs inutiles.

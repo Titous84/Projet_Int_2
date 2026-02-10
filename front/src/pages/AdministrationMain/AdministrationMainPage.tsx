@@ -131,5 +131,7 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
             componentToDisplayInContentZone: ongletTrouve.componentToDisplayInContentZone,
             ongletActifId: ongletTrouve.id,
         });
+
+        this.mettreAJourUrl(ongletTrouve.id);
     };
 }
