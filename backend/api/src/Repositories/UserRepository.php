@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -13,20 +14,22 @@ use App\Utils\GeneratorUUID;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Classe UserRepository
  * @author Christopher Boisvert
  * @author Alex Des Ruisseaux
  * @author Mathieu Sévégny
  * @package App\Repositories
- */
+*/
 class UserRepository extends Repository
 {
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir tous les utilisateurs
 	 * @author Christopher Boisvert
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return array|false Retourne un tableau des utilisateurs, sinon retourne false.
-	 */
+	*/
     public function get_all_users(): array
     {
 		try
@@ -45,13 +48,14 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir tous les juges actifs.
 	 * @author Jean-Philippe Bourassa
 	 * @author Jean-Christophe Demers
 	 * @author Thomas-Gabriel Paquin
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return array|false Retourne un tableau des juges, sinon retourne false.
-	 */
+	*/
     public function get_all_judges()
     {
 		try
@@ -86,11 +90,12 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère tous les administrateurs de la BD.
      * @author Antoine Ouellette
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return array Un tableau de tous les administrateurs.
-     */
+    */
     public function get_all_administrators(): array
     {
         try
@@ -123,12 +128,13 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère un administrateur de la BD par son id.
      * @param int $administratorId L'id de l'administrateur à récupérer.
      * @author Antoine Ouellette
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return ?object Un administrateur ou null si l'id n'existe pas.
-     */
+    */
     public function get_administrator_by_id(int $administratorId): ?AdministratorToReturn
     {
         try
@@ -170,11 +176,12 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Vérifie si l'email est déjà utilisé par un autre administrateur.
      * @param string $email L'email à vérifier.
      * @throws \PDOException Peut lancer des erreurs PDOException.
      * @return bool true si l'email est déjà utilisé, false sinon.
-     */
+    */
     public function is_email_already_in_use(string $email): bool
     {
         try
@@ -211,10 +218,11 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Crée un administrateur dans la BD.
      * @param AdministratorToCreate $administratorToCreate Un administrateur à créer.
      * @return bool true si l'administrateur a été créé avec succès, false sinon.
-     */
+    */
     public function create_administrator(AdministratorToCreate $administratorToCreate): bool
     {
         try
@@ -252,11 +260,12 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Méthode qui supprime une liste d'administrateurs par leurs ids de la BD.
      * @author Antoine Ouellette
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return bool Vrai si la suppression a réussi, faux sinon.
-     */
+    */
     public function delete_administrators_by_ids(array $administratorToDeleteIds): bool
     {
         try
@@ -288,9 +297,10 @@ class UserRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Réinitialise les données annuelles sensibles à l'édition courante.
      * @return bool true si la réinitialisation est un succès, false sinon.
-     */
+    */
     public function reset_annual_data(): bool
     {
         try {
@@ -318,11 +328,12 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir tous les juges et les séparer en blacklisted ou non.
 	 * @author Thomas-Gabriel Paquin
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return array|false Retourne un tableau des juges blacklister, sinon retourne false.
-	 */
+	*/
     public function get_all_judges_blacklisted()
     {
 		try
@@ -358,11 +369,12 @@ class UserRepository extends Repository
 	
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir tous les utilisateurs activer
 	 * @author Alex Des Ruisseaux
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return array|false Retourne un tableau des utilisateurs, sinon retourne false.
-	 */
+	*/
     public function get_activated_users(): array
     {
 		try
@@ -380,11 +392,12 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de changer le role d'un utilisateur activer
 	 * @author Alex Des Ruisseaux
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return array|false Retourne un tableau des utilisateurs, sinon retourne false.
-	 */
+	*/
     public function change_user_role(UserRole $userRole): int
     {
 		try
@@ -406,12 +419,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir un utilisateur par son id.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return mixed|false Retourne un tableau des données de l'utilisateur, sinon ça retourne false.
-	 */
+	*/
     public function get_user_by_id( int $id )
     {
 		try
@@ -435,12 +449,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir un utilisateur par son id.
 	 * @author Christopher Boisvert
 	 * @param string $email Email de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return mixed|false Retourne un tableau des données de l'utilisateur, sinon ça retourne false.
-	 */
+	*/
 	public function get_user_by_email( string $email )
 	{
 		try
@@ -464,13 +479,14 @@ class UserRepository extends Repository
 	}
 
 	/**
-	 * Fonction qui permet d'obtenir un utilisateur par son email. 
+	 * @author Nathan Reyes
+	 * Fonction qui permet d'obtenir un utilisateur par son email.
 	 * (sert seulement pour une fonction de juge dans add_judge_judge)
 	 * @author Déreck "THE GOAT" Lachance
 	 * @param string $email Email de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return int|false Retourne un tableau des données de l'utilisateur, sinon ça retourne false.
-	 */
+	*/
 	public function get_judge_by_email( string $email )
 	{
 		try
@@ -494,11 +510,12 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir un juge par son user_id.
 	 * @author Christopher Boisvert
 	 * @param int $user_id Identifiant de l'utilisateur.
 	 * @return array|false Retourne un tableau représentant le juge, sinon sa retourne false.
-	 */
+	*/
 	public function get_judge_by_user_id(int $user_id)
 	{
 		try
@@ -520,12 +537,13 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'ajouter un utilisateur.
 	 * @author Tristan Lafontaine
 	 * @param User $user Users à ajouter.
 	 * @return int Retourne le nombre de lignes ajouté.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	*/
     public function add_user( User $user ): int
     {
 		try
@@ -559,12 +577,13 @@ class UserRepository extends Repository
     }
 	
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'ajouter un juge dans user.
 	 * @author Jean-Philippe Bourassa
 	 * @param Judge $judge Users à ajouter.
 	 * @return int Retourne le nombre de lignes ajouté.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
     public function add_judge_user( Judge $judge ): int
     {
 		try{
@@ -595,13 +614,14 @@ class UserRepository extends Repository
     }
 	
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'ajouter un user dans juge avec son user_id.
 	 * @author Jean-Philippe Bourassa
 	 * @author Jean-Christophe Demers
 	 * @param Judge $judge Judge à ajouter.
 	 * @return string|Result Retourne le nombre de lignes ajouté.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
     public function add_judge_judge(Judge $judge)
     {
 		try
@@ -639,11 +659,12 @@ class UserRepository extends Repository
     }
 
 	/**
-     * get_category
-     * Permet d'obtenir l'id et le survey_id d'une categorie
-     * @param  string $category Le nom de la catégorie
-     * @return array
-     */
+	 * @author Nathan Reyes
+	 * get_category
+	 * Permet d'obtenir l'id et le survey_id d'une categorie
+	 * @param  string $category Le nom de la catégorie
+	 * @return array
+	*/
     public function get_category(string $category) : array
     {
         try{
@@ -664,12 +685,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier un utilisateur.
 	 * @author Christopher Boisvert
 	 * @param User $user User à modifié.
 	 * @return int Retourne le nombre de lignes modifié.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
     public function modify_user( User $user ): int
     {
 		try
@@ -701,12 +723,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier la catégorie un juge.
 	 * @author Thomas-Gabriel Paquin
 	 * @param int $userId ID de l'utilisateur a modifier.
 	 * @param int $category ID de la catégorie du juge.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
 	private function update_judge_category(int $userId, int $category)
 	{
 		$sql = "UPDATE judge SET categories_id=:categories_id
@@ -720,12 +743,13 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier la présence du juge à l'édition courante.
 	 * @author Thomas-Gabriel Paquin
 	 * @param int $userId ID de l'utilisateur à modifier.
 	 * @param int $participatesCurrentYear Indique si le juge participe à l'édition courante.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	*/
 	private function update_judge_participation(int $userId, int $participatesCurrentYear)
 	{
 		$sql = "UPDATE judge SET participates_current_year = :participates_current_year
@@ -739,12 +763,13 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier un juge.
 	 * @author Thomas-Gabriel Paquin
 	 * @param array $judge Juge à modifié.
 	 * @return int Retourne le nombre de lignes modifié.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
     public function update_judge_info( array $data ): int
     {
 		try
@@ -779,12 +804,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'activer un utilisateur.
 	 * @author Christopher Boisvert
 	 * @param int $id ID de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return int Retourne le nombre de ligne modifié.
-	 */
+	*/
 	public function activate_user( int $id )
 	{
 		try
@@ -806,13 +832,14 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier un juge et ainsi finir son inscription.
 	 * @author Jean-Philippe Bourassa
 	 * @author Jean-Christophe Demers
 	 * @param Judge $judge Judge à modifié.
 	 * @return int Retourne le nombre de lignes modifié.
-	 *@throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	 * @throws PDOException Peut lancer des erreurs PDOException.
+	*/
     public function activate_judge( Judge $judge ): int
     {
 		if($judge->user_id == null){
@@ -843,12 +870,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de donner un activation_token à un utilisateur
 	 * @author Jean-Philippe Bourassa
 	 * @param int $id id de l'utilisateur
 	 * @return int Retourne le nombre de lignes modifié.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
-	 */
+	*/
 	public function set_activation_token(int $id): int
 	{
 		try
@@ -871,11 +899,12 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Cherche l'usager via son token d'activation d'adresse courriel
 	 * @author Mathieu Sévégny
 	 * @param string $token Token d'action d'adresse courriel
 	 * @return mixed L'usager trouvé (Peut-être null)
-	 */
+	*/
 	public function get_user_by_activation_token(string $token)
 	{
 		try
@@ -898,11 +927,12 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Activation de l'adresse courriel de l'utilisateur via son identifiant
 	 * @author Mathieu Sévégny
 	 * @param int $userID Identifiant de l'utilisateur.
 	 * @return bool Si ça a fonctionnée.
-	 */
+	*/
 	public function activate_email_by_id(int $userID)
 	{
 		try
@@ -923,11 +953,12 @@ class UserRepository extends Repository
 		}
 	}
 	/**
+	 * @author Nathan Reyes
 	 * Cherche l'identifiant de l'équipe avec l'identifiant de l'usager
 	 * @author Mathieu Sévégny
 	 * @param int $userID Identifiant de l'utilisateur.
 	 * @return int Identifiant de l'équipe, si pas trouvé, retourne -1
-	 */
+	*/
 	public function get_team_id_by_user_id(int $userID)
 	{
 		try
@@ -952,11 +983,12 @@ class UserRepository extends Repository
 		}
 	}
 	/**
+	 * @author Nathan Reyes
 	 * Cherche les usagers de l'équipe n'ayant pas leur courriel validé.
 	 * @author Mathieu Sévégny
 	 * @param int $teamID Identifiant de l'équipe.
 	 * @return mixed Usagers n'ayant pas leur courriel validé
-	 */
+	*/
 	public function is_all_team_email_activated(int $teamID)
 	{
 		try
@@ -978,11 +1010,12 @@ class UserRepository extends Repository
 		}
 	}
 	/**
+	 * @author Nathan Reyes
 	 * Active l'équipe.
 	 * @author Mathieu Sévégny
 	 * @param int $teamID Identifiant de l'équipe.
 	 * @return bool Requête a fonctionné?
-	 */
+	*/
 	public function activate_team(int $teamID)
 	{
 		try
@@ -1003,12 +1036,13 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de supprimer un utilisateur.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return int Retourne le nombre de ligne supprimé.
-	 */
+	*/
     public function delete_judge( int $users_id ): int
     {
 		try
@@ -1043,12 +1077,13 @@ class UserRepository extends Repository
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de supprimer un utilisateur.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur.
 	 * @throws PDOException Peut lancer des erreurs PDOException.
 	 * @return int Retourne le nombre de ligne supprimé.
-	 */
+	*/
     public function delete_user( int $id ): int
     {
 		try
@@ -1072,10 +1107,11 @@ class UserRepository extends Repository
     }
 	
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir les rôles
 	 * @author Tristan Lafontaine
 	 * @return array Retourne un tableau de rôle
-	 */
+	*/
 	public function get_all_roles() : array
 	{
 		$sql = "SELECT name as role FROM role";
@@ -1086,11 +1122,12 @@ class UserRepository extends Repository
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Cherche les usagers de l'équipe n'ayant pas leur courriel validé.
 	 * @author Maxime Demers Boucher
 	 * @param int $teamID Identifiant de l'équipe.
 	 * @return mixed Usagers n'ayant pas leur courriel validé
-	 */
+	*/
 	public function email_adminValide(string $email)
 	{
 		try

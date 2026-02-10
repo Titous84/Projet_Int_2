@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import NavigateButton from './JudgesListPage';
@@ -5,14 +8,15 @@ import Judge from '../../types/judge';
 import { useNavigate } from 'react-router';
 
 /**
+ * @author Nathan Reyes
  * Tests unitaires pour le bouton d'envoi des évaluations par courriel.
- * 
+ *
  * Les tests vérifient que le bouton fonctionne correctement en fonction des juges sélectionnés.
- * 
+ *
  * @author Tommy Garneau
  * Code généré par ChatGPT
  * @see https://www.chatgpt.com/
- */
+*/
 
 // Mock de `useNavigate` pour vérifier les redirections
 vi.mock('react-router', () => ({

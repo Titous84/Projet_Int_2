@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -9,10 +10,11 @@ use PDOException;
 use Test\TestsUtils\TestLogger;
 
 /**
+ * @author Nathan Reyes
  * Classe SignUpTeamRepository.php
  * @package App\Repositories
  * @author Tristan Lafontaine
- */
+*/
 
 class SignUpTeamRepository extends Repository
 {    
@@ -20,12 +22,13 @@ class SignUpTeamRepository extends Repository
     private $errorMessages = [];
 
     /**
+     * @author Nathan Reyes
      * add_team
      * Ajout d'une équipe au complet
      * @param Team $team L'équipe à ajouter
      * @param array $token Le token de connexion
      * @return Result
-     */
+    */
     public function add_team(Team $team, array $token):Result
     {
         try{
@@ -74,13 +77,14 @@ class SignUpTeamRepository extends Repository
     }
       
     /**
+     * @author Nathan Reyes
      * add_member
      * Permet d'ajouter des membres
      * @param  Team $team L'équipe à ajouter
      * @param  int $idTeam L'id de l'équipe
      * @param array $token Le token de connexion
      * @return void
-     */
+    */
     public function add_member(Team $team, int $teamId, array $token){
         //Permet d'obtenir la longueur du tableau
         $sizeofArray = sizeof($team->members);
@@ -192,12 +196,13 @@ class SignUpTeamRepository extends Repository
     }
     
     /**
+     * @author Nathan Reyes
      * add_users_teams
      * Ajout les membres de l'équipe dans une équipe
      * @param  int $teamId l'id de l'équipe
      * @param  int $userId L'id du membre
      * @return void
-     */
+    */
     public function add_users_teams(int $teamId, int $userId){
         try{
             $sql = "INSERT INTO users_teams(teams_id,users_id) VALUES (:team_id,:user_id)";
@@ -215,12 +220,13 @@ class SignUpTeamRepository extends Repository
     }
     
     /**
+     * @author Nathan Reyes
      * add_team_contact_person
      * Permet d'ajouter des personnes ressources dans une équipe
      * @param  array $contactPerson Tableau de personne ressource
      * @param  int $teamId L'id de l'équipe
      * @return void
-     */
+    */
     public function add_team_contact_person(array $contactPerson, int $teamId){
         try{
             $sizeofArray = sizeof($contactPerson);
@@ -242,11 +248,12 @@ class SignUpTeamRepository extends Repository
     }
         
     /**
+     * @author Nathan Reyes
      * add_contact_person
      * Ajout d'une personne ressource dans la base de données
      * @param  Team $team L'équipe à ajouter
      * @return void
-     */
+    */
     public function add_contact_person(Team $team){
         try{
             $sizeofArray = sizeof($team->contactPerson);
@@ -270,11 +277,12 @@ class SignUpTeamRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * get_category
      * Permet d'obtenir l'id et le survey_id d'une categorie
      * @param  string $category Le nom de la catégorie
      * @return array|null
-     */
+    */
     public function get_category(string $category)
     {
         try{
@@ -296,11 +304,12 @@ class SignUpTeamRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * get_contact_person_by_email
      * Permet de retourner une personne ressource à partir de son courriel
      * @param  string $email L'adresse courriel de la personne ressource
      * @return array
-     */
+    */
     public function get_contact_person_by_email(string $email) : array
     {
         try{
@@ -324,12 +333,13 @@ class SignUpTeamRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * get_all_team_by_title_and_description
-     * Fonction qui permet d'obtenir la liste 
+     * Fonction qui permet d'obtenir la liste
      * @param  string $title Le titre du l'équipe
      * @param  string $description La description de l'équipe
      * @return array
-     */
+    */
     public function get_all_team_by_title_and_description(string $title, string $description) : array 
     {
         try{
@@ -350,6 +360,7 @@ class SignUpTeamRepository extends Repository
     }
     
     /**
+     * @author Nathan Reyes
      * get_team_by_title_description_and_category
      *
      * Permet d'obtenir un id selon le titre, sa description et sa catégorie
@@ -357,7 +368,7 @@ class SignUpTeamRepository extends Repository
      * @param  string $description La description du l'équipe
      * @param  string $category La categorie du l'équipe'
      * @return int|null
-     */
+    */
     public function get_team_by_title_description_and_category(string $title, string $description, string $category)
     {
         try{
@@ -380,11 +391,12 @@ class SignUpTeamRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * get_team
      * Permet d'obtenir une équipe à partir d'un id de l'équipe
      * @param int id ID de l'équipe
      * @return array
-     */
+    */
     public function get_team(int $id) : array
     {
         try{
@@ -405,11 +417,12 @@ class SignUpTeamRepository extends Repository
     }
     
     /**
+     * @author Nathan Reyes
      * get_member_by_numero_da
      * Permet d'obtenir un membre à partir de son numéro de DA
      * @param  string $numero_da Le numéro de DA du membre
-     * @return array 
-     */
+     * @return array
+    */
     public function get_member_by_numero_da(string $numero_da) : array
     {
         try{
@@ -434,12 +447,13 @@ class SignUpTeamRepository extends Repository
     }
     
     /**
- * get_member_by_numero_da_and_survey
- * Fonction qui permet de savoir si un étudiant est déjà inscrit selon la catégorie.
- * @param  string $numero_da Le numéro de DA du membre
- * @param  string $category Le nom de la catégorie
- * @return array
- */
+     * @author Nathan Reyes
+     * get_member_by_numero_da_and_survey
+     * Fonction qui permet de savoir si un étudiant est déjà inscrit selon la catégorie.
+     * @param  string $numero_da Le numéro de DA du membre
+     * @param  string $category Le nom de la catégorie
+     * @return array
+    */
 public function get_member_by_numero_da_and_survey(string $numero_da, string $category) : array
 {
     $category = $this->get_category($category);
@@ -468,11 +482,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
 }
     
     /**
+     * @author Nathan Reyes
      * get_members_team
      * Permet d'obtenir tous les membres dans une équipe
      * @param  int $id L'id de l'équipe
      * @return array
-     */
+    */
     public function get_members_team(int $id) : array
     {
    
@@ -493,11 +508,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
 
     /**
+     * @author Nathan Reyes
      * get_max_members_category
      * Requête pour obtenir le nombre maximum de coéquipier par catégorie pour une équipe
      * @param string $category Le nom de la catégorie
      * @return array
-     */
+    */
     public function get_max_members_category(string $category) : array
     {
         try{
@@ -525,11 +541,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
         
     /**
+     * @author Nathan Reyes
      * delete_all_team
      * Permet de supprimer toutes les équipes
      * @param  array $ids L'id des équipes
      * @return array
-     */
+    */
     public function delete_all_team(array $ids) : array
     {
         foreach ($ids as $id) {
@@ -543,11 +560,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
 
     /**
+     * @author Nathan Reyes
      * delete_team
      * Permet de supprimer une équipe à partir de l'id de l'équipe
      * @param  int $id L'id de l'équipe
      * @return string
-     */
+    */
     public function delete_team(int $id): bool
     {
         try {
@@ -570,11 +588,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
     
     /**
+     * @author Nathan Reyes
      * delete_all_team_members
      * Permet de supprimer tous les membres d'une équipe
      * @param  array $ids Tableau d'id des membres
      * @return array
-     */
+    */
     public function delete_all_team_members(array $ids) : array
     {
         for($i = 0; $i < sizeof($ids); $i++){
@@ -589,11 +608,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
 
     /**
+     * @author Nathan Reyes
      * delete_all_member_team
      * Supprime tous les membres d'une équipe à partir d'une liste d'id
      * @param  array $members Tableau de membres
      * @return void
-     */
+    */
     public function delete_all_member_team(array $members){
         $sizeofArray = sizeof($members);
         for($a = 0; $a < $sizeofArray; $a++){
@@ -602,11 +622,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
 
     /**
+     * @author Nathan Reyes
      * delete_user
      * Permet de supprimer un membre d'un équipe
      * @param  int $userId L'id du membre
      * @return void
-     */
+    */
     public function delete_user(int $userId){
         try{
             $sql = "DELETE FROM users WHERE id = :id";
@@ -623,11 +644,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
     
     /**
+     * @author Nathan Reyes
      * delete_users_team
      * Suppression de tous les liens entre une équipe et ses membres
      * @param  int $teamId L'id de l'équipe
      * @return void
-     */
+    */
     public function delete_users_team(int $teamId){
         try{
             
@@ -644,11 +666,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
 
     /**
+     * @author Nathan Reyes
      * delete_teams_users
      * Suppression de tous les liens entre une équipe et ses membres
      * @param  int $usersId L'id du membres
      * @return void
-     */
+    */
     public function delete_teams_users(int $usersId){
         try{
             
@@ -665,11 +688,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
     
     /**
+     * @author Nathan Reyes
      * delete_teams_contact_person
      * Supression de tous les liens entre une personne ressource et une équipe.
      * @param  int $teamId L'id de l'équipe
      * @return void
-     */
+    */
     public function delete_teams_contact_person(int $teamId){
         try{
             $sql = "DELETE FROM teams_contact_person WHERE teams_id = :team_id";
@@ -685,11 +709,12 @@ public function get_member_by_numero_da_and_survey(string $numero_da, string $ca
     }
     
     /**
- * check_numero_da_is_not_BD
- * Vérification des numéros de DA dans la base de données.
- * @param  Team $team L'équipe
- * @return array
- */
+     * @author Nathan Reyes
+     * check_numero_da_is_not_BD
+     * Vérification des numéros de DA dans la base de données.
+     * @param  Team $team L'équipe
+     * @return array
+    */
 public function check_numero_da_is_not_BD(Team $team): array
 {
     $errorNumeroDa = [];
@@ -704,11 +729,12 @@ public function check_numero_da_is_not_BD(Team $team): array
 }
     
     /**
- * check_numero_da_duplicate
- * Vérifie si il n'y a pas écrit plus d'une fois dans le formulaire le même numéro de DA
- * @param  Team $team L'équipe
- * @return array
- */
+     * @author Nathan Reyes
+     * check_numero_da_duplicate
+     * Vérifie si il n'y a pas écrit plus d'une fois dans le formulaire le même numéro de DA
+     * @param  Team $team L'équipe
+     * @return array
+    */
 public function check_numero_da_duplicate(Team $team) : array
 {
     $errorNumeroDa = [];
@@ -724,11 +750,12 @@ public function check_numero_da_duplicate(Team $team) : array
 }
     
     /**
+     * @author Nathan Reyes
      * check_team_active
      * Fonction qui vérifie si l'équipe est active ou pas selon le numéro de DA de deux membres de l'équipe.
      * @param  Team $team L'équipe
      * @return array
-     */
+    */
     public function check_team_active(Team $team) : array
     {
         $response = [];
@@ -753,11 +780,12 @@ public function check_numero_da_duplicate(Team $team) : array
     }
 
     /**
+     * @author Nathan Reyes
      * uppercase_first_letter
      * Permet de mettre la première lettre à majuscule.
      * @param string $data Une donnée en string
      * @return string
-     */
+    */
     public function uppercase_first_letter(string $data):string
     {
         return ucfirst($data);

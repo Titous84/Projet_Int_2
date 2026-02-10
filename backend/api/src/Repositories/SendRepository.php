@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -6,8 +7,9 @@ use PDO;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * A supprimer sert a rien
- */
+*/
 class SendRepository extends Repository
 {
     public function sendResultats($id) : array

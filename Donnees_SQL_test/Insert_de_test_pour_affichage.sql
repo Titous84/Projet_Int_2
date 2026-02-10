@@ -1,3 +1,4 @@
+-- @author Nathan Reyes
 -- Script de test utilisant la table evaluationgrids (anciennement survey).
 -- Insertions dans 'users' pour les juges
 INSERT INTO users (first_name, last_name, email, role_id) VALUES

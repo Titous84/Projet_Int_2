@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from "react";
 import { useParams } from "react-router";
 import { Alert } from "@mui/material";
@@ -9,9 +12,10 @@ import SurveyService from "../../api/survey/surveyService";
 import { TEXTS } from "../../lang/fr";
 
 /**
+ * @author Nathan Reyes
  * Page où un juge peut voir la liste de ses évaluations.
  * @author Mathieu Sévégny
- */
+*/
 export default function JudgeEvaluationsListPage(): JSX.Element {
     let { token } = useParams();
 
@@ -22,26 +26,29 @@ export default function JudgeEvaluationsListPage(): JSX.Element {
 }
 
 /**
+ * @author Nathan Reyes
  * Props pour le composant React: JudgeEvaluationsListPageContent.
  * @author Christopher Boisvert
- * 
+ *
  * @property token Token UUID qui représente un identifiant unique d'un juge.
- */
+*/
 interface JudgeEvaluationsListPageContentProps {
     token?:string
 }
 
 /**
+ * @author Nathan Reyes
  * Contenu de la page des évaluations d'un juge.
  * Ne pas utiliser directement cette classe, utiliser JudgeEvaluationsListPage pour pouvoir récupérer le token.
  * @author Christopher Boisvert
- */
+*/
 export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvaluationsListPageContentProps, IJudgeEvaluation> {
 
     /**
+     * @author Nathan Reyes
      * Constructeur.
      * @param props Prend en paramètre un JudgeSurveyProps.
-     */
+    */
     constructor(props:JudgeEvaluationsListPageContentProps){
         super(props)
 
@@ -60,18 +67,20 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
+     * @author Nathan Reyes
      * @author Christopher Boisvert
-     *  Après l'exécution du constructeur, cette fonction va s'exécuter afin d'aller chercher les formulaires d'évaluations.
-     */
+     * Après l'exécution du constructeur, cette fonction va s'exécuter afin d'aller chercher les formulaires d'évaluations.
+    */
     componentDidMount()
     {
         this.getSurvey()
     }
 
     /**
+     * @author Nathan Reyes
      * @author Christopher Boisvert
-     *  Permet d'aller obtenir dans l'api les formulaires d'évaluations avec le token UUID.
-     */
+     * Permet d'aller obtenir dans l'api les formulaires d'évaluations avec le token UUID.
+    */
     async getSurvey()
     {
         let result = await SurveyService.getAllSurveyByJudgeUUID(this.props.token!!)
@@ -93,10 +102,11 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
+     * @author Nathan Reyes
      * Méthode permettant de changer dans le state le commentaire d'un formulaire.
      * @param evaluationId Id de l'évaluation.
      * @param newCommentaire Nouveau score de la question.
-     */
+    */
     handleChangeCommentaire(evaluationId:number, newCommentaire:string)
     {
         let newListSurvey = this.state.evaluationsList.map((survey) => {
@@ -111,12 +121,13 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
+     * @author Nathan Reyes
      * Méthode permettant de changer dans le state le score d'une question.
      * @param questionId Id de la question.
      * @param sectionId Id de la section.
      * @param evaluationId Id de l'évaluation.
      * @param newScore Nouveau score de la question.
-     */
+    */
     handleChangeQuestion(questionId:number, sectionId:number, evaluationId:number, newScore:number)
     {
         let newListSurvey = this.state.evaluationsList.map((survey) => {
@@ -147,35 +158,39 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
-     *  Fonction qui retourne la valeur de la variable isSurveySearching dans le state.
+     * @author Nathan Reyes
+     * Fonction qui retourne la valeur de la variable isSurveySearching dans le state.
      * @returns Retourne vrai si la page cherche toujours un formulaire et faux dans le cas contraire.
-     */
+    */
     isSurveySearching(): boolean
     {
         return this.state.isSearchingEvaluation
     }
 
     /**
-     *  Fonction qui retourne la valeur de la variable isSurveyFound dans le state.
+     * @author Nathan Reyes
+     * Fonction qui retourne la valeur de la variable isSurveyFound dans le state.
      * @returns Retourne vrai si un formulaire a été trouvé et faux dans le cas contraire.
-     */
+    */
     isSurveyFound(): boolean
     {
         return this.state.isEvaluationFound
     }
     
     /**
-     *  Fonction qui retourne la valeur de la variable isSurveyCompleted dans le state.
+     * @author Nathan Reyes
+     * Fonction qui retourne la valeur de la variable isSurveyCompleted dans le state.
      * @returns Retourne vrai si tous les formulaires sont completés.
-     */
+    */
     isAllSurveyCompleted(): boolean
     {
         return this.state.isEvaluationCompleted
     }
 
     /**
-     *  Méthode qui permet de changer la variable d'etat isSurveyCompleted à true.
-     */
+     * @author Nathan Reyes
+     * Méthode qui permet de changer la variable d'etat isSurveyCompleted à true.
+    */
     setAllCompletedSurvey()
     {
         this.setState({
@@ -184,9 +199,10 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
+     * @author Nathan Reyes
      * @author Christopher Boisvert
      * @returns Retourne void.
-     */
+    */
     changeName(namePage:string)
     {
         this.setState({
@@ -195,9 +211,10 @@ export class JudgeEvaluationsListPageContent extends React.Component<JudgeEvalua
     }
 
     /**
+     * @author Nathan Reyes
      * @author Christopher Boisvert
      * @returns Retourne un objet JSX.Element contenant la page d'évaluation.
-     */
+    */
     render() {
         return (
             <div data-testid="judge-survey">

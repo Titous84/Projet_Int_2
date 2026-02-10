@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -12,20 +13,26 @@ use phpDocumentor\GraphViz\Exception;
 use function DI\env;
 
 /**
+ * @author Nathan Reyes
  * Classe FormRepository
  * @author Tomy Chouinard
  * @package App\Repositories
- */
+*/
 class FormRepository extends Repository
 {
 
 
-    /*********************************************************** QUESTIONS CRUD ********************************************************************************/
     /**
+     * @author Nathan Reyes
+    * @author Nathan Reyes
+ * @author Nathan Reyes
+ * @author Nathan Reyes
+    /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les critères d'une section donnée
      * @return array Retourne un tableau des critères, sinon retourne false.
      * @throws PDOException Peut lancer des erreurs PDOException.
-     */
+    */
     public function get_all_criteria($id)
     {
         try {
@@ -44,11 +51,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de créer une nouvelle section.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result.
-     */
+    */
     public function create_question(string $name,int $position,int $rating_section_id, int $maxValue,int $increment):Result
     {
         try{
@@ -71,11 +79,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de supprimer une question d'une section.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return bool|null Retourne la section, sinon retourne null.
-     */
+    */
     public function deleteQuestion(int $id):Result
     {
         try{
@@ -94,11 +103,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de modifier une section.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result retourne un resultat avec un code http.
-     */
+    */
     public function update_question(int $id, string $name,int $position, int $maxValue,int $increment):Result
     {
         try{
@@ -120,13 +130,18 @@ class FormRepository extends Repository
         }
     }
 
-    /*********************************************************** SECTIONS CRUD ********************************************************************************/
     /**
+     * @author Nathan Reyes
+    * @author Nathan Reyes
+ * @author Nathan Reyes
+ * @author Nathan Reyes
+    /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les sections d'un formulaire donné
      * @author Tomy Chouinard
      * @return array|false Retourne un tableau des sections, sinon retourne false.
      * @throws PDOException Peut lancer des erreurs PDOException.
-     */
+    */
     public function get_all_sections($id): array
     {
         try{
@@ -143,11 +158,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de créer une nouvelle section.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result.
-     */
+    */
     public function create_section(string $name,int $position, int $survey_id):Result
     {
         try{
@@ -168,11 +184,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de supprimer une section d'un formulaire.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return bool|null Retourne la section, sinon retourne null.
-     */
+    */
     public function deleteSection(int $id):Result
     {
         try{
@@ -191,11 +208,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de modifier une section.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result retourne un resultat avec un code http.
-     */
+    */
     public function update_section(int $id, string $name,int $position, int $survey_id):Result
     {
         try{
@@ -216,13 +234,18 @@ class FormRepository extends Repository
         }
     }
 
-    /*********************************************************** SURVEY CRUD ********************************************************************************/
     /**
+     * @author Nathan Reyes
+    * @author Nathan Reyes
+ * @author Nathan Reyes
+ * @author Nathan Reyes
+    /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les formulaires
      * @author Tomy Chouinard
      * @return array|false Retourne un tableau des formulaires, sinon retourne false.
      * @throws PDOException Peut lancer des erreurs PDOException.
-     */
+    */
     public function get_all_survey(): array{
         try{
         // Utilisation de la table evaluationgrids (anciennement survey) pour les formulaires.
@@ -235,11 +258,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de créer un nouveau formulaire.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result.
-     */
+    */
     public function create_survey(string $name):Result
     {
         try{
@@ -259,11 +283,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de supprimer un formulaire.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result Retourne un resultat avec code http.
-     */
+    */
     public function deleteSurvey(int $id):Result
     {
         try{
@@ -291,11 +316,12 @@ class FormRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de modifier un formulaire.
      * @author Tomy Chouinard
      * @throws PDOException Peut lancer des erreurs PDOException.
      * @return Result retourne un resultat avec un code http.
-     */
+    */
     public function update_survey(int $id, string $name, int $survey_id):Result
     {
         try{

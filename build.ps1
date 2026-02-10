@@ -1,3 +1,4 @@
+# @author Nathan Reyes
 #ExpoSAT script de compilation et paquete l'API et le projet React.
 
 function Build-ExpoSAT{

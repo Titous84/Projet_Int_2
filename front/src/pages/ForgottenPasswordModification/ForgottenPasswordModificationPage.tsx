@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
@@ -10,8 +13,9 @@ import { TEXTS } from "../../lang/fr";
 import styles from "./ForgottenPasswordModificationPage.module.css";
 
 /**
+ * @author Nathan Reyes
  * Props du composant React: ForgottenPasswordModificationPage.
- */
+*/
 interface ForgottenPasswordModificationPageState {
     codeVerification: string,
     newPassword: string,
@@ -19,9 +23,10 @@ interface ForgottenPasswordModificationPageState {
 }
 
 /**
+ * @author Nathan Reyes
  * Page pour changer le mot de passe oublié.
  * @author Maxime Demers Boucher
- */
+*/
 export default class ForgottenPasswordModificationPage extends IPage<{}, ForgottenPasswordModificationPageState> {
     constructor(props:ForgottenPasswordModificationPageState) {
         super(props)
@@ -35,35 +40,39 @@ export default class ForgottenPasswordModificationPage extends IPage<{}, Forgott
     }
 
     /**
+     * @author Nathan Reyes
      * Change la valeur de newPassword
-     * @param event 
-     */
+     * @param event
+    */
     handleChangeOnNewPassword = (event: React.ChangeEvent<any>) => {
         const np = event.target.value;
         this.setState({ newPassword : np });
     }
 
     /**
+     * @author Nathan Reyes
      * Change la valeur de verifyPassword
-     * @param event 
-     */
+     * @param event
+    */
     handleChangeOnVerifyPassword = (event: React.ChangeEvent<any>) => {
         const vp = event.target.value;
         this.setState({ verifyPassword : vp });
     }
 
     /**
+     * @author Nathan Reyes
      * Change la valeur de codeVerification
-     * @param event 
-     */
+     * @param event
+    */
     handleChangeOnCodeVerification = (event: React.ChangeEvent<any>) => {
         const codeVerification = event.target.value;
         this.setState({ codeVerification : codeVerification });
     }
 
     /**
+     * @author Nathan Reyes
      * Vérification personnalisée
-     */
+    */
     componentDidMount() {
         //  Vérfier la longeur du champs Titre du stand
         ValidatorForm.addValidationRule('maxlength', (value) => {
@@ -75,16 +84,18 @@ export default class ForgottenPasswordModificationPage extends IPage<{}, Forgott
     }
 
     /**
+     * @author Nathan Reyes
      * Permet d'enlever l'erreur des champs quand il respecte les critères
-     */
+    */
     componentWillUnmount() {
         // Retir l'erreur pour le champ adresse titre du stand
         ValidatorForm.removeValidationRule('maxlength');
     }
       
     /**
+     * @author Nathan Reyes
      * Le submit du formulaire d'ajout d'un admin
-     */
+    */
     async handleSubmit(){
         if (this.state.newPassword !== '' && this.state.verifyPassword !== '' && this.state.codeVerification !==''){
             const codeValide = await verificationCodeService.validateVerificationCode(this.state.codeVerification);
@@ -121,8 +132,9 @@ export default class ForgottenPasswordModificationPage extends IPage<{}, Forgott
 
     public render() {
         /**
+         * @author Nathan Reyes
          * @see https://www.npmjs.com/package/react-material-ui-form-validator
-         */
+        */
         return (
             <div data-testid="ChangePWF" className={styles.toCenter}>
                 <PageSection titre={TEXTS.modifyPassword.title}>

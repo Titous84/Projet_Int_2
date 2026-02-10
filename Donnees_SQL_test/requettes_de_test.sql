@@ -1,3 +1,4 @@
+-- @author Nathan Reyes
 -- Les requêtes de test utilisent la table evaluationgrids (anciennement survey).
 SELECT
   categories.name AS "categorie",

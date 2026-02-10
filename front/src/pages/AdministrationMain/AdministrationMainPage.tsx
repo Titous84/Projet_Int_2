@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { Container, Divider, Stack } from "@mui/material";
 import AdministrationNavigationSidebar from "../../components/AdministrationMainPage/AdministrationNavigationSidebar";
 import { ADMINISTRATION_MAIN_PAGE_TABS } from "../../types/AdministrationMainPage/AdministrationMainPageTabs";
@@ -5,18 +8,20 @@ import IPage from "../../types/IPage";
 import React from "react";
 
 /**
+ * @author Nathan Reyes
  * Variables d'états du composant React: AdministrationMainPage.
  * @property {IPage} componentToDisplayInContentZone - Composant React à afficher dans la zône de contenu de l'onglet sélectionné.
  * @property {string} ongletActifId - Identifiant de l'onglet actuellement sélectionné.
- */
+*/
 interface AdministrationMainPageState {
     componentToDisplayInContentZone: React.ComponentType<any>;
     ongletActifId: string;
 }
 
 /**
+ * @author Nathan Reyes
  * Page d'administration
- */
+*/
 export default class AdministrationMainPage extends IPage<{}, AdministrationMainPageState> {
     constructor(props: {}) {
         super(props)
@@ -64,9 +69,10 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
     }
 
     /**
+     * @author Nathan Reyes
      * Quand un onglet est sélectionné, on change le contenu selon l'onglet sélectionné.
      * @param {string} newTabId - Identifiant de l'onglet qui vient d'être sélectionné.
-     */
+    */
     onSidebarTabSelected = (newTabId: string) => {
         const ongletTrouve = this.trouverOnglet(newTabId);
 
@@ -81,8 +87,9 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
     };
 
     /**
+     * @author Nathan Reyes
      * Récupère l'onglet dans l'URL et valide qu'il existe.
-     */
+    */
     obtenirOngletDepuisUrl() {
         const params = new URLSearchParams(window.location.search);
         const onglet = params.get("onglet");
@@ -91,15 +98,17 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
     }
 
     /**
+     * @author Nathan Reyes
      * Retourne l'onglet correspondant, sinon le premier de la liste.
-     */
+    */
     trouverOnglet(ongletId: string) {
         return ADMINISTRATION_MAIN_PAGE_TABS.find(tab => tab.id === ongletId) ?? ADMINISTRATION_MAIN_PAGE_TABS[0];
     }
 
     /**
+     * @author Nathan Reyes
      * Met à jour l'URL avec l'onglet sélectionné.
-     */
+    */
     mettreAJourUrl(ongletId: string, remplacer = false) {
         const url = new URL(window.location.href);
         url.searchParams.set("onglet", ongletId);
@@ -111,8 +120,9 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
     }
 
     /**
+     * @author Nathan Reyes
      * Gère la navigation via l'historique (retour/avance).
-     */
+    */
     gestionRetourHistorique = () => {
         const ongletId = this.obtenirOngletDepuisUrl();
         const ongletTrouve = this.trouverOnglet(ongletId);
@@ -121,5 +131,7 @@ export default class AdministrationMainPage extends IPage<{}, AdministrationMain
             componentToDisplayInContentZone: ongletTrouve.componentToDisplayInContentZone,
             ongletActifId: ongletTrouve.id,
         });
+
+        this.mettreAJourUrl(ongletTrouve.id);
     };
 }

@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import { Navigate, useParams } from "react-router";
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
@@ -13,10 +16,11 @@ import { INPUT_VARIANT } from "../../utils/muiConstants";
 import { TEXTS } from '../../lang/fr';
 
 /**
+ * @author Nathan Reyes
  * Page de création d'un modèle de grille d'évaluation.
  * Si le paramètre id est présent, le modèle est modifié, sinon il est créé.
  * @returns La page de création d'un modèle de grille d'évaluation.
- */
+*/
 export default function EvaluationGridCreationPage(): JSX.Element {
     // Récupère l'id du modèle de grille d'évaluation dans l'URL.
     let { id } = useParams();
@@ -27,6 +31,7 @@ export default function EvaluationGridCreationPage(): JSX.Element {
 }
 
 /**
+ * @author Nathan Reyes
  * Variables d'état du composant React: EvaluationGridCreationPageContent.
  * @property {IEvaluationGrid} evaluationGrid - Le modèle de grille d'évaluation.
  * @property {Category[]} categories - Les catégories de la grille d'évaluation.
@@ -34,7 +39,7 @@ export default function EvaluationGridCreationPage(): JSX.Element {
  * @property {boolean} loading - Si la page est en train de charger.
  * @property {boolean} sendSuccess - Si l'envoie a réussi.
  * @property {boolean} updateMode - Si le modèle est en mode modification.
- */
+*/
 interface EvaluationGridCreationPageContentState {
     evaluationGrid: IEvaluationGrid;
     categories: Category[];
@@ -45,30 +50,33 @@ interface EvaluationGridCreationPageContentState {
 }
 
 /**
+ * @author Nathan Reyes
  * Props pour le composant React: EvaluationGridCreationPageContent.
  * @property {number} id - L'id du modèle de grille d'évaluation.
- */
+*/
 interface EvaluationGridCreationPageContentProps {
     id?: number;
 }
 
 /**
+ * @author Nathan Reyes
  * Méthode qui vérifie si le champ texte est valide (entre 1 et 255 charactères).
  * @author Thomas-Gabriel Paquin
- * 
+ *
  * @param value Valeur à vérifier
  * @returns true si la valeur est un nombre valide, false sinon.
- */
+*/
 function isValidName(value: string) {
     return !isNaN(value.length) && value.length >= 1 && value.length <= 255;
 }
 
 /**
+ * @author Nathan Reyes
  * Contenu de la page pour créer ou modifier les modèles de questionnaire.
  * Si le paramètre id est présent, le modèle est modifié, sinon il est créé.
  * @author Raphaël Boisvert
  * @author Thomas-Gabriel Paquin
- */
+*/
 export class EvaluationGridCreationPageContent extends React.Component<EvaluationGridCreationPageContentProps, EvaluationGridCreationPageContentState> {
     constructor(props: EvaluationGridCreationPageContentProps) {
         super(props)
@@ -106,8 +114,9 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Ajoute une section au modèle de grille d'évaluation
-     */
+    */
     addSection() {
         let oldState : any = {...this.state.evaluationGrid};
         let array : any[] = Array.from(oldState.sections);
@@ -137,9 +146,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Enlève une section du modèle de grille d'évaluation
      * @param position La position de la section à enlever
-     */
+    */
     removeSection(position: number) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.sections.splice(position, 1);
@@ -147,9 +157,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Ajoute un critère à une section du modèle de grille d'évaluation
      * @param sectionPosition La position de la section dans le modèle
-     */
+    */
     addCriteria(sectionPosition: number) {
         let oldState : any = {...this.state.evaluationGrid};
 
@@ -166,9 +177,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Enlève un critère d'une section du modèle de grille d'évaluation
      * @param sectionPosition La position de la section dans le modèle
-     */
+    */
     removeCriteria(sectionPosition: number, criteriaPosition: number) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.sections[sectionPosition].criterias.splice(criteriaPosition-1, 1);
@@ -179,9 +191,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Vérifie si le composant est en mode modification ou création
      * et valide les champs du formulaire.
-     */
+    */
     componentDidMount() {
         if (this.props.id !== undefined) {
             this.getEvaluationGridById(Number(this.props.id));
@@ -204,8 +217,9 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère les modèles de questionnaire
-     */
+    */
     async getEvaluationGridById(id: number) {
         const response = await EvaluationGridService.getEvaluationGridById(id);
         if (response && response.data) {
@@ -214,10 +228,11 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Modifie le state de evaluationGrid
      * @param event L'événement
      * @param key La clé du state à modifier
-     */
+    */
     handleChangeForm(event: any, key: string) {
         let evaluationGrid : any = {...this.state};
         evaluationGrid.evaluationGrid[key] = event;
@@ -225,12 +240,13 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Modifie le state des critères de evaluationGrid
      * @param event L'événement
      * @param key La clé du state à modifier
      * @param sectionPosition La position de la section dans le state
      * @param criteriaPosition La position du critère dans le state
-     */
+    */
     handleChangeName(event: any, key: string, name: string) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.name = key;
@@ -238,11 +254,12 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Modifie le state des sections de evaluationGrid
      * @param event L'événement
      * @param key La clé du state à modifier
      * @param sectionPosition La position de la section dans le state
-     */
+    */
     handleChangeSection(event: any, key: string, sectionPosition: number) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.sections[sectionPosition].name = key;
@@ -250,12 +267,13 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Modifie le state des critères de evaluationGrid
      * @param event L'événement
      * @param key La clé du state à modifier
      * @param sectionPosition La position de la section dans le state
      * @param criteriaPosition La position du critère dans le state
-     */
+    */
     handleChangeCriteria(event: any, key: string, sectionPosition: number, criteriaPosition: number) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.sections[sectionPosition].criterias[criteriaPosition].name = key;
@@ -263,12 +281,13 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Modifie le state de la pondération de evaluationGrid
      * @param event L'événement
      * @param key La clé du state à modifier
      * @param sectionPosition La position de la section dans le state
      * @param criteriaPosition La position du critère dans le state
-     */
+    */
     handleChangeValue(event: any, key: number, sectionPosition: number, criteriaPosition: number) {
         let evaluationGrid : any = {...this.state.evaluationGrid};
         evaluationGrid.sections[sectionPosition].criterias[criteriaPosition].max_value = Number(key);
@@ -276,8 +295,9 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Envoie le modèle de grille d'évaluation à l'API
-     */
+    */
     async onSubmit() {
         this.setState({ loading: true });
 
@@ -311,16 +331,18 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Enlève les vérifications de formulaire
-     */
+    */
     componentWillUnmount() {
         ValidatorForm.removeValidationRule('maxLengthName');
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les formulaires de sections
      * @returns Un formulaire de section
-     */
+    */
     generateSectionsForm() {
         return this.state.evaluationGrid.sections.map((section: any, sectionPosition: number) => {
             return <EvaluationGridFormSection 
@@ -336,9 +358,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les alerts lors d'erreur avec l'API.
      * @returns une alert pour chaque erreur
-     */
+    */
     generateAlert(){
         let counter = 0;
         if(this.state.error.length > 0){
@@ -353,9 +376,10 @@ export class EvaluationGridCreationPageContent extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Fait un rendu de la progression de l'envoie du formulaire
      * @returns Un composant de progression
-     */
+    */
     renderLoading() {
         return (
             <div className="loading">

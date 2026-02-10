@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { useNavigate } from 'react-router';
 import { Button, IconButton, Stack, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, Send as SendIcon } from '@mui/icons-material';
@@ -6,10 +9,11 @@ import { useState } from 'react';
 import Judge from "../../types/judge";
 
 /**
+ * @author Nathan Reyes
  * Props pour le composant React: AdministratorsTableToolbar.
  * @property {() => void} deleteSelectedJudge - Méthode passée par le parent qui supprime les administrateurs sélectionnés dans le tableau.
  * @property {(id: number | null) => void} setSelectedUserId - Méthode pour mettre à jour l'ID du juge sélectionné dans le tableau parent.
- */
+*/
 interface JudgeTableToolbarProps {
     selectedJudges: Judge[];
     deleteSelectedJudge: () => void;
@@ -17,12 +21,13 @@ interface JudgeTableToolbarProps {
 }
 
 /**
+ * @author Nathan Reyes
  * Bouton qui permet de naviguer vers la page d'envoi d'évaluation aux juges.
  * @author Tommy Garneau
  * code inspiré de https://medium.com/@bobjunior542/using-usenavigate-in-react-router-6-a-complete-guide-46f51403f430
  * @param selectedJudges La liste des juges sélectionnés.
  * @returns Un bouton qui permet d'envoyer un courriel aux juges sélectionnés.
- */
+*/
 function SendEvaluationGridsButton({ selectedJudges }: { selectedJudges: Judge[] }) {
     const navigate = useNavigate();
     const eligibleJudges = (selectedJudges || []).filter((judge) => {
@@ -55,13 +60,14 @@ function SendEvaluationGridsButton({ selectedJudges }: { selectedJudges: Judge[]
 }
 
 /**
+ * @author Nathan Reyes
  * Barre d'outils pour le tableau des Juge.
  * @param {JudgeTableToolbarProps} { deleteSelectedJudge, setSelectedUserId } - Un objet contenant les props reçues par le composant React.
  * @returns {React.Component} Le composant React de cette barre d'outils.
  *
  * @author Étienne nadeau
  * inspirer d'Antoine Ouellette
- */
+*/
 export default function JudgeTableToolbar({ selectedJudges, deleteSelectedJudge, setSelectedUserId }: JudgeTableToolbarProps) {
     const navigate = useNavigate(); // Récupère la méthode pour naviguer entre les pages.
     const [openPopup, setOpenPopup] = useState<boolean>(false);

@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
@@ -10,11 +13,12 @@ import { TEXTS } from "../../lang/fr"
 import styles from "./LoginPage.module.css"
 
 /**
+ * @author Nathan Reyes
  * Props du composant React: LoginPage.
  * @property {string} username - Le nom d'utilisateur.
  * @property {string} password - Le mot de passe de l'utilisateur.
  * @property {boolean} connworked - Si la connexion a fonctionné ou non.
- */
+*/
 interface LoginPageState{
     username: string,
     password: string,
@@ -22,9 +26,10 @@ interface LoginPageState{
 }
 
 /**
+ * @author Nathan Reyes
  * Page de connexion
  * @author Alex Des Ruisseaux
- */
+*/
 export default class LoginPage extends IPage<{}, LoginPageState> {
     constructor(props: LoginPageState){
         super(props)
@@ -52,10 +57,11 @@ export default class LoginPage extends IPage<{}, LoginPageState> {
     }
 
     /**
+     * @author Nathan Reyes
      * Le submit du formulaire qui regarde si l'usager existe et
-     *  met le token dans le localstoragae si oui et
-     *  met a jour la barre de navigation en fonction de son role
-     */
+     * met le token dans le localstoragae si oui et
+     * met a jour la barre de navigation en fonction de son role
+    */
     async handleSubmit(){
         if (this.state.username !== '' && this.state.password !== ''){
             const response = await ConnectionService.tryGetToken(this.state.username,this.state.password)
@@ -82,7 +88,8 @@ export default class LoginPage extends IPage<{}, LoginPageState> {
         }
     }
     /**
-    * Vérification personnaliser
+     * @author Nathan Reyes
+     * Vérification personnaliser
     */
     componentDidMount() {
         //  Vérfier la longeur du champs Titre du stand

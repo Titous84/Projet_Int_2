@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Validators;
 
@@ -7,38 +8,42 @@ use App\Models\Result;
 use App\Repositories\SignUpTeamRepository;
 
 /**
+ * @author Nathan Reyes
  * ValidatorTeam
  * Permet de valider chaque champs d'un objet Team
  * @author Tristan Lafontaine
  * @package App\Validators
- */
+*/
 class ValidatorTeam extends Validator
 {    
     /**
+     * @author Nathan Reyes
      * signUpTeamRepository
      *
      * @var SignUpTeamRepository Permet d'avoir assez à la classe SignUpTeamRepository'
-     */
+    */
     private $signUpTeamRepository;
     
     /**
+     * @author Nathan Reyes
      * __construct
      *
      * @param  mixed $signUpTeamRepository
      * @return void
-     */
+    */
     public function __construct(SignUpTeamRepository $signUpTeamRepository)
     {
         $this->signUpTeamRepository = $signUpTeamRepository;
     }
  
     /**
+     * @author Nathan Reyes
      * validate
      * Permet de valider les champs d'une équipe
      * @param  mixed $team
      * @author Tristan Lafontaine
      * @return Result
-     */
+    */
     public function validate( array $team ) : Result
     {
         //Tableau d'erreur de vérification

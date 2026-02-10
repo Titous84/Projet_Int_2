@@ -1,6 +1,10 @@
 /**
+ * @author Nathan Reyes
+*/
+/**
+ * @author Nathan Reyes
  * Tristan Lafontaine
- */
+*/
 import React from 'react';
 import { ValidatorForm } from 'react-material-ui-form-validator'
 import TeamMember from '../../types/sign-up/team-member';
@@ -13,8 +17,9 @@ import { TEXTS } from '../../lang/fr';
 import { suffix } from '../../utils/utils';
 
 /**
- *  Composant membre de l'équipe
- */
+ * @author Nathan Reyes
+ * Composant membre de l'équipe
+*/
 interface TeamMemberFormProps{
     teamMember:TeamMember;
     number:number;
@@ -23,8 +28,9 @@ interface TeamMemberFormProps{
 
 export default class TeamMemberForm extends React.Component<TeamMemberFormProps> {
     /**
+     * @author Nathan Reyes
      * Vérification personnaliser
-     */
+    */
      componentDidMount() {
 
         //  Vérfier la longeur du champs nom famille

@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import Router from './router/router';
 import { pages, RoleName } from './router/routes';
@@ -8,8 +11,9 @@ import {ActualRole as RoleClass} from './utils/roleUtil';
 import AppSnackbar from './components/common/AppSnackbar';
 
 /**
+ * @author Nathan Reyes
  * Composant affichant le cadre de l'application
- */
+*/
 export default class App extends React.Component {
     constructor(props: {}){
         super(props)
@@ -28,14 +32,16 @@ export default class App extends React.Component {
     }
 
     /**
+     * @author Nathan Reyes
      * Genere les liens pour la navbar en fonction du nom du role actuel
-     */
+    */
     generateRoleLinks() {
         /**
+         * @author Nathan Reyes
          * Retrouve les pages accessibles par tous les rôles,
          * ou le rôle actuel et la page n'est pas Hidden.
          * @author Charles Lavoie
-         */
+        */
         const filteredPages = pages.filter(page => (
             (
                 // Si page.roles == ["*"].

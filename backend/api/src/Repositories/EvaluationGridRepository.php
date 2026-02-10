@@ -1,21 +1,24 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Class EvaluationGridRepository
  * @author Raphaël Boisvert
  * @author Thomas-Gabriel Paquin
  * @package App\Repositories
- */
+*/
 class EvaluationGridRepository extends Repository
 {
     /**
+     * @author Nathan Reyes
      * Requête pour obtenir la liste de toutes les grilles d'évaluation
      * @return array|null
-     */
+    */
     public function getEvaluationGrid()
     {
         try {
@@ -33,12 +36,13 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * @author Jean-Christophe Demers
      * @author Thomas-Gabriel Paquin
      * Requête pour obtenir une grille d'évaluation et toutes ses sections et ses critères
      * @param $id
      * @return array|null
-     */
+    */
     public function getEvaluationGridById($id)
     {
         try {
@@ -98,10 +102,11 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour supprimer une grille d'évaluation et toutes ses sections et tous ses critères
      * @param $id
      * @return bool
-     */
+    */
     public function deleteEvaluationGridById($id)
     {
         try {
@@ -127,10 +132,11 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour ajouter une grille d'évaluation et toutes ses sections et tous ses critères
      * @param $id
      * @return int|null
-     */
+    */
     public function insertEvaluationGrid($data){
         try {
             $sql = "INSERT INTO evaluationgrids (name) VALUES (:name)";
@@ -168,10 +174,11 @@ class EvaluationGridRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Requête pour mette à jour une grille d'évaluation et toutes ses sections ainsi que tous ses critères
      * @param $id
      * @return bool
-     */
+    */
     public function updateEvaluationGrid($data)
     {
         try {

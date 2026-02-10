@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from "@mui/material";
 import React from "react";
 import { TEXTS } from '../../lang/fr';
@@ -6,20 +9,22 @@ import UserService from "../../api/users/userService";
 import { ShowToast } from "../../utils/utils";
 
 /**
+ * @author Nathan Reyes
  * Page de gestion des administrateurs
- * 
+ *
  * Affiche la liste des administrateurs et permet l'ajout, la modification
  * et la suppression d'administrateurs.
- * 
+ *
  * @author Antoine Ouellette
- */
+*/
 export default function AdministratorsListPage() {
     const [dialogOuvert, setDialogOuvert] = React.useState(false);
     const [reinitialisationEnCours, setReinitialisationEnCours] = React.useState(false);
 
     /**
+     * @author Nathan Reyes
      * Lance la réinitialisation annuelle après confirmation.
-     */
+    */
     const confirmerReinitialisation = async () => {
         setReinitialisationEnCours(true);
         try {

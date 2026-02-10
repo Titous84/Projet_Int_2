@@ -1,23 +1,28 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from "react";
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { ADMINISTRATION_MAIN_PAGE_TABS } from "../../types/AdministrationMainPage/AdministrationMainPageTabs";
 
 /**
+ * @author Nathan Reyes
  * Props reçues par le composant React: AdministrationNavigationSidebar.
  * @property {function} onTabSelected - Méthode passée par le parent. Appelée quand un onglet est sélectionné. Change l'onglet sélectionné dans le parent.
  * @property {string} ongletActifId - Identifiant de l'onglet actuellement sélectionné.
- */
+*/
 interface AdministrationNavigationSidebarProps {
     onAdministrationSidebarTabSelected: (tabId: string) => void; // Méthode passée par le parent.
     ongletActifId: string;
 }
 
 /**
+ * @author Nathan Reyes
  * Barre de navigation affichée à la gauche de la page d'administration seulement.
  * Affiche une liste d'onglets de toutes les contenus à afficher dans la page d'administration.
  * Le contenu dans la zône adjacente à la barre de navigation dans la page d'administration changera selon l'onglet sélectionné.
- */
+*/
 export default class AdministrationNavigationSidebar extends React.Component<AdministrationNavigationSidebarProps> {
     constructor(props: AdministrationNavigationSidebarProps) {
         super(props)

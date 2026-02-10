@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import { IEvaluationGridSection } from '../../types/evaluationGrid/IEvaluationGridSection';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
@@ -24,10 +27,11 @@ function isValidName(value: string) {
 }
 
 /**
+ * @author Nathan Reyes
  * Composant de formulaire pour une section de grille d'évaluation
  * @author Raphaël Boisvert
  * @author Thomas-Gabriel Paquin
- */
+*/
 export default class EvaluationGridFormSection extends React.Component<EvaluationGridFormSectionProps> {
     componentDidMount(): void {
         ValidatorForm.addValidationRule('maxLengthSectionName', (value) => {
@@ -40,8 +44,9 @@ export default class EvaluationGridFormSection extends React.Component<Evaluatio
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les formulaires de critères pour une section
-     */
+    */
     generateCriteriaForms() {
         let criteriaForms = [];
         for (let i = 0; i < this.props.section.criterias.length; i++) {

@@ -1,5 +1,5 @@
-
 <?php
+// @author Nathan Reyes
 use Slim\Routing\RouteCollectorProxy;
 use App\Actions\DefaultAction;
 // Obtenir un token pour avoir accès à l'API
@@ -162,9 +162,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 	});
 
     /**
+     * @author Nathan Reyes
      * Routes en lien avec les administrateurs sur le site web.
      * @author Antoine Ouellette
-     */
+    */
     $group->group('/administrators', function (RouteCollectorProxy $administratorsGroup) {
         // Permet d'obtenir la liste de tous les administrateurs.
         $administratorsGroup->get("/all", GetAllAdministratorsAction::class);
@@ -325,9 +326,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 	});
 	######################################################## FORMULAIRE ÉVALUATIONS ###########################################################################
 	/**
+	 * @author Nathan Reyes
 	 * Section d'opération CRUD pour les codes de vérification des mots de passe oublié
 	 * @author TMaxime Demers Boucher
-	 */
+	*/
 	$group->group('/verificationCode', function (RouteCollectorProxy $verificationCode) {
 		// [POST] Permet de géné le code de vérification
 		$verificationCode->post("/generate", VerificationCodeGenerateAction::class);

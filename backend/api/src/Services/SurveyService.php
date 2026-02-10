@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Services;
 
@@ -16,45 +17,53 @@ use App\Validators\ValidatorCommentResult;
 use Exception;
 
 /**
+ * @author Nathan Reyes
  * Classe SurveyService permet d'obtenir les formulaires d'évaluation.
  * @author Christopher Boisvert
  * @package App\Services
- */
+*/
 class SurveyService
 {
     /**
+     * @author Nathan Reyes
      * @var SurveyRepository $surveyRepository Repositoire des évaluations.
-     */
+    */
     private $surveyRepository;
 
     /**
+     * @author Nathan Reyes
      * @var LogHandler $logHandler Permet d'enregistrer des logs.
-     */
+    */
     private $logHandler;
 
     /**
+     * @author Nathan Reyes
      * @var ValidatorUUID $validatorUUID Permet de vérifier un UUID.
-     */
+    */
     private $validatorUUID;
 
     /**
+     * @author Nathan Reyes
      * @var ValidatorCommentResult $validatorCommentResult Permet de vérifier un résultat d'une question.
-     */
+    */
     private $validatorCommentResult;
 
     /**
+     * @author Nathan Reyes
      * @var ValidatorQuestionResult $validatorQuestionResult Permet de vérifier un résultat d'une question.
-     */
+    */
     private $validatorQuestionResult;
 
     /**
+     * @author Nathan Reyes
      * @var EmailEvaluationFabricator $emailEvaluationFabricator Permet d'envoyer des courriels contenant un lien vers les évaluations.
-     */
+    */
     private $emailEvaluationFabricator;
 
     /**
+     * @author Nathan Reyes
      * SurveyService constructeur.
-     */
+    */
     public function __construct(
         SurveyRepository $surveyRepository,
         LogHandler $logHandler,
@@ -72,10 +81,11 @@ class SurveyService
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les formulaires assignés à un juge par son uuid.
      * @param string $judge_uuid UUID du juge.
      * @return Result Retourne le résultat de l'opération de recherche des formulaires d'évaluations.
-     */
+    */
     public function get_all_survey_by_judge_id(string $judgeUUID): Result
     {
         try {
@@ -126,11 +136,12 @@ class SurveyService
     }
 
     /**
-	 * @author Jean-Christophe Demers
+     * @author Nathan Reyes
+     * @author Jean-Christophe Demers
      * Fonction qui permet d'ajouter une évaluation d'un commentaire d'un juge.
      * @param mixed $commentResultJSON Données bruts de la réponse du juge.
      * @return Result Retourne un résultat de l'opération d'ajout de l'évaluation du juge.
-     */
+    */
     public function set_comment_result($commentResultJSON): Result
     {
         try {
@@ -151,10 +162,11 @@ class SurveyService
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'ajouter une évaluation d'une question d'un juge.
      * @param mixed $questionResultJSON Données bruts de la réponse du juge.
      * @return Result Retourne un résultat de l'opération d'ajout de l'évaluation du juge.
-     */
+    */
     public function set_question_result($questionResultJSON): Result
     {
         try {
@@ -175,10 +187,11 @@ class SurveyService
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir le score d'une question.
      * @param mixed $evaluationGetSurveyScoreJSON Tableau contenant les informations afin d'obtenir le score d'une évaluation.
      * @return Result Retourne le résultat de recherche du score d'une évaluation.
-     */
+    */
     public function get_survey_score($evaluationGetSurveyScoreJSON): Result
     {
         try {
@@ -197,10 +210,11 @@ class SurveyService
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction permettant de fermer un formulaire d'évaluation.
      * @param mixed $evaluationCloseJSON Tableau contenant les informations liés à la fermeture de l'évaluation.
      * @return Result Retourne le résultat de la fermeture du formulaire.
-     */
+    */
     public function close_survey($evaluationCloseJSON): Result
     {
         try {
@@ -219,9 +233,10 @@ class SurveyService
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'envoyer les courriels à tous les juges.
      * @return Result Retourne un résultat d'envoi de tous les courriels.
-     */
+    */
     public function send_all_survey_judge()
     {
         try {
@@ -271,10 +286,11 @@ class SurveyService
     }
 
 /**
+ * @author Nathan Reyes
  * Fonction qui permet d'envoyer un courriel à un ou plusieurs juges reçus du frontend.
  * @param array $judges La liste des juges.
  * @return Result Retourne un résultat d'envoi des courriels.
- */
+*/
 public function send_all_survey_judgeIndividually(array $judges)
 {
     try {
@@ -340,9 +356,10 @@ public function send_all_survey_judgeIndividually(array $judges)
 
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les formulaires
      * @return Result Retourne le résultat de l'opération de recherche des formulaires d'évaluations.
-     */
+    */
     public function get_all_evaluation(): Result
     {
         try {

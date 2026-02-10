@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -8,17 +9,19 @@ use App\Models\TeamMember;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Class TeamsListRepository
  * @author Tristan Lafontaine, Carlos Cordeiro
  * @package App\Repositories
- */
+*/
 class TeamsListRepository extends Repository
 {
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les membres et les équipes
      * @param  string $role_name
      * @return array Retourne un tableau contenant les équipes et les membres ou un tableau vide.
-     */
+    */
     public function get_all_teams_and_members(string $role_name): array
     {
         try {
@@ -80,10 +83,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les équipes avec les membres dans une seul colonne
      * @param  string $role_name
      * @return array Retourne un tableau contenant les équipes et les membres ou un tableau vide.
-     */
+    */
     public function get_all_teams_and_members_concat(string $role_name): array
     {
         try {
@@ -130,10 +134,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les informations ainsi que les membres d'une équipe
      * @param int $id
      * @return Team | null Retourne une équipe ou null si l'équipe n'est pas trouvé ou n'existe pas.
-     */
+    */
     public function get_team_and_members(int $id): ? Team
     {
         try {
@@ -182,10 +187,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir l'id et le nom du type d'évaluation à partir du nom de l'évaluation
      * @param  string $survey
      * @return array Retourne un tableau contenant l'id et le nom du type d'évaluation ou un tableau vide.
-     */
+    */
     public function get_survey_by_name(string $survey): array
     {
         try {
@@ -210,8 +216,9 @@ class TeamsListRepository extends Repository
     }
 
     /**
-    * Fonction qui récupère le nom de toutes les catégories
-    * @return array Retourne un tableau contenant l'id et le nom des catégories
+     * @author Nathan Reyes
+     * Fonction qui récupère le nom de toutes les catégories
+     * @return array Retourne un tableau contenant l'id et le nom des catégories
     */
     public function get_categories(): array 
     {
@@ -237,10 +244,11 @@ class TeamsListRepository extends Repository
 
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir l'id et le nom de la catégorie à partir du nom de la catégorie
      * @param  string $category
      * @return array Retourne un tableau contenant l'ID,le nom de la catégorie et l'ID de template d'évaluation ou un tableau vide.
-     */
+    */
     public function get_category_by_name(string $category): array
     {
         try {
@@ -263,10 +271,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'ajouter un membre à une équipe
      * @param  TeamMember $teamMember
      * @return bool Retourne vrai si l'ajout a fonctionné sinon, il retourne faux
-     */
+    */
     public function add_team_member(TeamMember $teamMember): bool
     {
         try {
@@ -350,10 +359,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les informations de l'équipe et de mettre à jour les informations de l'enseignant(e) de l'équipe
      * @param  TeamInfo $team
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_team_info(TeamInfo $team): bool
     {
         try {
@@ -406,10 +416,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les membres de l'équipe
      * @param  TeamMember $teamMember
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_team_member(TeamMember $teamMember): bool
     {
         try {
@@ -502,10 +513,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les numéros des stands de l'équipe
      * @param  array $teams
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_teams_numbers(array $teams): bool
     {
         try {
@@ -538,10 +550,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Contruit une équipe à partir des valeurs d'un array.
      * @param array $array Un tableau des membres.
      * @return Team | null Retourne l'équipe de l'array.
-     */
+    */
     private function construct_teams_from_array(array $members): ? Team
     {
         if (count($members) < 1)

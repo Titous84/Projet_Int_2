@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Services;
 
@@ -30,71 +31,82 @@ use PDOException;
 use function DI\get;
 
 /**
+ * @author Nathan Reyes
  * Classe UserService.
  * @author Christopher Boisvert
  * @author Tristan Lafontaine
  * @author Alex Des Ruisseaux
  * @package App\Services
- */
+*/
 class UserService
 {
 	/**
+	 * @author Nathan Reyes
 	 * @var UserRepository Dépôt lié à la bdd permettant d'accéder aux utilisateurs.
-	 */
+	*/
 	private $userRepository;
 
 	/**
+	 * @author Nathan Reyes
 	 * @var ValidatorUserRole Validateur permettant de vérifier les données liés à un rôle.
-	 */
+	*/
 	private $validatorUserRole;
 
 	/**
+	 * @author Nathan Reyes
 	 * @var ValidatorUser Validateur qui permet de vérifier un utilisateur.
-	 */
+	*/
 	private $validatorUser;
 
     /**
+     * @author Nathan Reyes
      * @var ValidatorAdministrator Validateur qui permet de vérifier un administrateur.
-     */
+    */
     private $validatorAdministrator;
 
 	/**
+	 * @author Nathan Reyes
 	 * @var ValidatorJudge Validateur qui permet de vérifier un judge.
-	 */
+	*/
 	private $validatorJudge;
 
 	/**
+	 * @author Nathan Reyes
 	 * @var LogHandler Gestionnaire de log.
-	 */
+	*/
 	private $logHandler;
 
 	/**
+	 * @author Nathan Reyes
 	 * emailService
 	 *
 	 * @var EmailService Permet d'avoir access à la classe EmailService'
-	 */
+	*/
 	private $emailService;
 
 	/**
+	 * @author Nathan Reyes
 	 * twigService
 	 *
 	 * @var TwigService Permet d'avoir access à la classe TwigService'
-	 */
+	*/
 	private $twigService;
 
 	/**
+	 * @author Nathan Reyes
 	 * VerificationService
 	 *
 	 * @var VerificationCodeService Permet d'avoir access à la classe VerificationCodeService'
-	 */
+	*/
 	private $verificationCodeService;
 
 	/**
+	 * @author Nathan Reyes
 	 * UserService constructeur.
 	 * @param UserRepository $userRepository Dépôt des utilisateurs.
 	 * @param TokenRepository $tokenRepository Dépôt des tokens.
 	 * @param LogHandler $logHandler Permet d'enregistrer les erreurs.
-	 */
+	*/
 	public function __construct(UserRepository $userRepository, ValidatorUserRole $validatorUserRole, LogHandler $logHandler, ValidatorUser $validatorUser, ValidatorAdministrator $validatorAdministrator, ValidatorJudge $validatorJudge, EmailService $emailService, TwigService $twigService, VerificationCodeService $verificationCodeService)
 	{
 		$this->userRepository = $userRepository;
@@ -109,10 +121,11 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction permettant d'obtenir les utilisateurs.
 	 * @author Christopher Boisvert
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function get_all_users(): Result
 	{
 		try {
@@ -131,11 +144,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction permettant d'obtenir les tout juges actifs ou les juges blacklister selon la page qui est ouvert.
 	 * @author Thomas-Gabriel Paquin
 	 * @param int $blacklisted information si le judge fait partis de la liste noire ou non.
 	 * @return Result Retourne un tableau de tout les juges actifs.
-	 */
+	*/
 	public function get_all_judges(int $blacklisted): Result
     {
 	    try
@@ -163,11 +177,12 @@ class UserService
     }
 
 	/**
-     * Fonction qui permet de mettre à jour les informations d'un juge
+	 * @author Nathan Reyes
+	 * Fonction qui permet de mettre à jour les informations d'un juge
 	 * @author Thomas-Gabriel Paquin
-     * @param  array $judge
-     * @return Result Retourne le résultat de l'opération
-     */
+	 * @param  array $judge
+	 * @return Result Retourne le résultat de l'opération
+	*/
 
 	public function update_judge_infos(array $judge) : Result
 	{
@@ -195,10 +210,11 @@ class UserService
 	}
 
     /**
+     * @author Nathan Reyes
      * Récupère tous les administrateurs.
      * @author Antoine Ouellette
      * @return Result Un objet contenant les informations à mettre dans le corps de la réponse.
-     */
+    */
     public function get_all_administrators(): Result
     {
         try
@@ -222,11 +238,12 @@ class UserService
     }
 
     /**
+     * @author Nathan Reyes
      * Crée un administrateur.
      * @author Antoine Ouellette
      * @param array|object|null $requestBody Le corps de la requête contenant les informations de l'administrateur à créer.
      * @return Result Un objet contenant les informations à mettre dans le corps de la réponse.
-     */
+    */
     public function create_administrator(array|object|null $requestBody): Result
     {
         try
@@ -269,8 +286,9 @@ class UserService
     }
 
     /**
+     * @author Nathan Reyes
      * Réinitialise les données annuelles liées à l'administration.
-     */
+    */
     public function reset_annual_data(): Result
     {
         try {
@@ -287,14 +305,15 @@ class UserService
     }
 
     /**
+     * @author Nathan Reyes
      * Supprime une liste d'administrateurs par leurs ids.
-     * 
+     *
      * Cette méthode retourne un code HTTP 200 si AU MOINS UN des ids d'administrateurs existe dans la BD.
      * Sinon, si TOUS les ids d'administrateurs n'existent pas dans la BD, un code HTTP 404 est retourné.
-     * 
+     *
      * @author Antoine Ouellette
      * @return Result Un objet contenant les informations à mettre dans le corps de la réponse.
-     */
+    */
     public function delete_administrators_by_ids(array $administratorsToDeleteIds): Result
     {
         try
@@ -326,10 +345,11 @@ class UserService
     }
 
     /**
+     * @author Nathan Reyes
      * Vérifie si TOUS les administrateurs d'un tableau ne sont pas trouvés (n'existent TOUS pas dans la BD).
      * @param array $administratorsToDeleteIds La liste des ids d'administrateurs à vérifier.
      * @return bool true si TOUS les ids ne sont pas trouvés, false si AU MOINS UN id est trouvé.
-     */
+    */
     private function are_all_administrators_ids_not_found(array $administratorsToDeleteIds): bool
     {
         foreach ($administratorsToDeleteIds as $currentId)
@@ -344,11 +364,12 @@ class UserService
     }
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction permettant d'obtenir les utilisateurs activés.
 	 * @author Alex Des Ruisseaux
 	 * @author Christopher Boisvert
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function get_activated_users(): Result
 	{
 		try {
@@ -367,12 +388,13 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier le role d'un utilisateur.
 	 * @author Alex Des Ruisseaux
 	 * @author Christopher Boisvert
 	 * @param mixed $userRoleJSON Tableau de données du rôle à changer à l'utilisateur.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function modify_user_role($userRoleJSON): Result
 	{
 		try {
@@ -398,11 +420,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir un utilisateur par son id.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur.
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function get_user_by_id(int $id): Result
 	{
 		try {
@@ -425,11 +448,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'obtenir un utilisateur par son activation token.
 	 * @author Jean-Philippe Bourassa
 	 * @param string $token Activation token de l'utilisateur.
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function get_user_by_activation_token(string $token): Result
 	{
 		try {
@@ -458,12 +482,13 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'ajouter un utilisateur.
 	 * @author Tristan Lafontaine
 	 * modifier par Maxime Demers Boucher
 	 * @param array $userJSON Tableau représentant l'utilisateur.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function add_user(array $userJSON): Result
 	{
 		try {
@@ -530,12 +555,13 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'ajouter un juge.
 	 * @author Jean-Philippe Bourassa
 	 * @author Jean-Christophe Demers
 	 * @param array $judgeJSON Tableau représentant le juge.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function add_judge_user(array $judgeJSON): Result
 	{
 		try {
@@ -603,11 +629,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de compléter l'inscription d'un juge.
 	 * @author Jean-Philippe Bourassa
 	 * @param array $judgeJSON Tableau représentant le juge.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function add_judge_judge(array $judgeJSON): Result
 	{
 		try {
@@ -664,11 +691,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de modifier un utilisateur.
 	 * @author Christopher Boisvert
 	 * @param $userJSON array Information lié à l'utilisateur.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function modify_user(array $userJSON): Result
 	{
 		try {
@@ -693,12 +721,13 @@ class UserService
 		}
 	}
 
-	/***
+	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'activer un utilisateur selon son id.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur à supprimer.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function activate_user(int $id): Result
 	{
 		try {
@@ -720,12 +749,13 @@ class UserService
 		}
 	}
 
-	/***
+	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de supprimer un juge selon son id.
 	 * @author Étienne Nadeau
 	 * @param int $id  du juge à supprimer.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function delete_judge(int $user_id): Result
 	{
 		try {
@@ -749,12 +779,13 @@ class UserService
 		}
 	}
 
-	/***
+	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet de supprimer un utilisateur selon son id.
 	 * @author Christopher Boisvert
 	 * @param int $id Credential de l'utilisateur à supprimer.
 	 * @return Result Retourne un objet de type Result contenant le résultat de l'opération.
-	 */
+	*/
 	public function delete_user(int $id): Result
 	{
 		try {
@@ -772,11 +803,12 @@ class UserService
 		}
 	}
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'activer le courriel d'un usager par un token.
 	 * @author Tristan Lafontaine
 	 * @param string $token Credential de l'utilisateur.
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function activate_email_by_token(string $token): Result
 	{
 		try {
@@ -817,11 +849,12 @@ class UserService
 		}
 	}
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'envoyer le courriel d'inscription aux juges présents dans la bd.
 	 * @author Jean-Philippe Bourassa
 	 * @author Jean-Christophe Demers
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function send_email_judges(): Result
 	{
 		try {
@@ -843,11 +876,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'envoyer le courriel du mot de passe
 	 * Fortement inspiré de send_email_judge
 	 * @author Maxime Demers Boucher
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function send_email_admin(User $admin): Result
 	{
 		try {
@@ -866,11 +900,12 @@ class UserService
 	}
 
 	/**
+	 * @author Nathan Reyes
 	 * Fonction qui permet d'envoyer le courriel du mot de passe
 	 * Fortement inspiré de send_email_judge
 	 * @author Maxime Demers Boucher
 	 * @return Result Retourne le résultat de l'opération.
-	 */
+	*/
 	public function send_email_PWF(string $email, string $code): Result
 	{
 		try {
@@ -892,10 +927,11 @@ class UserService
 		}
 	}
 	/**
-	 *Fonction qui permet d'obtenir les rôles
+	 * @author Nathan Reyes
+	 * Fonction qui permet d'obtenir les rôles
 	 * @author Tristan Lafontaine
 	 * @return Result Retourne une réponse
-	 */
+	*/
 	public function get_all_roles(): Result
 	{
 		try {
