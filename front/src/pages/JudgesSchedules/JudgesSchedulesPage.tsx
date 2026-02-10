@@ -1,5 +1,16 @@
 import * as React from 'react';
-import { Button, ButtonProps, Divider, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  Divider,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { purple } from '@mui/material/colors';
 import EvalHour from '../../components/judge-stand/eval-hour';
 import StandRow from '../../components/judge-stand/stand-row';
@@ -13,23 +24,23 @@ import SignUpJudgeService from '../../api/signUpJudge/signUpJudgeService';
 import { ShowToast } from '../../utils/utils';
 
 interface JudgesSchedulesPageState {
-    stands: StandInfo[];
-    standsEval: IAssignation[];
-    juges: JugeInfo[];
-    categories: Category[];
-    hours: TimeSlots[],
-    boolDialog: boolean;
-    boolStand: boolean;
-    boolLoading: boolean;
+  stands: StandInfo[];
+  standsEval: IAssignation[];
+  juges: JugeInfo[];
+  categories: Category[];
+  hours: TimeSlots[];
+  boolDialog: boolean;
+  boolStand: boolean;
+  boolLoading: boolean;
 }
 
 //suivre thème de couleur du site
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    color: theme.palette.getContrastText(purple[500]),
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: 'black',
+  '&:hover': {
     backgroundColor: 'black',
-    '&:hover': {
-        backgroundColor: 'black',
-    },
+  },
 }));
 
 /**
@@ -293,6 +304,7 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
                     }
                 });
         }
+      });
     }
 
     /**
@@ -474,6 +486,21 @@ export default class JudgesSchedulesPage extends React.Component<{}, JudgesSched
             hours: updatedHour
         })
     }
+  };
+
+  /**
+   * @author Xavier Houle
+   * @returns Les juges groupés par catégorie
+   * S'occupe de grouper les juges selon leurs catégories et retourne
+   * un tableau avec les juges groupées
+   */
+  groupJudgesByCategory(): { categoryId: number; judges: JugeInfo[] }[] {
+    const groupedJudges: { [key: number]: JugeInfo[] } = {};
+
+    this.state.juges.forEach((juge) => {
+      if (!groupedJudges[juge.categories_id]) {
+        groupedJudges[juge.categories_id] = [];
+      }
 
     render() {
         // Gestion des cas sans données pour éviter des erreurs inutiles.
