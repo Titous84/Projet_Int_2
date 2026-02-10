@@ -1,6 +1,10 @@
 /**
+ * @author Nathan Reyes
+*/
+/**
+ * @author Nathan Reyes
  * Jean-Philippe Bourassa, basé sur le travail de Tristan Lafontaine
- */
+*/
 import { Navigate } from 'react-router';
 import { ValidatorForm } from 'react-material-ui-form-validator'
 import { Box, Button } from '@mui/material';
@@ -17,8 +21,9 @@ import { TEXTS } from '../../lang/fr';
 import styles from "./JudgeCreationPage.module.css"
 
 /**
+ * @author Nathan Reyes
  * Page d'inscription des juges
- */
+*/
 
 interface JudgeCreationPageState {
     judge: Judge,
@@ -48,6 +53,8 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
                 lastName: "",
                 category: "",
                 pictureConsent: false,
+                participatesCurrentYear: true,
+                hasAssignment: false,
                 pwd: "",
                 pwdconfirm: "",
                 blacklisted: false,
@@ -70,8 +77,9 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
     }
 
     /**
-      * Fonction qui permet d'aller chercher les categories à l'API
-      */
+     * @author Nathan Reyes
+     * Fonction qui permet d'aller chercher les categories à l'API
+    */
     async getCategory() {
         const res = await SignUpJudgeService.tryGetCategory();
         if (res.error) {
@@ -91,8 +99,9 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
     }
 
     /**
+     * @author Nathan Reyes
      * Vérification personnalisée
-     */
+    */
     componentDidMount() {
         //Permet de récupérer les catégories lors du chargmement de la page
         this.getCategory();
@@ -155,11 +164,12 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
     }
 
     /**
-      * Génère les alertes lors d'erreur avec l'API.
-      * @returns une alerte pour chaque erreur
-      * @author Tristan Lafontaine
-      * @author Étienne Nadeau
-      */
+     * @author Nathan Reyes
+     * Génère les alertes lors d'erreur avec l'API.
+     * @returns une alerte pour chaque erreur
+     * @author Tristan Lafontaine
+     * @author Étienne Nadeau
+    */
     generateAlert() {
         let counter = 0;
         if (this.state.error.length > 0) {
@@ -174,10 +184,11 @@ export default class JudgeCreationPage extends IPage<{}, JudgeCreationPageState>
     }
 
     /**
-      * Fonction qui permet d'envoyer le formulaire à l'API
-      * @author Jean-Philippe Bourassa
-      * @author Étienne Nadeau
-      */
+     * @author Nathan Reyes
+     * Fonction qui permet d'envoyer le formulaire à l'API
+     * @author Jean-Philippe Bourassa
+     * @author Étienne Nadeau
+    */
     async onSubmit() {
         const response = await SignUpJudgeService.tryPostUser(this.state.judge)
         if (response.error) {

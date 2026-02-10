@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -10,11 +13,12 @@ import { TEXTS } from '../../../lang/fr';
 import ConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialog';
 
 /**
+ * @author Nathan Reyes
  * Tableau qui affiche la liste des équipes.
  * Affichage: une équipe par ligne et tous les membres dans la même cellule.
- * 
+ *
  * @author Carlos Cordeiro
- */
+*/
 export default function TeamsTable() {
     // Variables d'état
     const [teamsArray, setTeamsArray] = useState<ITeam[]>([])
@@ -27,6 +31,18 @@ export default function TeamsTable() {
     const [snackbarMessageType, setSnackbarMessageType] = useState<SnackbarMessageType>("error") // Type de message à afficher dans le snackbar. Peut être "success", "error", "warning" ou "info".
     // Fenêtre contextuelle de confirmation pour la suppression des équipes sélectionnées.
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
+
+    /**
+     * @author Nathan Reyes
+     * Affiche un message lorsque la liste d'équipes est vide.
+    */
+    const NoTeamsOverlay = () => {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                <span>Aucune équipe pour l'instant</span>
+            </div>
+        );
+    };
 
     // Quelles colonnes on veut afficher et sous quel nom.
     const columns: GridColDef<ITeam>[] = [
@@ -99,10 +115,11 @@ export default function TeamsTable() {
     ]
 
     /**
+     * @author Nathan Reyes
      * Méthode appelée pour mettre à jour une ligne après modification.
      * @param updatedRow La nouvelle ligne modifiée.
      * @returns La ligne mise à jour.
-     */
+    */
     const processRowUpdate = async (updatedRow: ITeam) => {
         try {
             // Trouver la ligne originale dans l'état local
@@ -158,9 +175,10 @@ export default function TeamsTable() {
     };
 
     /**
+     * @author Nathan Reyes
      * Méthode appelée lorsque le bouton de suppression dans la barre d'outils est cliqué.
      * Affiche une boîte de dialogue de confirmation.
-     */
+    */
     const handleDeleteButtonClick = () => {
         if (selectedTeamsIds.length === 0) {
             // Afficher un message d'attention.
@@ -173,8 +191,9 @@ export default function TeamsTable() {
     };
 
     /**
+     * @author Nathan Reyes
      * Supprime les équipes sélectionnées.
-     */
+    */
     const deleteSelectedTeams = () => {
         setIsConfirmationDialogOpen(false);
         TeamsListService.deletesTeamsInfos(selectedTeamsIds)
@@ -212,8 +231,9 @@ export default function TeamsTable() {
     }
 
     /**
+     * @author Nathan Reyes
      * Exécute lorsque le composant est monté.
-     */
+    */
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -294,7 +314,8 @@ export default function TeamsTable() {
                             <TeamsTableToolbar
                                 {...props}
                                 deleteSelectedTeams={handleDeleteButtonClick} // Passe la méthode pour supprimer les équipes par ids au composant.
-                            />
+                            />,
+                        noRowsOverlay: NoTeamsOverlay
                     }}
                     onRowSelectionModelChange={(newSelection) => {
                         setSelectedTeamsIds(newSelection.map(id => Number(id)));

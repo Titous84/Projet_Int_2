@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from "react";
 import { useParams } from "react-router";
 import { Button } from "@mui/material";
@@ -13,9 +16,10 @@ import { ShowToast } from "../../utils/utils";
 import styles from "./EmailValidationJudgePage.module.css"
 
 /**
+ * @author Nathan Reyes
  * Page de validation de l'adresse courriel d'un juge.
  * @author Jean-Philippe Bourassa
- */
+*/
 export function EmailValidationJudgePage(){
     // Récupère le token dans l'URL.
     const {token} = useParams()
@@ -26,21 +30,23 @@ export function EmailValidationJudgePage(){
 }
 
 /**
+ * @author Nathan Reyes
  * Props du composant React: EmailValidationJudgePageContent.
  * @property token : le token du juge à valider.
- */
+*/
 interface EmailValidationJudgePageProps{
     token: string | undefined;
 }
 
 /**
+ * @author Nathan Reyes
  * Variables d'état du composant React: EmailValidationJudgePageContent.
  * @property response : la réponse de l'API.
  * @property judge : le juge à valider.
  * @property categories : les catégories de programmes d'études.
  * @property error : les erreurs de validation du formulaire.
  * @property sendSuccess : si l'envoi a réussi ou non.
- */
+*/
 interface EmailValidationJudgePageStates{
     response: string | null;
     judge:Judge;
@@ -50,17 +56,19 @@ interface EmailValidationJudgePageStates{
 }
 
 /**
+ * @author Nathan Reyes
  * Contenu de la page de validation de l'adresse courriel d'un juge.
  * Ne pas utiliser directement cette classe, utiliser EmailValidationJudgePage pour pouvoir récupérer le token.
  * @author Jean-Philippe Bourassa
- */
+*/
 export default class EmailValidationJudgePageContent extends React.Component<EmailValidationJudgePageProps,EmailValidationJudgePageStates> {
     constructor(props:EmailValidationJudgePageProps){
         super(props)
 
         /**
+         * @author Nathan Reyes
          * Initialisation des variables.
-         */
+        */
         this.state = {
             response:null,
             judge:{
@@ -70,6 +78,8 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
                 lastName:"",
                 category:"",
                 pictureConsent:false,
+                participatesCurrentYear:true,
+                hasAssignment:false,
                 pwd:"",
                 pwdconfirm:"",
                 blacklisted:false,
@@ -85,8 +95,9 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
     }
 
     /**
+     * @author Nathan Reyes
      * Permet de modifier le state titleStand lors d'un changement dans le champs.
-     */
+    */
     handleChangeForm(event:any, key:string){
         let judge : any = {...this.state}
         judge.judge[key] = event
@@ -94,9 +105,10 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'aller chercher les catégories à l'API
      * Tristan Lafontaine
-     */
+    */
     async getCategory() {
     const response = await SignUpJudgeService.tryGetCategory()
     if (response.error){
@@ -112,9 +124,10 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'aller chercher l'utilisateur à l'API
      * Jean-Philippe Bourassa
-     */
+    */
     async getUser() {
     if (!this.props.token) return;
 
@@ -132,9 +145,10 @@ export default class EmailValidationJudgePageContent extends React.Component<Ema
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'envoyer le formulaire à l'API
      * @author Jean-Philippe Bourassa
-     */
+    */
     async onSubmit() {
         const response = await SignUpJudgeService.tryPostJudge(this.state.judge)
         if (response.error) {

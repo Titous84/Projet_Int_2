@@ -1,7 +1,11 @@
 /**
+ * @author Nathan Reyes
+*/
+/**
+ * @author Nathan Reyes
  * Chaînes de caractères inclues dans le site.
  * Author: Mathieu Sévégny, Tristan Lafontaine et Jean-Philippe Bourassa
- */
+*/
 export const TEXTS = {
     judgeList:{
         defaultNamePage:"Liste des juges",
@@ -63,7 +67,15 @@ export const TEXTS = {
         btnemail:"Envoyer un email"
     },
     administratorsListPage:{
-        title:"Gestion des administrateurs"
+        title:"Paramètres généraux",
+        resetAction:"Réinitialiser l'année",
+        resetTitle:"Réinitialisation annuelle",
+        resetDescription:"Réinitialise la participation des juges et les assignations de l'édition courante.",
+        resetConfirmation:"Voulez-vous vraiment lancer la réinitialisation annuelle? Cette action peut désactiver des assignations en cours.",
+        resetConfirm:"Confirmer la réinitialisation",
+        resetCancel:"Annuler",
+        resetSuccess:"La réinitialisation annuelle a été effectuée avec succès.",
+        resetError:"Une erreur est survenue lors de la réinitialisation annuelle."
     },
     ajoutAdmin:{
         title:"Ajouter un administrateur à Expo Sat",
@@ -178,9 +190,16 @@ export const TEXTS = {
             }
         },
         pictureConsent:{
-            label:"Je consens à être pris en photo et j'autorise le comité à les utiliser pour faire de la publicité future (site web, médias sociaux, journaux, etc.)",
+            label:"Consentement à la prise de photos",
+            publication:"J'autorise l'utilisation des photos pour la promotion (site web, médias sociaux, journaux, etc.).",
+            internal:"J'autorise l'utilisation des photos à des fins internes et pédagogiques.",
+            refusal:"Je refuse que des photos soient prises de moi.",
             yes:"Oui",
             no:"Non"
+        },
+        anonymous:{
+            label:"Inscription anonyme",
+            helper:"Masquer mes informations personnelles (prénom, nom, DA, etc.) dans les listes."
         },
         buttons:{
             addMember:"Ajouter un membre",
@@ -418,15 +437,17 @@ export const TEXTS = {
         alreadyVote:"Merci d'avoir voté.",
     },
     /**
+     * @author Nathan Reyes
      * @author Charles Lavoie
-     */
+    */
     admin:{
         pageTitle:"Administration",
         equipes:{
             title:"Équipes",
             /**
+             * @author Nathan Reyes
              * Équipes
-             */
+            */
             layout1:{
                 layoutName:"Équipes",
                 link1:"Gestion des équipes"
@@ -435,8 +456,9 @@ export const TEXTS = {
         gestion:{
             title:"Gestion",
             /**
+             * @author Nathan Reyes
              * Gestion des juges
-             */
+            */
             layout1:{
                 layoutName:"Gestion des juges",
                 link1:"Gestion des juges",
@@ -445,23 +467,26 @@ export const TEXTS = {
                 link4:"Ajout de juges pour une équipe"
             },
             /**
+             * @author Nathan Reyes
              * Gestion des emails
-             */
+            */
             layout3:{
                 layoutName:"Gestion des emails",
                 link1:"Email non-vérifié",
                 link2:"Envoi des évaluations aux juges"
             },
             /**
+             * @author Nathan Reyes
              * Gestion des évaluations
-             */
+            */
             layout4:{
                 layoutName:"Gestion des évaluations",
                 link1:"Gestion des grilles d'évaluations"
             },
             /**
+             * @author Nathan Reyes
              * Rôles
-             */
+            */
             layout6:{
                 layoutName:"Rôles",
                 link1:"Assignation des rôles"
@@ -470,8 +495,9 @@ export const TEXTS = {
         resultats:{
             title:"Résultats",
             /**
+             * @author Nathan Reyes
              * Résultats
-             */
+            */
             layout1:{
                 layoutName:"Résultats",
                 link1:"Liste des résultats",
@@ -482,8 +508,9 @@ export const TEXTS = {
         correcteur:{
             title:"Correction d'équipe",
             /**
+             * @author Nathan Reyes
              * Correcteur
-             */
+            */
             layout1:{
                 layoutName:"Correction d'équipe",
                 link1:"Aperçu",
@@ -493,8 +520,9 @@ export const TEXTS = {
         administrateurs:{
             title:"Administrateurs",
             /**
+             * @author Nathan Reyes
              * Administrateurs
-             */
+            */
             layout1:{
                 layoutName:"Administrateurs",
                 link1:"Ajout Administrateur",
