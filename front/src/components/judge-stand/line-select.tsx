@@ -23,15 +23,17 @@ interface LineSelectState {
 }
 
 /**
+ * @author Nathan Reyes
  * Classe pour selectionner un juge
  * @author Christopher Boisvert, Alex Des Ruisseaux
  * @editor Xavier Houle
- */
+*/
 export default class LineSelect extends React.Component<LineSelectProps, LineSelectState> {
     /**
+     * @author Nathan Reyes
      * constructeur de la classe
      * @param props tableau de juge disponibles, numero de categorie de stand
-     */
+    */
     constructor(props: LineSelectProps) {
         super(props)
         this.state = {
@@ -52,9 +54,10 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
     }
 
     /**
+     * @author Nathan Reyes
      * @author Xavier Houle
      * Affiche les assignations du select
-     */
+    */
     CheckEvals() {
         this.props.standsEval.map((evals) => {
             if (evals.hour !== this.props.placement + 1)
@@ -68,19 +71,21 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
         })
     }
     /**
+     * @author Nathan Reyes
      * appel de la methode GetConflict
-     * @author Souleymane Soumaré 
+     * @author Souleymane Soumaré
      * @param {string} jugeId - nom du juge
      * @param {number} standId - numero de stand
-     */
+    */
     async checkConflict(jugeId: string, standId: string) {
         await JugeStandService.GetConflict(jugeId, standId)
     }
 
     /**
+     * @author Nathan Reyes
      * @author Xavier Houle
      * S'occupe de supprimer l'assignation dans la base de données
-     */
+    */
     async DeleteSurvey() {
         await JugeStandService.DeleteSurvey(this.state.evalId);
         this.props.handleDeleteAssignation(this.state.evalId);
@@ -89,13 +94,14 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
     }
 
     /**
+     * @author Nathan Reyes
      * @author Xavier Houle
-     * Créer une nouvelle interface IAssignation 
-     * et envoye l'évaluation a ajouter ou modifier 
+     * Créer une nouvelle interface IAssignation
+     * et envoye l'évaluation a ajouter ou modifier
      * pour ensuite enregistrer les valeurs dans la base de données
      * @param standId Le numéro de l'équipe
      * @param surveyId L'id d'un formulaire d'évaluation
-     */
+    */
     updateOrAddSurvey(standId: string, surveyId: number) {
         const jugeId = this.props.leJuge.id;
         const placement = this.props.placement + 1;
@@ -112,13 +118,32 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
     }
 
     /**
+     * @author Nathan Reyes
      * @author Xavier Houle
      * S'occupe de vérifier que le numéro d'équipe existe et
      * ensuite envoye les valeurs à la fonction updateOrAddSurvey()
+     * Cas d'utilisation Nathan Reyes : avertir si l'équipe est déjà assignée au juge à une autre heure.
      * @param e La numéro d'équipe selectionner par l'utilisateur
-     */
+    */
     handleChange(e: SelectChangeEvent<string>) {
         this.setState({ standId: e.target.value });
+        const placement = this.props.placement + 1;
+
+        const assignationExistante = this.props.standsEval.find((assignation) => (
+            assignation.judge_id === this.props.leJuge.id &&
+            assignation.stand_id === e.target.value &&
+            assignation.hour !== placement
+        ));
+
+        if (assignationExistante) {
+            ShowToast(
+                `Ce juge est déjà assigné à l'équipe ${e.target.value} à une autre heure.`,
+                5000,
+                "warning",
+                "top-center",
+                false
+            );
+        }
 
         this.props.stands.map((stand) => {
             if (stand.team_number != e.target.value)
@@ -132,13 +157,14 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
         this.checkConflict(this.props.leJuge.nom_complet, e.target.value);
     }
     /**
+     * @author Nathan Reyes
      * @author Xavier Houle
-     * S'occupe de donner une ordre de prioriété 
+     * S'occupe de donner une ordre de prioriété
      * Les équipes seront afficher en ordre croissant
-     * Les équipes n'étant pas dans la même catégories du juges seront en dessous 
+     * Les équipes n'étant pas dans la même catégories du juges seront en dessous
      * de ceux qui le sont
      * @returns L'ordre de priorité des numéros d'équipes
-     */
+    */
     sortStand(): StandInfo[] {
         return this.props.stands.sort((stand1, stand2) => {
 
@@ -163,11 +189,12 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
     }
 
     /**
+     * @author Nathan Reyes
      * Affiche les numéros d'équipes en jaune lorsque le juge
      * n'est pas dans la même catégorie que le juge
      * @param stand Les informations des équipes
      * @returns Retourne la couleur a affiché
-     */
+    */
     colorMenuItem(stand: StandInfo) {
         if (this.props.leJuge.categories_id !== stand.categories_id) {
             
@@ -181,10 +208,11 @@ export default class LineSelect extends React.Component<LineSelectProps, LineSel
 
     render() {
         /**
+         * @author Nathan Reyes
          * filtre les juges selon la categorie du stand.
-         * @author Déreck "The GOAT" Lachance 
+         * @author Déreck "The GOAT" Lachance
          * @editor Xavier Houle
-         */
+        */
         return (
             <FormControl sx={{ m: 1, minWidth: 75 }}>
                 <InputLabel id="stand-selection-label">Équipes</InputLabel>

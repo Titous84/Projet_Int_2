@@ -1,7 +1,10 @@
+/**
+ * @author Nathan Reyes
+*/
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';
-import Layout from "../../components/layout/layout";
+import PageSection from "../../components/common/PageSection";
 import IPage from "../../types/IPage";
 import UserService from "../../api/users/userService";
 import VerificationCodeService from "../../api/verificationCode/verificationCodeService";
@@ -10,17 +13,19 @@ import { TEXTS } from "../../lang/fr";
 import styles from "./ForgottenPasswordPage.module.css"
 
 /**
+ * @author Nathan Reyes
  * Variables d'états du composant React: ForgottenPasswordPage.
  * @property {string} email - Adresse courriel de l'utilisateur.
- */
+*/
 interface ForgottenPasswordPageState{
     email: string,
 }
 
 /**
+ * @author Nathan Reyes
  * Page mot de passe oublié
  * @author Alex Des Ruisseaux
- */
+*/
 export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPageState> {
     constructor(props: {}) {
         super(props);
@@ -32,18 +37,20 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
     }
 
     /**
+     * @author Nathan Reyes
      * Méthode appelée lorsque la valeur du champ du courriel change.
      * Change la valeur de la variable d'état.
-     */
+    */
     handleChangeEmail = (event: React.ChangeEvent<any>) => {
         const change = event.target.value;
         this.setState({ email : change });       
     }
 
     /**
+     * @author Nathan Reyes
      * Méthode appelée lors de la soumission du formulaire.
      * Envoie une requête pour générer un code de vérification et l'envoie à l'adresse courriel de l'utilisateur.
-     */
+    */
     async handleSubmit(){
         const responsecode = await VerificationCodeService.generateVerificationCode(this.state.email);
         const code = responsecode.data;
@@ -56,8 +63,9 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
     }
 
     /**
+     * @author Nathan Reyes
      * Vérification personnaliser
-     */
+    */
     componentDidMount() {
         // Vérifie la longeur du champs Titre du projet
         ValidatorForm.addValidationRule('maxlength', (value) => {
@@ -70,19 +78,21 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
     }
 
     /**
+     * @author Nathan Reyes
      * Permet d'enlever les messages d'erreurs des champs quand ils respectent les critères.
-     */
+    */
     componentWillUnmount() {
         ValidatorForm.removeValidationRule('maxlength');
     }
 
     public render() {
         /**
+         * @author Nathan Reyes
          * @see https://www.npmjs.com/package/react-material-ui-form-validator
-         */
+        */
         return (
             <div className={styles.toCenter}>
-                <Layout name={TEXTS.signin.password.title}>
+                <PageSection titre={TEXTS.signin.password.title}>
                     <ValidatorForm
                         onSubmit={()=>this.handleSubmit()}
                         onError={errors => ()=>ShowToast(errors.toString(),5000,"error","top-center",false)}
@@ -103,7 +113,7 @@ export default class ForgottenPasswordPage extends IPage<{}, ForgottenPasswordPa
                             <Button type="submit" className={styles.btnConnexion+ ' ' + styles.btnHover}>{TEXTS.signin.btnemail}</Button>
                         </div>
                     </ValidatorForm>
-                </Layout>              
+                </PageSection>              
             </div>
         )
     }

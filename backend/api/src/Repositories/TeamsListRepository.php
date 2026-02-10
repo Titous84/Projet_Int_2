@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -8,20 +9,24 @@ use App\Models\TeamMember;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Class TeamsListRepository
  * @author Tristan Lafontaine, Carlos Cordeiro
  * @package App\Repositories
- */
+*/
 class TeamsListRepository extends Repository
 {
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les membres et les équipes
      * @param  string $role_name
      * @return array Retourne un tableau contenant les équipes et les membres ou un tableau vide.
-     */
+    */
     public function get_all_teams_and_members(string $role_name): array
     {
         try {
+            // Les grilles d'évaluation sont stockées dans evaluationgrids (alias survey pour garder les champs).
+            // Les informations des participants anonymes sont masquées dans la requête.
             $sql = "SELECT users.id,
                 teams.id as team_id,
                 teams.team_number,
@@ -31,20 +36,24 @@ class TeamsListRepository extends Repository
                 teams.years as year,
                 survey.name as survey,
                 teams.activated as teams_activated, 
-                users.first_name, 
-                users.last_name,
-                users.numero_da,
-                users.email, 
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END as first_name,
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END as last_name,
+                CASE WHEN users.is_anonymous = 1 THEN 'Masqué' ELSE users.numero_da END as numero_da,
+                CASE WHEN users.is_anonymous = 1 THEN NULL ELSE users.email END as email,
                 users.activated as users_activated,
                 users.blacklisted, 
                 users.picture_consent,
+                users.photo_consent_publication,
+                users.photo_consent_internal,
+                users.photo_consent_refusal,
+                users.is_anonymous,
                 GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name, 
                 GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -74,20 +83,27 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les équipes avec les membres dans une seul colonne
      * @param  string $role_name
      * @return array Retourne un tableau contenant les équipes et les membres ou un tableau vide.
-     */
+    */
     public function get_all_teams_and_members_concat(string $role_name): array
     {
         try {
             $sql = "SELECT teams.id as team_id, teams.team_number, teams.name as title, teams.description, categories.name as category, teams.years as year, survey.name as survey, teams.activated as teams_activated, 
-            GROUP_CONCAT(DISTINCT CONCAT(users.first_name,' ',users.last_name) SEPARATOR ', ') as members, GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name, GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
+            GROUP_CONCAT(DISTINCT CONCAT(
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END,
+                ' ',
+                CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END
+            ) SEPARATOR ', ') as members,
+            GROUP_CONCAT(DISTINCT contact_person.name SEPARATOR ', ') as contact_person_name,
+            GROUP_CONCAT(DISTINCT contact_person.email SEPARATOR ', ') as contact_person_email
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN role ON users.role_id = role.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
@@ -118,20 +134,34 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir toutes les informations ainsi que les membres d'une équipe
      * @param int $id
      * @return Team | null Retourne une équipe ou null si l'équipe n'est pas trouvé ou n'existe pas.
-     */
+    */
     public function get_team_and_members(int $id): ? Team
     {
         try {
             $sql = "SELECT users.id, teams.id as team_id, teams.team_number, teams.name as title, teams.description, categories.name as category, teams.years as year, survey.name as survey, survey.id as survey_id, teams.activated as teams_activated, 
-            users.first_name, users.last_name, users.numero_da, users.email, users.picture_consent, users.activated as users_activated, users.blacklisted, contact_person.name as contact_name, contact_person.email as contact_email, contact_person.id as contact_id
+            CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.first_name END as first_name,
+            CASE WHEN users.is_anonymous = 1 THEN 'Anonyme' ELSE users.last_name END as last_name,
+            CASE WHEN users.is_anonymous = 1 THEN 'Masqué' ELSE users.numero_da END as numero_da,
+            CASE WHEN users.is_anonymous = 1 THEN NULL ELSE users.email END as email,
+            users.picture_consent,
+            users.photo_consent_publication,
+            users.photo_consent_internal,
+            users.photo_consent_refusal,
+            users.is_anonymous,
+            users.activated as users_activated,
+            users.blacklisted,
+            contact_person.name as contact_name,
+            contact_person.email as contact_email,
+            contact_person.id as contact_id
             FROM users 
             INNER JOIN users_teams ON users.id = users_teams.users_id 
             INNER JOIN teams ON teams.id = users_teams.teams_id 
             INNER JOIN categories ON teams.categories_id = categories.id 
-            INNER JOIN survey ON teams.survey_id = survey.id
+            INNER JOIN evaluationgrids AS survey ON teams.survey_id = survey.id
             INNER JOIN teams_contact_person ON teams.id = teams_contact_person.teams_id
             INNER JOIN contact_person ON teams_contact_person.contact_person_id = contact_person.id
             WHERE teams.id = :id
@@ -157,14 +187,15 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir l'id et le nom du type d'évaluation à partir du nom de l'évaluation
      * @param  string $survey
      * @return array Retourne un tableau contenant l'id et le nom du type d'évaluation ou un tableau vide.
-     */
+    */
     public function get_survey_by_name(string $survey): array
     {
         try {
-            $sql = "SELECT id, name FROM survey WHERE name = '$survey'";
+            $sql = "SELECT id, name FROM evaluationgrids WHERE name = '$survey'";
 
             $req = $this->db->query($sql);
 
@@ -185,8 +216,9 @@ class TeamsListRepository extends Repository
     }
 
     /**
-    * Fonction qui récupère le nom de toutes les catégories
-    * @return array Retourne un tableau contenant l'id et le nom des catégories
+     * @author Nathan Reyes
+     * Fonction qui récupère le nom de toutes les catégories
+     * @return array Retourne un tableau contenant l'id et le nom des catégories
     */
     public function get_categories(): array 
     {
@@ -212,10 +244,11 @@ class TeamsListRepository extends Repository
 
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir l'id et le nom de la catégorie à partir du nom de la catégorie
      * @param  string $category
      * @return array Retourne un tableau contenant l'ID,le nom de la catégorie et l'ID de template d'évaluation ou un tableau vide.
-     */
+    */
     public function get_category_by_name(string $category): array
     {
         try {
@@ -238,10 +271,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'ajouter un membre à une équipe
      * @param  TeamMember $teamMember
      * @return bool Retourne vrai si l'ajout a fonctionné sinon, il retourne faux
-     */
+    */
     public function add_team_member(TeamMember $teamMember): bool
     {
         try {
@@ -249,8 +283,30 @@ class TeamsListRepository extends Repository
 
             // Insertion dans la table `users`
             $sqlUser = "
-                INSERT INTO users (first_name, last_name, numero_da, picture_consent, activated, role_id)
-                VALUES (:first_name, :last_name, :numero_da, :picture_consent, :activated, :role_id)
+                INSERT INTO users (
+                    first_name,
+                    last_name,
+                    numero_da,
+                    picture_consent,
+                    photo_consent_publication,
+                    photo_consent_internal,
+                    photo_consent_refusal,
+                    is_anonymous,
+                    activated,
+                    role_id
+                )
+                VALUES (
+                    :first_name,
+                    :last_name,
+                    :numero_da,
+                    :picture_consent,
+                    :photo_consent_publication,
+                    :photo_consent_internal,
+                    :photo_consent_refusal,
+                    :is_anonymous,
+                    :activated,
+                    :role_id
+                )
             ";
 
             $reqUser = $this->db->prepare($sqlUser);
@@ -259,6 +315,10 @@ class TeamsListRepository extends Repository
                 "last_name" => $teamMember->lastName,
                 "numero_da" => $teamMember->numeroDa,
                 "picture_consent" => $teamMember->pictureConsent,
+                "photo_consent_publication" => $teamMember->photoConsentPublication,
+                "photo_consent_internal" => $teamMember->photoConsentInternal,
+                "photo_consent_refusal" => $teamMember->photoConsentRefusal,
+                "is_anonymous" => $teamMember->isAnonymous,
                 "activated" => $teamMember->userActivated,
                 "role_id" => 3,
             ]);
@@ -299,10 +359,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les informations de l'équipe et de mettre à jour les informations de l'enseignant(e) de l'équipe
      * @param  TeamInfo $team
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_team_info(TeamInfo $team): bool
     {
         try {
@@ -355,10 +416,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les membres de l'équipe
      * @param  TeamMember $teamMember
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_team_member(TeamMember $teamMember): bool
     {
         try {
@@ -374,6 +436,10 @@ class TeamsListRepository extends Repository
                 numero_da = :numero_da,
                 blacklisted = :blacklisted,
                 picture_consent = :picture_consent,
+                photo_consent_publication = :photo_consent_publication,
+                photo_consent_internal = :photo_consent_internal,
+                photo_consent_refusal = :photo_consent_refusal,
+                is_anonymous = :is_anonymous,
                 activated = :activated
             WHERE id = :id";
     
@@ -386,6 +452,10 @@ class TeamsListRepository extends Repository
                 "numero_da" => $teamMember->numeroDa,
                 "blacklisted" => $teamMember->blacklisted,
                 "picture_consent" => $teamMember->pictureConsent,
+                "photo_consent_publication" => $teamMember->photoConsentPublication,
+                "photo_consent_internal" => $teamMember->photoConsentInternal,
+                "photo_consent_refusal" => $teamMember->photoConsentRefusal,
+                "is_anonymous" => $teamMember->isAnonymous,
                 "activated" => $teamMember->userActivated
             ]);
     
@@ -443,10 +513,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de mettre à jour les numéros des stands de l'équipe
      * @param  array $teams
      * @return bool Retourne vrai si la mise à jour a fonctionné sinon, il retourne faux
-     */
+    */
     public function update_teams_numbers(array $teams): bool
     {
         try {
@@ -479,10 +550,11 @@ class TeamsListRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Contruit une équipe à partir des valeurs d'un array.
      * @param array $array Un tableau des membres.
      * @return Team | null Retourne l'équipe de l'array.
-     */
+    */
     private function construct_teams_from_array(array $members): ? Team
     {
         if (count($members) < 1)
@@ -505,6 +577,10 @@ class TeamsListRepository extends Repository
                         "contact_person_name" => $member["contact_name"],
                         "contact_person_id" => $member["contact_id"],
                         "picture_consent" => $member["picture_consent"],
+                        "photo_consent_publication" => $member["photo_consent_publication"],
+                        "photo_consent_internal" => $member["photo_consent_internal"],
+                        "photo_consent_refusal" => $member["photo_consent_refusal"],
+                        "is_anonymous" => $member["is_anonymous"],
                     ]
                 )
             );

@@ -1,5 +1,5 @@
-
 <?php
+// @author Nathan Reyes
 use Slim\Routing\RouteCollectorProxy;
 use App\Actions\DefaultAction;
 // Obtenir un token pour avoir accès à l'API
@@ -24,6 +24,7 @@ use App\Actions\Users\ChangePasswordAction;
 use App\Actions\Administrators\GetAllAdministratorsAction;
 use App\Actions\Administrators\DeleteAdministratorsByIdsAction;
 use App\Actions\Administrators\PostAdministratorAction;
+use App\Actions\Administrators\ResetAnnualDataAction;
 
 // ?
 use App\Actions\SignUpTeamAction\PostSignUp;
@@ -161,15 +162,19 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 	});
 
     /**
+     * @author Nathan Reyes
      * Routes en lien avec les administrateurs sur le site web.
      * @author Antoine Ouellette
-     */
+    */
     $group->group('/administrators', function (RouteCollectorProxy $administratorsGroup) {
         // Permet d'obtenir la liste de tous les administrateurs.
         $administratorsGroup->get("/all", GetAllAdministratorsAction::class);
 
         // Permet de créer un nouvel administrateur.
         $administratorsGroup->post("", PostAdministratorAction::class);
+
+        // Permet de réinitialiser les données annuelles.
+        $administratorsGroup->post("/reset-annual", ResetAnnualDataAction::class);
 
         // Permet de modifier un administrateur.
         // $administratorsGroup->put("", DeleteAdministratorAction::class);
@@ -321,9 +326,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
 	});
 	######################################################## FORMULAIRE ÉVALUATIONS ###########################################################################
 	/**
+	 * @author Nathan Reyes
 	 * Section d'opération CRUD pour les codes de vérification des mots de passe oublié
 	 * @author TMaxime Demers Boucher
-	 */
+	*/
 	$group->group('/verificationCode', function (RouteCollectorProxy $verificationCode) {
 		// [POST] Permet de géné le code de vérification
 		$verificationCode->post("/generate", VerificationCodeGenerateAction::class);

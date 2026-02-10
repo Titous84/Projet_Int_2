@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { ContentPaste as ContentPasteIcon, Groups as GroupsIcon, ManageAccounts as ManageAccountsIcon, Percent as PercentIcon, Person as PersonIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
 import { blue, green, grey, orange, red } from "@mui/material/colors";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -10,15 +13,16 @@ import TeamsListPage from "../../pages/TeamsList/TeamsListPage";
 import AdministratorsListPage from "../../pages/AdministratorsList/AdministratorsListPage";
 
 /**
+ * @author Nathan Reyes
  * Un onglet dans la barre latérale de navigation de la page d'administration.
- * 
+ *
  * @property {string} id - Un nom unique pour identifier l'onglet. Sert d'id pour pouvoir récupérer un onglet parmi ceux dans ADMINISTRATION_MAIN_PAGE_TABS.
  * @property {string} primaryText - Le texte principal affiché dans l'onglet. C'est comme le titre.
  * @property {string} secondaryText - Le texte secondaire affiché dans l'onglet. C'est comme la description.
  * @property {OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string; }} icon - Une icône MUI.
  * @property {string} iconColor - La couleur de l'icône. Peut être une chaîne de caractères retrouvée dans les couleurs MUI.
  * @property {React.ComponentType<any>} componentToDisplayInContentZone - Le composant React de la page à afficher dans la zône du contenu lorsque cet onglet est sélectionné.
- */
+*/
 export interface AdministrationMainPageTab {
     id: string;
     primaryText: string;
@@ -29,9 +33,10 @@ export interface AdministrationMainPageTab {
 }
 
 /**
+ * @author Nathan Reyes
  * Liste des onglets de la barre latérale de navigation dans la page d'administration.
  * @type {AdministrationMainPageTab[]} Un tableau d'objets représentant un onglet de la barre latérale.
- */
+*/
 export const ADMINISTRATION_MAIN_PAGE_TABS: AdministrationMainPageTab[] = [
     {
         id: "equipes",
@@ -74,9 +79,9 @@ export const ADMINISTRATION_MAIN_PAGE_TABS: AdministrationMainPageTab[] = [
         iconColor: grey[500]
     },
     {
-        id: "administrateurs",
-        primaryText: "Administrateurs",
-        secondaryText: "Ajouter et supprimer des administrateurs et modifier leur mot de passe",
+        id: "parametres-generaux",
+        primaryText: "Paramètres généraux",
+        secondaryText: "Administration générale et actions de maintenance annuelle",
         componentToDisplayInContentZone: AdministratorsListPage,
         icon: ManageAccountsIcon,
         iconColor: grey[500]

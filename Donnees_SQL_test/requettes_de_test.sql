@@ -1,3 +1,5 @@
+-- @author Nathan Reyes
+-- Les requêtes de test utilisent la table evaluationgrids (anciennement survey).
 SELECT
   categories.name AS "categorie",
   teams.name AS "teams_name",
@@ -18,12 +20,12 @@ ORDER BY categories.name, "global_score" DESC;
 
 SELECT id FROM evaluation WHERE teams_id = (SELECT id FROM teams WHERE name = 'Équipe Alpha');
 
-SELECT id FROM criteria WHERE criteria = 'Clarté de l\'explication' AND rating_section_id = (SELECT id FROM rating_section WHERE survey_id = (SELECT id FROM survey WHERE name = 'Template_physique')) LIMIT 1
+SELECT id FROM criteria WHERE criteria = 'Clarté de l\'explication' AND rating_section_id = (SELECT id FROM rating_section WHERE survey_id = (SELECT id FROM evaluationgrids WHERE name = 'Template_physique')) LIMIT 1
 
-SELECT id FROM criteria WHERE criteria = 'Contenu approfondi' AND rating_section_id = (SELECT id FROM rating_section WHERE survey_id = (SELECT id FROM survey WHERE name = 'Template_physique')) LIMIT 1;
+SELECT id FROM criteria WHERE criteria = 'Contenu approfondi' AND rating_section_id = (SELECT id FROM rating_section WHERE survey_id = (SELECT id FROM evaluationgrids WHERE name = 'Template_physique')) LIMIT 1;
 
 -- Vérifier tous les sondages disponibles
-SELECT * FROM survey;
+SELECT * FROM evaluationgrids;
 
 -- Vérifier toutes les sections d'évaluation disponibles
 SELECT * FROM rating_section;

@@ -1,3 +1,6 @@
+/**
+ * @author Nathan Reyes
+*/
 import { RoleName } from "../../router/routes";
 import ActivatedUser from "../../types/activatedUser";
 import APIResult from "../../types/apiResult";
@@ -30,8 +33,9 @@ interface emailMotDePasseOublier{
 }
 
 /**
+ * @author Nathan Reyes
  * Classe contenant les appels d'API en lien avec les users.
- */
+*/
 export default class UserService {
     public static async tryValidateEmail(token:string) : Promise<string>{
         token = encodeURIComponent(token);
@@ -42,8 +46,9 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
      * @author Charles Lavoie
-     */
+    */
     public static async tryGetRole(token:string) : Promise<RoleName>{
         token = encodeURIComponent(token);
         //Changer la route lorsque créé
@@ -62,10 +67,11 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère la liste des administrateurs avec les informations suivante: id, email, isActive.
      * @returns {Promise<IAdministratorInformation[]>} - Liste des administrateurs
      * @author Antoine Ouellette
-     */
+    */
     public static async getAllAdministrators() : Promise<IAdministratorInformation[]> {
         let response: APIResult<IAdministratorInformation[]>
         try {
@@ -87,11 +93,12 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
      * Crée un nouvel administrateur.
      * @param email - L'email de l'administrateur à créer.
      * @param password - Le mot de passe de l'administrateur à créer.
      * @author Antoine Ouellette
-     */
+    */
     public static async createAdministrator(email: string, password: string): Promise<void> {
         let response: APIResult<void>;
         try {
@@ -109,10 +116,11 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
      * Supprime une liste d'administrateurs en fonction de leurs ids.
      * @param administratorsToDeleteIds - Liste des ids des administrateurs à supprimer.
      * @author Antoine Ouellette
-     */
+    */
     public static async deleteAdministratorsByIds(administratorsToDeleteIds: number[]) : Promise<void> {
         let response: APIResult<void>;
         try {
@@ -132,21 +140,41 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
+     * Lance la réinitialisation annuelle des données d'administration.
+    */
+    public static async resetAnnualData(): Promise<void> {
+        let response: APIResult<void>;
+        try {
+            response = await APIRequest("administrators/reset-annual", "POST", true);
+        } catch (error) {
+            console.error("Erreur lors de la réinitialisation annuelle :", error);
+            throw new Error("Une erreur est survenue lors de la réinitialisation annuelle.");
+        }
+
+        if (response.error) {
+            throw new Error(response.error);
+        }
+    }
+
+    /**
+     * @author Nathan Reyes
      * @author Thomas-gabriel Paquin
      * Permet de recevoir les informations des juges.
      * @param blacklisted Information si les juges font partis de la liste noire.
      * @returns Judge[]
-     */
+    */
     public static async getAllJudges(blacklisted:boolean) : Promise<APIResult<Judge[]>>{
         return await APIRequest(`judge/all/${blacklisted?"1":"0"}`,"GET",true)        
     }
 
     /**
+     * @author Nathan Reyes
      * @author Thomas-gabriel Paquin
      * Permet de mettre à jour les informations des juges
      * @param judge Judge
      * @returns Judge[]
-     */
+    */
     public static async patchJudgeInfos(judge: JudgeUpdate): Promise<APIResult<Judge[]>> {
         const body = {
             judge,
@@ -176,30 +204,33 @@ export default class UserService {
         return response;
     }
     /**
+     * @author Nathan Reyes
      * Fonnction qui permet d'appeler l'API pour avoir les rôles
      * @author Tristan Lafontaine
      * @returns {Promise<string>}
-     */
+    */
     public static async getAllRoles() : Promise<APIResult<string[]>>{
         const response : APIResult<string[]> = await APIRequest(`user/all-role`,"GET",true)
         return response;
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'appeler l'API pour ajouter un user
      * @author Maxime Demers Boucher
      * @returns {Promise<string>}
-     */
+    */
     public static async addUser(body:user) : Promise<APIResult<string[]>>{
         const response : APIResult<string[]> = await APIRequest(`user/addUser`,"POST",true,body)
         return response;
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'appeler l'API pour changer le mot de passe
      * @author Maxime Demers Boucher
      * @returns {Promise<string>}
-     */
+    */
     public static async ChangePwUser(email:string,pwd:string) : Promise<APIResult<string[]>>{
         const body:changePassword = {
            email,
@@ -210,10 +241,11 @@ export default class UserService {
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'appeler l'API pour envoier un email lors de l'oublie d'un mot de passe
      * @author Maxime Demers Boucher
      * @returns {Promise<APIResult<string[]>}
-     */
+    */
     public static async PasswordForgoten(email:string,verificationCode:string) : Promise<APIResult<string[]>>{
         const body:emailMotDePasseOublier = {
             email,

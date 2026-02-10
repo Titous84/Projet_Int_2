@@ -1,7 +1,10 @@
+/**
+ * @author Nathan Reyes
+*/
 import { IconButton, Tooltip } from '@mui/material';
 import { Add, Edit, Logout } from '@mui/icons-material';
 import InformationsEditor from '../../components/informations/informationsEditor/informationsEditor';
-import Layout from '../../components/layout/layout';
+import PageSection from '../../components/common/PageSection';
 import MDContentViewer from '../../components/markdown/mdContentViewer';
 import InformationBlockInfo from '../../types/informations/informationBlockInfo';
 import IPage from '../../types/IPage';
@@ -12,17 +15,19 @@ import { TEXTS } from '../../lang/fr';
 import styles from "./InformationsPage.module.css";
 
 /**
+ * @author Nathan Reyes
  * Variables d'état du composant React: InformationsPage.
  * @property {InformationBlockInfo[]} informations - Liste des blocs d'informations.
- */
+*/
 interface InformationsPageState{
     informations:InformationBlockInfo[];
 }
 
 /**
+ * @author Nathan Reyes
  * Page qui affiche les informations d'ExpoSAT.
  * @author Mathieu Sévégny
- */
+*/
 export default class InformationsPage extends IPage<{}, InformationsPageState> {
     constructor(props: {}){
         super(props)
@@ -37,22 +42,25 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
     }
 
     /**
+     * @author Nathan Reyes
      * Variables privées.
      * Ici ce n'est pas un state pour ne pas que l'usager le change facilement.
-     */
+    */
     modifying: boolean = false;
     isAdmin: boolean = false;
 
     /**
+     * @author Nathan Reyes
      * Récupére les informations lors de l'ouverture de la page.
-     */
+    */
     componentDidMount(){
         this.getInfos();
     }
 
     /**
+     * @author Nathan Reyes
      * Récupère les informations nécessaires.
-     */
+    */
     async getInfos(){
         const responseInfos = await InformationService.getInformations();
         if (responseInfos && responseInfos.data){
@@ -69,8 +77,9 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
     }
 
     /**
+     * @author Nathan Reyes
      * Génère les boutons appropriés à l'état actuel.
-     */
+    */
     generateButtons(){
         //Si l'usager n'est pas admin, il ne doit pas afficher de boutons.
         if (!this.isAdmin) return <></>
@@ -103,16 +112,18 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
     }
 
     /**
+     * @author Nathan Reyes
      * Alterne l'état de modification.
-     */
+    */
     toggleModification(){
         this.modifying = !this.modifying;
         this.forceUpdate();
     }
 
     /**
+     * @author Nathan Reyes
      * Crée un bloc d'information vide.
-     */
+    */
     async createInformationBlock(){
         let lastOrder = 0;
         this.state.informations.forEach(info => {
@@ -133,9 +144,10 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
     }
 
     /**
+     * @author Nathan Reyes
      * Lorsque l'enfant a fait des modifications à la liste d'information, changer l'état ici aussi.
      * @param informations Liste d'informations
-     */
+    */
     onUpdate(informations:InformationBlockInfo[]){
         this.setState({informations})
     }
@@ -145,7 +157,7 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
         let content = informations.map(info => {return info.content}).join("\n");
         return (
             <div data-testid="Information" className={styles.informationPage}>
-                <Layout name={TEXTS.informations.title}>
+                <PageSection titre={TEXTS.informations.title}>
                     {/* Boutons administrateurs */}
                     {this.generateButtons()}
                     {/* Affichage des informations */}
@@ -153,7 +165,7 @@ export default class InformationsPage extends IPage<{}, InformationsPageState> {
                     content={content}/>}
                     {/* Éditeur des informations */}
                     {this.modifying && <InformationsEditor update={this.onUpdate} informations={this.state.informations}/>}
-                </Layout>
+                </PageSection>
             </div>
         );
     }

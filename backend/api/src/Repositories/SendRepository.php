@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -6,21 +7,23 @@ use PDO;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * A supprimer sert a rien
- */
+*/
 class SendRepository extends Repository
 {
     public function sendResultats($id) : array
     {
         try
         {
+            // La table des grilles d'évaluation s'appelle désormais evaluationgrids (alias survey pour compatibilité).
             $sql = "SELECT teams.id, teams.name as teams_name, floor(Avg(global_score)) As global_note, contact_person.name, contact_person.email 
             FROM evaluation
             INNER JOIN judge ON judge.id = evaluation.judge_id
             INNER JOIN users ON users.id = judge.users_id
             INNER JOIN teams ON teams.id = evaluation.teams_id
             INNER JOIN categories ON categories.id = teams.categories_id
-            INNER JOIN survey ON survey.id = evaluation.survey_id
+            INNER JOIN evaluationgrids AS survey ON survey.id = evaluation.survey_id
             INNER JOIN teams_contact_person ON teams_contact_person.teams_id = teams.id
             INNER JOIN contact_person ON contact_person.id = teams_contact_person.contact_person_id
             WHERE teams.id = :id
@@ -40,4 +43,3 @@ class SendRepository extends Repository
 		}
     }
 }
-

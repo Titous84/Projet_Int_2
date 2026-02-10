@@ -1,4 +1,5 @@
 <?php
+// @author Nathan Reyes
 
 namespace App\Repositories;
 
@@ -8,19 +9,21 @@ use PDO;
 use PDOException;
 
 /**
+ * @author Nathan Reyes
  * Classe SurveyRepository.
  * @package App\Repositories
  * @author Christopher Boisvert
- */
+*/
 class SurveyRepository extends Repository
 {    
     /**
-	 * @author Christopher Boisvert
-	 * @author Jean-Christophe Demers
+     * @author Nathan Reyes
+     * @author Christopher Boisvert
+     * @author Jean-Christophe Demers
      * Fonction qui permet d'obtenir les formulaires d'évaluations par l'uuid du juge.
      * @param string $judge_uuid UUID du juge.
      * @return array Retourne un tableau contenant les formulaires d'évaluations, sinon retourne un tableau vide.
-     */
+    */
     public function get_all_survey_by_judge_id(string $judgeUUID): array
     {
         $sql = "SELECT evaluation.id, teams.name as stand_name, teams.id as stand_id, evaluation.survey_id, time_slots.time AS evaluation_start, evaluation.comments
@@ -44,9 +47,10 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir les évaluations et leurs informations
      * @return array Retourne un tableau contenant les formulaires d'évaluations, sinon retourne un tableau vide.
-     */
+    */
     public function get_all_evaluation(): array
     {
         try{
@@ -68,10 +72,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir les sections par l'ID d'un formulaire d'évaluation.
      * @param int $survey_id Identifiant du formulaire d'évaluation.
      * @return array Retourne un tableau des sections d'un formulaire, sinon retourne un tableau vide.
-     */
+    */
     public function get_all_sections_by_survey_id(int $surveyId): array
     {
         $sql = "SELECT id, name, position FROM rating_section WHERE survey_id=:survey_id ORDER BY position ASC;";
@@ -84,10 +89,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir les questions par l'ID d'une section.
      * @param int $section_id Identifiant d'une section.
      * @return array Retourne un tableau des questions d'une section, sinon retourne un tableau vide.
-     */
+    */
     public function get_all_questions_by_section_id_and_evaluation_id(int $sectionId): array
     {
         $sql = "SELECT criteria.id, criteria.position, criteria, max_value AS 'maxValue', incremental_value AS 'incrementalValue'
@@ -103,10 +109,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir le score d'une question par l'identifiant d'évaluation et de la question concerné.
      * @param SurveyQuestionResult Prend un objet de type SurveyQuestionResult.
      * @return int|null Retourne le score de la question si elle est trouvé, et null dans le cas contraire.
-     */
+    */
     public function get_question_result_by_evaluation_id_and_criteria_id(SurveyQuestionResult $surveyQuestionResult)
     {
         $sql = "SELECT score FROM criteria_evaluation WHERE evaluation_id=:evaluation_id && criteria_id=:criteria_id";
@@ -121,11 +128,12 @@ class SurveyRepository extends Repository
     }
 
     /**
-	 * @author Jean-Christophe Demers
+     * @author Nathan Reyes
+     * @author Jean-Christophe Demers
      * Fonction qui remplace dans la bd le commentaire du juge.
      * @param SurveyCommentResult Prend un objet de type SurveyQuestionResult.
      * @return int Retourne le nombre de champ ajouté.
-     */
+    */
     public function set_comment_result(SurveyCommentResult $surveyCommentResult): int
     {
         $sql = "UPDATE evaluation SET comments = :comment WHERE id = :id;";
@@ -139,10 +147,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui ajoute ou remplace dans la bd la réponse du juge.
      * @param SurveyQuestionResult Prend un objet de type SurveyQuestionResult.
      * @return int Retourne le nombre de champ ajouté.
-     */
+    */
     public function add_or_replace_question_result(SurveyQuestionResult $surveyQuestionResult): int
     {
         $sql = "REPLACE INTO criteria_evaluation(score, evaluation_id, criteria_id) VALUES(:score, :evaluation_id, :criteria_id);";
@@ -157,10 +166,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fontion qui permet d'obtenir le score d'un formulaire
      * @param int $evaluationId Id d'une évaluation.
      * @return int|null Le score de l'évaluation si trouvé, sinon false.
-     */
+    */
     public function get_survey_score( int $evaluationId )
     {
         $sql = "SELECT SUM(score) AS score FROM criteria_evaluation WHERE evaluation_id=:evaluation_id";
@@ -174,10 +184,11 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet de fermer définitivement un formulaire d'évaluation.
      * @param int $evaluationId Id d'une évaluation.
      * @return int Retourne le nombre de ligne modifié.
-     */
+    */
     public function close_survey( int $evaluationId )
     {
         $sql = "UPDATE evaluation SET est_actif=0 WHERE id=:evaluation_id";
@@ -190,24 +201,62 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui permet d'obtenir tous les juges qui sont pas blacklisté.
      * @return array Retourne les juges trouvés, sinon un tableau vide.
-     */
+    */
     public function find_all_judge_not_blacklisted()
     {
         $sql = "SELECT judge.id, users.first_name, users.last_name, users.email
         FROM judge
         INNER JOIN users
         ON judge.users_id=users.id
-        WHERE users.blacklisted IS NOT true AND users.activated IS true AND role_id=1;";
+        WHERE users.blacklisted IS NOT true
+            AND users.activated IS true
+            AND judge.participates_current_year = 1
+            AND role_id=1
+            AND EXISTS (
+                SELECT 1 FROM evaluation
+                WHERE evaluation.judge_id = judge.id
+            );";
         $req = $this->db->query($sql);
         return $req->fetchAll();
     }
 
     /**
+     * @author Nathan Reyes
+     * Récupère les juges admissibles à l'envoi d'évaluations parmi une liste d'identifiants utilisateurs.
+     * @param array $judgeUserIds Liste d'IDs d'utilisateurs.
+     * @return array Retourne la liste des juges admissibles.
+    */
+    public function find_eligible_judges_by_user_ids(array $judgeUserIds): array
+    {
+        if (empty($judgeUserIds)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($judgeUserIds), '?'));
+        $sql = "SELECT users.id, users.first_name, users.last_name, users.email, judge.id AS judge_id
+            FROM judge
+            INNER JOIN users ON judge.users_id = users.id
+            WHERE users.id IN ($placeholders)
+                AND users.blacklisted IS NOT true
+                AND users.activated IS true
+                AND judge.participates_current_year = 1
+                AND EXISTS (
+                    SELECT 1 FROM evaluation
+                    WHERE evaluation.judge_id = judge.id
+                );";
+        $req = $this->db->prepare($sql);
+        $req->execute($judgeUserIds);
+        return $req->fetchAll();
+    }
+
+    /**
+     * @author Nathan Reyes
      * Fonction qui le code UUID d'un juge.
      * @return int Retourne le nombre de ligne modifié.
-     */
+    */
     public function change_uuid_judge(int $judge_id, string $uuid)
     {
         $sql = "UPDATE judge SET uuid=:uuid WHERE id=:judge_id";
@@ -221,9 +270,10 @@ class SurveyRepository extends Repository
     }
 
     /**
+     * @author Nathan Reyes
      * Fonction qui le code UUID d'un juge individuellement.
      * @return int Retourne le nombre de ligne modifié.
-     */
+    */
     public function change_uuid_judgeIndividually(int $judge_id, string $uuid)
     {
         $sql = "UPDATE judge SET uuid=:uuid WHERE users_id=:judge_id";
