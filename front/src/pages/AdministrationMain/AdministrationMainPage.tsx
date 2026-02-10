@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import { Container, Divider, Stack } from "@mui/material";
 import AdministrationNavigationSidebar from "../../components/AdministrationMainPage/AdministrationNavigationSidebar";
 import { ADMINISTRATION_MAIN_PAGE_TABS } from "../../types/AdministrationMainPage/AdministrationMainPageTabs";

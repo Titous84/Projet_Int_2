@@ -1,7 +1,4 @@
 /**
- * @author Nathan Reyes
- */
-/**
  * Jean-Philippe Bourassa, basé sur le travail de Tristan Lafontaine
  */
 import { Navigate } from 'react-router';

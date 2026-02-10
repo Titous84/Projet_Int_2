@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import NavigateButton from './JudgesListPage';

@@ -1,7 +1,4 @@
 /**
- * @author Nathan Reyes
- */
-/**
  * @file Page d'inscription des participants.
  * @author Tristan Lafontaine
  */

@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import { IconButton, Tooltip } from '@mui/material';
 import { Add, Edit, Logout } from '@mui/icons-material';
 import InformationsEditor from '../../components/informations/informationsEditor/informationsEditor';

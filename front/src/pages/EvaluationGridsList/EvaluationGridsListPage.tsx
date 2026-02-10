@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import { Link } from "react-router-dom";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ButtonExposat from '../../components/button/button-exposat';

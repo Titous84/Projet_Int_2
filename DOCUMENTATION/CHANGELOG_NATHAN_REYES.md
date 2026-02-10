@@ -1,7 +1,6 @@
 # Journal des changements — Nathan Reyes
 
-> Auteur des modifications documentées : Nathan Reyes  
-> @author Nathan Reyes
+> Auteur des modifications documentées : Nathan Reyes
 
 Ce document résume les changements réalisés dans ce projet, ainsi que les cas d’utilisation associés.
 

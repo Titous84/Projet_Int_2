@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import {v4 as uuidv4} from 'uuid';
 
 export type MessageTypes = "success" | "error" | "warning" | "info" | "default";

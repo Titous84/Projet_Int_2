@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import React from 'react';
 import { IEvaluationGridSection } from '../../types/evaluationGrid/IEvaluationGridSection';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';

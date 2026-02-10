@@ -1,7 +1,4 @@
 /**
- * @author Nathan Reyes
- */
-/**
  * Chaînes de caractères inclues dans le site.
  * Author: Mathieu Sévégny, Tristan Lafontaine et Jean-Philippe Bourassa
  */

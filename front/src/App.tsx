@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import React from 'react';
 import Router from './router/router';
 import { pages, RoleName } from './router/routes';

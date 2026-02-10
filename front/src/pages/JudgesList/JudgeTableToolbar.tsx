@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import { useNavigate } from 'react-router';
 import { Button, IconButton, Stack, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, Send as SendIcon } from '@mui/icons-material';

@@ -1,5 +1,5 @@
+
 <?php
-// @author Nathan Reyes
 use Slim\Routing\RouteCollectorProxy;
 use App\Actions\DefaultAction;
 // Obtenir un token pour avoir accès à l'API

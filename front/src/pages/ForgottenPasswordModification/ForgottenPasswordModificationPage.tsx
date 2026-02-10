@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import React from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Button from '@mui/material/Button';

@@ -1,7 +1,4 @@
 /**
- * @author Nathan Reyes
- */
-/**
  * Tristan Lafontaine
  */
 import React from 'react';

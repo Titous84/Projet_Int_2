@@ -1,6 +1,3 @@
-/**
- * @author Nathan Reyes
- */
 import IPage from "../../types/IPage";
 import PageSection from "../../components/common/PageSection";
 import styles from './DevelopersListPage.module.css'
